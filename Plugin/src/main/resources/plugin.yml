@@ -1,0 +1,13 @@
+name: LavaRise
+api-version: 1.13
+version: '${project.version}'
+main: com.goodbyepavlyi.lavarise.plugin.LavaRise
+author: goodbyepavlyi
+website: https://goodbyepavlyi.ovh
+
+commands:
+  lavarise:
+
+permissions:
+  lavarise.admin:
+    default: op
