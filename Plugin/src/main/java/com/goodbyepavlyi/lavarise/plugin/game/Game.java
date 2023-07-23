@@ -151,15 +151,34 @@ public class Game {
     }
 
     public void checkForWinner() {
-        if (this.arena.getPlayers().stream().filter(gamePlayer -> !gamePlayer.isSpectator()).count() > 1) return;
+        long remainingPlayers = this.arena.getPlayers().stream()
+                .filter(gamePlayer -> !gamePlayer.isSpectator())
+                .count();
+
+        if (remainingPlayers > 1)
+            return;
+
+        if (remainingPlayers == 1) {
+            GamePlayer winner = this.arena.getPlayers().stream()
+                    .filter(gamePlayer -> !gamePlayer.isSpectator())
+                    .findFirst()
+                    .orElse(null);
+
+            this.instance.getConfiguration().GAME_COMMANDS_WINNER().forEach(command -> {
+                String winnerCommand = command.replace("%winner%", winner.getPlayer().getName());
+                this.instance.getServer().dispatchCommand(this.instance.getServer().getConsoleSender(), winnerCommand);
+            });
+        }
 
         this.stop();
-
         this.instance.debug(Level.INFO, String.format("Checked for winner in arena %s", this.arena.getName()));
     }
 
     public void makeSpectator(Player player) {
+        this.checkForWinner();
+
         GamePlayer gamePlayer = this.arena.getPlayer(player.getUniqueId());
+        if (gamePlayer == null) return;
 
         gamePlayer.spectate();
 

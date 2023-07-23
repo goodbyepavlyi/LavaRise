@@ -2,9 +2,16 @@
 game:
   gracePhaseTime: 60  # Duration of the grace phase in seconds
   lavaRisingTime: 5  # Time it takes for the lava to rise in seconds
+
+  # List of items that players will receive during the game
   items:
     - "IRON_AXE"  # Example of an item that players will receive
     - "IRON_PICKAXE"  # Another example of an item
+
+  # Commands to be executed when a player wins the game
+  commands:
+    winner:
+      - "tell %winner% You won the game!"  # Send a congratulatory message to the winner using %winner% placeholder
 
 # Configuration for the queue settings
 queue:

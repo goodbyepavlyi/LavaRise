@@ -50,7 +50,6 @@ public class GameEvents implements Listener {
 
         Game game = arena.getGame();
         game.makeSpectator(player);
-        game.checkForWinner();
 
         this.instance.debug(Level.INFO, String.format("Player %s died in arena %s", player.getName(), arena.getName()));
     }
@@ -71,7 +70,6 @@ public class GameEvents implements Listener {
         Game game = arena.getGame();
         arena.announce(Arena.Announce.PLAYER_DEATH, player.getName());
         game.makeSpectator(player);
-        game.checkForWinner();
 
         this.instance.debug(Level.INFO, String.format("Player %s died in arena %s (Cancelled)", player.getName(), arena.getName()));
     }
@@ -101,7 +99,6 @@ public class GameEvents implements Listener {
 
         Game game = arena.getGame();
         game.makeSpectator(player);
-        game.checkForWinner();
 
         this.instance.debug(Level.INFO, String.format("Player %s disconnected in arena %s", player.getName(), arena.getName()));
     }

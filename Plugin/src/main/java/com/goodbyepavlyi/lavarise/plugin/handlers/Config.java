@@ -31,6 +31,10 @@ public class Config extends ConfigUtil {
                 .collect(Collectors.toList());
     }
 
+    public List<String> GAME_COMMANDS_WINNER() {
+        return this.getConfig().getStringList("game.commands.winner");
+    }
+
     public int QUEUE_COUNTDOWN() {
         return this.getConfig().getInt("queue.countdown");
     }
