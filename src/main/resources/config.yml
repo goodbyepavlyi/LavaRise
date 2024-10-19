@@ -1,0 +1,24 @@
+version: 1
+
+# Configuration for the game settings
+game:
+  gracePhaseTime: 60  # Duration of the grace phase in seconds
+  lavaRisingTime: 10  # Time it takes for the lava to rise in seconds
+  spectatorSpawnYLavaOffset: 10  # Y offset from the lava where spectators will spawn
+
+  # List of items that players will receive during the game
+  items:
+    - "IRON_AXE"  # Example of an item that players will receive
+    - "IRON_PICKAXE"  # Another example of an item
+
+  # Commands to be executed when a player wins the game
+  commands:
+    winner:
+      - "tell %winner% You won the game!"  # Send a congratulatory message to the winner using %winner% placeholder
+
+# Configuration for the queue settings
+queue:
+  countdown: 45  # Countdown time in seconds before the game starts
+  halfFullQueueCountdown:  # Countdown time when the queue is half full
+    enabled: true
+    value: 10  # Countdown time in seconds before the game starts when the queue is half full

@@ -1,0 +1,94 @@
+version: 1
+
+command:
+  usage:
+    - "&8------------------ &6&lLavaRise &8------------------"
+    - " &6<> &8= required, &6[] &8= optional"
+    - " &8- &6/lavarise &8(Displays a help prompt)"
+    - " &8- &6/lavarise arena list &8(Lists available arenas)"
+    - " &8- &6/lavarise arena create <name> &8(Creates an arena)"
+    - " &8- &6/lavarise arena delete <name> &8(Deletes an arena)"
+    - " &8- &6/lavarise arena set <name> lobby &8(Sets lobby point)"
+    - " &8- &6/lavarise arena set <name> gamearea <top/bottom> &8(Sets up game area)"
+    - " &8- &6/lavarise arena set <name> minplayers <value> &8(Sets minimum players)"
+    - " &8- &6/lavarise arena set <name> maxplayers <value> &8(Sets maximum players)"
+    - " &8- &6/lavarise join <name> &8(Joins arena)"
+    - " &8- &6/lavarise leave &8(Leaves arena)"
+    - "&8------------------------------------------------"
+
+  noPermissions: "&8[&6&lLavaRise&8] You are not allowed to do this!"
+  onlyPlayer: "&8[&6&lLavaRise&8] Only players have the ability to perform this action!"
+  arenaNotFound: "&8[&6&lLavaRise&8] Arena doesn't exist!"
+  expectedNumber: "&8[&6&lLavaRise&8] The expected input for the value was a numeric type."
+  invalidGameArea: "&8[&6&lLavaRise&8] Invalid game area type! Valid types: &6%types%&8"
+
+  arena:
+    list:
+      success: "&8[&6&lLavaRise&8] Available arenas: &6%arenas%"
+      empty: "&8[&6&lLavaRise&8] There are none available arenas!"
+
+    create:
+      success: "&8[&6&lLavaRise&8] &6%arenaName% &8successfully created!"
+      failed: "&8[&6&lLavaRise&8] &6%arenaName% &8already exists!"
+
+    delete:
+      success: "&8[&6&lLavaRise&8] &6%arenaName% &8successfully deleted!"
+      failed: "&8[&6&lLavaRise&8] &6%arenaName% &8doesn't exist!"
+
+    set:
+      minplayers:
+        success: "&8[&6&lLavaRise&8] Minimum players have been set to &6%minimumPlayers%&8!"
+        lowValue: "&8[&6&lLavaRise&8] Minimum players must be less than maximum players!"
+
+      maxplayers:
+        success: "&8[&6&lLavaRise&8] Maximum players have been set to &6%maximumPlayers%&8!"
+        lowValue: "&8[&6&lLavaRise&8] Maximum players must be greater than minimal players!"
+
+      lobby:
+        success: "&8[&6&lLavaRise&8] The location of the lobby has been set to &6%blockX%, %blockY%, %blockZ% &8in &6%worldName%&8!"
+
+      gamearea:
+        success: "&8[&6&lLavaRise&8] The &6%type% &8game area location has been set to &6%blockX%, %blockY%, %blockZ% &8in &6%worldName%&8!"
+
+  join:
+    alreadyInArena: "&8[&6&lLavaRise&8] You are already in an arena!"
+    arenaIsntSetup: "&8[&6&lLavaRise&8] Arena hasn't been set up yet!"
+    arenaFull: "&8[&6&lLavaRise&8] Arena is full!"
+    arenaInGame: "&8[&6&lLavaRise&8] Arena is in-game!"
+
+  leave:
+    notInArena: "&8[&6&lLavaRise&8] You are not in arena!"
+
+queue:
+  playerJoin: "&8[&6&lLavaRise&8] &6%playerName% &8joined the game! (&6%playerCount%&8/&6%maximumPlayers%&8)"
+  playerLeave: "&8[&6&lLavaRise&8] &6%playerName% &8left the game! (&6%playerCount%&8/&6%maximumPlayers%&8)"
+
+  cancelled: "&8[&6&lLavaRise&8] Game countdown stopped due to lack of players!"
+  gameStartingIn: "&8[&6&lLavaRise&8] Game starting in &6%timeLeft%&8!"
+
+  items:
+    leave:
+      name: "&cLeave"
+
+  scoreboard:
+    title: "&6&lLavaRise"
+    durationWaiting: "Waiting.."
+    lines:
+      - "&8Starting in: &6%duration%"
+      - "&8Players: &6%currentPlayers%&8/&6%maximumPlayers%"
+
+game:
+  scoreboard:
+    title: "&6&lLavaRise"
+    lines:
+      - "&8Players Left: &6%playersLeft%"
+      - "&8Event: &6%event%"
+      - ""
+      - "&8Lava Y: &6%lavaY%"
+      - "&8Time: &6%gameTime%"
+
+  events:
+    gameStart: "&8[&6&lLavaRise&8] Game started! Have fun!"
+    gameEnded: "&8[&6&lLavaRise&8] Game ended! Thanks for playing."
+    playerDeath: "&8[&6&lLavaRise&8] &6%playerName% &8died!"
+    playerKilled: "&8[&6&lLavaRise&8] &6%playerName% &8killed by &6%killerName%&8!"

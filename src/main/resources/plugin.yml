@@ -1,0 +1,12 @@
+name: LavaRise
+version: '${project.version}'
+main: me.goodbyepavlyi.lavarise.LavaRiseInstance
+author: goodbyepavlyi
+
+commands:
+  lavarise:
+    description: Main command for the plugin LavaRise
+
+permissions:
+  lavarise.admin:
+    default: op
