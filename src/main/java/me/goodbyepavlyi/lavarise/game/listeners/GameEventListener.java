@@ -36,7 +36,6 @@ public class GameEventListener implements Listener {
     @EventHandler
     public void makePlayerSpectatorOnPlayerKill(EntityDamageByEntityEvent event) {
         if (!(event.getEntity() instanceof Player victim && event.getDamager() instanceof Player killer)) return;
-        Logger.debug(String.format("Victim: %s, Killer: %s", victim.getName(), killer.getName()));
 
         Arena arena = this.instance.getArenaManager().getArenaByPlayer(victim.getUniqueId());
         if (arena == null || arena.getState() != Arena.State.IN_GAME || arena.getGame().isSpectator(victim)) return;
