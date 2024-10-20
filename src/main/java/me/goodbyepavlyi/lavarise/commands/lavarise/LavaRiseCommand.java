@@ -92,46 +92,73 @@ public class LavaRiseCommand implements CommandExecutor, TabCompleter {
         return true;
     }
 
-
     @Override
     public List<String> onTabComplete(CommandSender commandSender, Command command, String label, String[] args) {
         List<String> completions = new ArrayList<>();
 
         if (args.length == 0) return null;
 
-        if (args.length == 1)
-            completions.addAll(Arrays.asList("arena", "join", "leave"));
+        if (args.length == 1) {
+            completions.addAll(filterOptions(Arrays.asList("arena", "join", "leave"), args[0]));
+            return completions;
+        }
 
-        if (args[0].equalsIgnoreCase("join") || args[0].equalsIgnoreCase("leave"))
-            if (args.length == 2)
-                completions.addAll(this.instance.getArenaManager().getArenaList().stream().map(Arena::getName).toList());
+        // Don't complete anything after "leave"
+        if (args[0].equalsIgnoreCase("leave")) return null;
 
+        // Complete arena names for "join"
+        if (args[0].equalsIgnoreCase("join") && args.length == 2) {
+            completions.addAll(this.instance.getArenaManager().getArenaList().stream()
+                .map(Arena::getName)
+                .filter(name -> name.toLowerCase().startsWith(args[1].toLowerCase()))
+                .toList()
+            );
+
+            return completions;
+        }
+
+        // Handle the "arena" command
         if (args[0].equalsIgnoreCase("arena")) {
             if (!commandSender.hasPermission(Permissions.ADMIN.toString()))
                 return null;
 
+            // Complete subcommands
             if (args.length == 2)
-                completions.addAll(Arrays.asList("list", "create", "delete", "set"));
+                completions.addAll(filterOptions(Arrays.asList("list", "create", "delete", "set"), args[1]));
 
-            if (args.length == 3 && (
-                args[1].equalsIgnoreCase("delete")
-                || args[1].equalsIgnoreCase("set"))
-            )
-                completions.addAll(this.instance.getArenaManager().getArenaList().stream().map(Arena::getName).toList());
-
-            if (args.length == 4 && args[1].equalsIgnoreCase("set")) {
-                completions.addAll(Arrays.asList("lobby", "gamearea", "minplayers", "maxplayers"));
+            // Complete arena names for "delete" and "set"
+            if (args.length == 3 && (args[1].equalsIgnoreCase("delete") || args[1].equalsIgnoreCase("set"))) {
+                completions.addAll(this.instance.getArenaManager().getArenaList().stream()
+                    .map(Arena::getName)
+                    .filter(name -> name.toLowerCase().startsWith(args[2].toLowerCase()))
+                    .toList()
+                );
             }
 
-            if (args.length == 5 && args[1].equalsIgnoreCase("set")) {
-                if (args[3].equalsIgnoreCase("gamearea"))
-                    completions.addAll(Arrays.asList(ArenaConfig.GameArea.TOP.toString(), ArenaConfig.GameArea.BOTTOM.toString()));
+            // Complete options for "set"
+            if (args.length == 4 && args[1].equalsIgnoreCase("set"))
+                completions.addAll(filterOptions(Arrays.asList("lobby", "gamearea", "minplayers", "maxplayers"), args[3]));
+
+            // Complete GameArea options for "set gamearea"
+            if (args.length == 5 && args[1].equalsIgnoreCase("set") && args[3].equalsIgnoreCase("gamearea")) {
+                completions.addAll(
+                    Arrays.stream(ArenaConfig.GameArea.values())
+                        .map(ArenaConfig.GameArea::toString)
+                        .filter(area -> area.toLowerCase().startsWith(args[4].toLowerCase()))
+                        .toList()
+                );
             }
         }
 
         String currentInput = args[args.length - 1].toLowerCase();
         completions.removeIf(option -> !option.toLowerCase().startsWith(currentInput));
-
         return completions;
+    }
+
+    // Helper methods for clarity
+    private List<String> filterOptions(List<String> options, String input) {
+        return options.stream()
+            .filter(option -> option.toLowerCase().startsWith(input.toLowerCase()))
+            .toList();
     }
 }
