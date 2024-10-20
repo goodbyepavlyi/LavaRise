@@ -83,10 +83,16 @@ public class GameMap {
         Location gameAreaBottom = this.arena.getConfig().getGameArea(ArenaConfig.GameArea.BOTTOM);
         Location gameAreaTop = this.arena.getConfig().getGameArea(ArenaConfig.GameArea.TOP);
 
+        if (this.game.getCurrentLavaY() >= gameAreaTop.getBlockY()) {
+            Logger.debug(String.format("Lava has reached the top of the map in arena %s", this.arena.getName()));
+            this.stopLavaFillTask();
+            return;
+        }
+
         this.fillArea(
-                Material.LAVA,
-                gameAreaBottom.getBlockX(), gameAreaBottom.getBlockY(), gameAreaBottom.getBlockZ(),
-                gameAreaTop.getBlockX(), this.game.getCurrentLavaY(), gameAreaTop.getBlockZ()
+            Material.LAVA,
+            gameAreaBottom.getBlockX(), gameAreaBottom.getBlockY(), gameAreaBottom.getBlockZ(),
+            gameAreaTop.getBlockX(), this.game.getCurrentLavaY(), gameAreaTop.getBlockZ()
         );
 
         this.game.setCurrentLavaY(this.game.getCurrentLavaY() + 1);
