@@ -137,16 +137,22 @@ public class LavaRiseCommand implements CommandExecutor, TabCompleter {
 
             // Complete options for "set"
             if (args.length == 4 && args[1].equalsIgnoreCase("set"))
-                completions.addAll(filterOptions(Arrays.asList("lobby", "gamearea", "minplayers", "maxplayers"), args[3]));
+                completions.addAll(filterOptions(Arrays.asList("lobby", "gamearea", "minplayers", "maxplayers", "pvp"), args[3]));
 
-            // Complete GameArea options for "set gamearea"
-            if (args.length == 5 && args[1].equalsIgnoreCase("set") && args[3].equalsIgnoreCase("gamearea")) {
-                completions.addAll(
-                    Arrays.stream(ArenaConfig.GameArea.values())
-                        .map(ArenaConfig.GameArea::toString)
-                        .filter(area -> area.toLowerCase().startsWith(args[4].toLowerCase()))
-                        .toList()
-                );
+            if (args.length == 5 && args[1].equalsIgnoreCase("set")) {
+                // Complete GameArea options for "set gamearea"
+                if (args[3].equalsIgnoreCase("gamearea")) {
+                    completions.addAll(
+                        Arrays.stream(ArenaConfig.GameArea.values())
+                            .map(ArenaConfig.GameArea::toString)
+                            .filter(area -> area.toLowerCase().startsWith(args[4].toLowerCase()))
+                            .toList()
+                    );
+                }
+
+                // Complete options for "set pvp"
+                if (args[3].equalsIgnoreCase("pvp"))
+                    completions.addAll(new ArrayList<>(Arrays.asList("true", "false")));
             }
         }
 

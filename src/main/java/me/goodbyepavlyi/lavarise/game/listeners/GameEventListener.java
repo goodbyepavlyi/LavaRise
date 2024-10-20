@@ -122,4 +122,15 @@ public class GameEventListener implements Listener {
         event.setCancelled(true);
         Logger.debug(String.format("Cancelling block place event for player %s in arena %s (Outside game map)", player.getName(), arena.getName()));
     }
+
+    @EventHandler
+    public void cancelPlayerPVP(EntityDamageByEntityEvent event) {
+        if (!(event.getEntity() instanceof Player victim && event.getDamager() instanceof Player killer)) return;
+
+        Arena arena = this.instance.getArenaManager().getArenaByPlayer(victim.getUniqueId());
+        if (arena == null || arena.getState() != Arena.State.IN_GAME || arena.getConfig().getPVP()) return;
+
+        event.setCancelled(true);
+        Logger.debug(String.format("Cancelled PVP between players %s and %s in arena %s", killer.getName(), victim.getName(), arena.getName()));
+    }
 }

@@ -122,6 +122,16 @@ public class Messages extends YamlConfig {
                 .replaceAll("%blockZ%", String.valueOf(location.getBlockZ()));
     }
 
+    public String COMMAND_ARENA_SET_PVP_INVALIDVALUE() {
+        return this.getString("command.arena.set.pvp.invalidValue")
+                .replaceAll("%types%", "true, false");
+    }
+
+    public String COMMAND_ARENA_SET_PVP_SUCCESS(boolean pvp) {
+        return this.getString("command.arena.set.pvp.success")
+                .replaceAll("%type%", pvp ? "true" : "false");
+    }
+
     public String COMMAND_JOIN_ALREADYINARENA() {
         return this.getString("command.join.alreadyInArena");
     }

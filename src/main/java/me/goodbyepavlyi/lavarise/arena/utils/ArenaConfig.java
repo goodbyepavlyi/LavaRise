@@ -70,6 +70,17 @@ public class ArenaConfig {
         return maxPlayers;
     }
 
+    public void setPVP(boolean pvp) {
+        this.config.set("pvp", pvp);
+        Logger.debug(String.format("Set PVP to %b for arena %s", pvp, this.arena.getName()));
+    }
+
+    public boolean getPVP() {
+        boolean pvp = this.config.getBoolean("pvp");
+        Logger.debug(String.format("Retrieved PVP (%b) for arena %s", pvp, this.arena.getName()));
+        return pvp;
+    }
+
     public void setLobby(Location lobby) {
         this.config.set("lobby.world", lobby.getWorld().getName());
         this.config.set("lobby.x", lobby.getBlockX());

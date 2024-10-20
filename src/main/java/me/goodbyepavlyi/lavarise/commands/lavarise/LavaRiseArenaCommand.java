@@ -81,6 +81,9 @@ public class LavaRiseArenaCommand {
                     case "gamearea":
                         setGameArea(lavaRiseInstance, player, arena, actionValue);
                         return true;
+                    case "pvp":
+                        setPVP(lavaRiseInstance, player, arena, actionValue);
+                        return true;
                 }
             }
         }
@@ -128,5 +131,16 @@ public class LavaRiseArenaCommand {
         } catch (IllegalArgumentException e) {
             CommandUtils.sendMessage(player, lavaRiseInstance.getMessages().COMMAND_ARENA_SET_GAMEAREA_INVALIDVALUE());
         }
+    }
+
+    private static void setPVP(LavaRiseInstance lavaRiseInstance, Player player, Arena arena, String actionValue) {
+        if (!actionValue.equalsIgnoreCase("true") && !actionValue.equalsIgnoreCase("false")) {
+            CommandUtils.sendMessage(player, lavaRiseInstance.getMessages().COMMAND_ARENA_SET_PVP_INVALIDVALUE());
+            return;
+        }
+
+        boolean pvp = Boolean.parseBoolean(actionValue);
+        arena.getConfig().setPVP(pvp);
+        CommandUtils.sendMessage(player, lavaRiseInstance.getMessages().COMMAND_ARENA_SET_PVP_SUCCESS(pvp));
     }
 }

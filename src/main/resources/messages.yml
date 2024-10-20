@@ -12,6 +12,7 @@ command:
     - " &8- &6/lavarise arena set <name> gamearea <top/bottom> &8(Sets up game area)"
     - " &8- &6/lavarise arena set <name> minplayers <value> &8(Sets minimum players)"
     - " &8- &6/lavarise arena set <name> maxplayers <value> &8(Sets maximum players)"
+    - " &8- &6/lavarise arena set <name> pvp <true/false> &8(Enables/Disables PVP)"
     - " &8- &6/lavarise join <name> &8(Joins arena)"
     - " &8- &6/lavarise leave &8(Leaves arena)"
     - "&8------------------------------------------------"
@@ -49,6 +50,10 @@ command:
       gamearea:
         invalidValue: "&8[&6&lLavaRise&8] Invalid game area type! Valid types: &6%types%&8"
         success: "&8[&6&lLavaRise&8] The &6%type% &8game area location has been set to &6%blockX%, %blockY%, %blockZ% &8in &6%worldName%&8!"
+
+      pvp:
+        invalidValue: "&8[&6&lLavaRise&8] Invalid PVP value! Valid values: &6%types%&8"
+        success: "&8[&6&lLavaRise&8] PVP has been set to &6%type%&8!"
 
   join:
     alreadyInArena: "&8[&6&lLavaRise&8] You are already in an arena!"
