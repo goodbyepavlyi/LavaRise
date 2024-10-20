@@ -94,7 +94,6 @@ public class Game {
         this.gameTime = System.currentTimeMillis();
 
         this.gameMap.saveOriginalBlocks();
-        this.gameMap.createSpawnpoints();
 
         this.currentLavaY = this.arena.getConfig().getGameArea(ArenaConfig.GameArea.BOTTOM).getBlockY();
 

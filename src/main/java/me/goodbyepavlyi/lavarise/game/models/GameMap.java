@@ -34,6 +34,7 @@ public class GameMap {
     }
 
     public List<Location> getSpawnpoints() {
+        if (this.spawnpoints == null) this.createSpawnpoints();
         return this.spawnpoints;
     }
 
