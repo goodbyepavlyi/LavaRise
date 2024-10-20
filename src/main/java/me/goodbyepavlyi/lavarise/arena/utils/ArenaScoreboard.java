@@ -56,12 +56,10 @@ public class ArenaScoreboard {
         }
 
         this.show();
-        Logger.debug(String.format("Scoreboard updated for arena %s", this.getArena().getName()));
     }
 
     public void show() {
         this.arena.doForAllPlayers(player -> player.setScoreboard(this.scoreboard));
-        Logger.debug(String.format("Scoreboard displayed to all players in arena: %s", this.arena.getName()));
     }
 
     public void startScoreboardUpdateTask(Runnable updateMethod) {
