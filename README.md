@@ -46,4 +46,4 @@ We welcome contributions from the community to enhance the LavaRise plugin.
 
 ## License
 
-LavaRise is released under the [MIT License](https://opensource.org/licenses/MIT). Please see the [LICENSE](https://github.com/goodbyepavlyi/LavaRise/blob/main/LICENSE) file for more details.
+LavaRise is released under the [MIT License](https://opensource.org/licenses/MIT). Please see the [LICENSE](https://github.com/goodbyepavlyi/LavaRise/blob/master/LICENSE) file for more details.
