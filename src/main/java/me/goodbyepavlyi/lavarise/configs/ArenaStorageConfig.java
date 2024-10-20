@@ -5,6 +5,7 @@ import me.goodbyepavlyi.lavarise.utils.YamlConfig;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ArenaStorageConfig extends YamlConfig {
     private final int CONFIG_VERSION = 1;
@@ -19,7 +20,10 @@ public class ArenaStorageConfig extends YamlConfig {
     }
 
     public Set<String> getArenas() {
-        return this.getConfig().getKeys(false);
+        return this.getConfig().getKeys(false)
+                .stream()
+                .filter(key -> !key.equals("version"))
+                .collect(Collectors.toSet());
     }
 
     public ConfigurationSection getSection(String arenaName) {
