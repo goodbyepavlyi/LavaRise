@@ -161,12 +161,13 @@ public class Game {
         Location spectatorLocation = new Location(
             topLocation.getWorld(),
             (topLocation.getX() + bottomLocation.getX()) / 2,
-            this.currentLavaY + GameSpectatorSpawnYLavaOffset,
+            this.currentLavaY,
             (topLocation.getZ() + bottomLocation.getZ()) / 2);
 
         while (spectatorLocation.getWorld().getBlockAt(spectatorLocation).getType().isSolid())
             spectatorLocation.add(0, 1, 0);
 
+        spectatorLocation.add(0, GameSpectatorSpawnYLavaOffset, 0);
         return spectatorLocation;
     }
 
@@ -213,17 +214,17 @@ public class Game {
 
         arenaPlayer.setSpectator(true);
         this.arena.doForAllPlayers(p -> p.hidePlayer(this.instance, player));
+        player.setGameMode(GameMode.ADVENTURE);
         player.setAllowFlight(true);
         player.setFlying(true);
         player.teleport(this.createSpectatorSpawnpoint(), PlayerTeleportEvent.TeleportCause.PLUGIN);
-        player.setGameMode(GameMode.ADVENTURE);
         player.setHealth(20);
         player.setFoodLevel(20);
         player.getInventory().clear();
         player.getInventory().setArmorContents(null);
         this.arena.delayFireTicks(player);
+        Logger.debug(String.format("Player %s has become a spectator in arena %s", player.getName(), this.arena.getName()));
 
         this.checkForWinner();
-        Logger.debug(String.format("Player %s has become a spectator in arena %s", player.getName(), this.arena.getName()));
     }
 }
