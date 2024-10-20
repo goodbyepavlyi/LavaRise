@@ -126,7 +126,7 @@ public class LavaRiseArenaCommand {
             arena.getConfig().setGameAreaLocation(gameArea, player.getLocation());
             CommandUtils.sendMessage(player, lavaRiseInstance.getMessages().COMMAND_ARENA_SET_GAMEAREA_SUCCESS(gameArea, player.getLocation()));
         } catch (IllegalArgumentException e) {
-            CommandUtils.sendMessage(player, lavaRiseInstance.getMessages().COMMAND_INVALID_GAMEAREA());
+            CommandUtils.sendMessage(player, lavaRiseInstance.getMessages().COMMAND_ARENA_SET_GAMEAREA_INVALIDVALUE());
         }
     }
 }

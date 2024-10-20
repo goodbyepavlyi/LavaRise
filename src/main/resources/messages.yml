@@ -20,7 +20,6 @@ command:
   onlyPlayer: "&8[&6&lLavaRise&8] Only players have the ability to perform this action!"
   arenaNotFound: "&8[&6&lLavaRise&8] Arena doesn't exist!"
   expectedNumber: "&8[&6&lLavaRise&8] The expected input for the value was a numeric type."
-  invalidGameArea: "&8[&6&lLavaRise&8] Invalid game area type! Valid types: &6%types%&8"
 
   arena:
     list:
@@ -48,6 +47,7 @@ command:
         success: "&8[&6&lLavaRise&8] The location of the lobby has been set to &6%blockX%, %blockY%, %blockZ% &8in &6%worldName%&8!"
 
       gamearea:
+        invalidValue: "&8[&6&lLavaRise&8] Invalid game area type! Valid types: &6%types%&8"
         success: "&8[&6&lLavaRise&8] The &6%type% &8game area location has been set to &6%blockX%, %blockY%, %blockZ% &8in &6%worldName%&8!"
 
   join:

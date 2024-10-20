@@ -51,13 +51,6 @@ public class Messages extends YamlConfig {
         return this.getString("command.expectedNumber");
     }
 
-    public String COMMAND_INVALID_GAMEAREA() {
-        return this.getString("command.invalidGameArea")
-            .replaceAll("%types%", Arrays.stream(ArenaConfig.GameArea.values())
-                .map(ArenaConfig.GameArea::toString)
-                .collect(Collectors.joining(", ")));
-    }
-
     public String COMMAND_ARENA_LIST_EMPTY() {
         return this.getString("command.arena.list.empty");
     }
@@ -111,6 +104,13 @@ public class Messages extends YamlConfig {
                 .replaceAll("%blockX%", String.valueOf(location.getBlockX()))
                 .replaceAll("%blockY%", String.valueOf(location.getBlockY()))
                 .replaceAll("%blockZ%", String.valueOf(location.getBlockZ()));
+    }
+
+    public String COMMAND_ARENA_SET_GAMEAREA_INVALIDVALUE() {
+        return this.getString("command.arena.set.gamearea.invalidValue")
+                .replaceAll("%types%", Arrays.stream(ArenaConfig.GameArea.values())
+                        .map(ArenaConfig.GameArea::toString)
+                        .collect(Collectors.joining(", ")));
     }
 
     public String COMMAND_ARENA_SET_GAMEAREA_SUCCESS(ArenaConfig.GameArea gameArea, Location location) {
