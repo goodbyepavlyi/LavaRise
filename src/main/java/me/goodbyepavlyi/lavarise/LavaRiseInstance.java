@@ -9,6 +9,7 @@ import me.goodbyepavlyi.lavarise.configs.Messages;
 import me.goodbyepavlyi.lavarise.game.listeners.GameGracePhaseEventListener;
 import me.goodbyepavlyi.lavarise.queue.listeners.QueueEventListener;
 import me.goodbyepavlyi.lavarise.utils.Logger;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.lang.management.ManagementFactory;
@@ -37,6 +38,11 @@ public class LavaRiseInstance extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new GameGracePhaseEventListener(this), this);
         this.getCommand("lavarise").setExecutor(new LavaRiseCommand(this));
         this.getCommand("lavarise").setTabCompleter(new LavaRiseCommand(this));
+
+        if (this.config.Metrics() && !this.DEBUG) {
+            Logger.debug("Enabling bStats metrics");
+            new Metrics(this, 23679);
+        } else Logger.debug("bStats metrics are disabled, skipping");
     }
 
     @Override

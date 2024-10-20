@@ -48,4 +48,8 @@ public class Config extends YamlConfig {
     public int QueueHalfFullQueueCountdownValue() {
         return this.getConfig().getInt("queue.halfFullQueueCountdown.value");
     }
+
+    public boolean Metrics() {
+        return this.getConfig().getBoolean("metrics");
+    }
 }
