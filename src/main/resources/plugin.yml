@@ -10,3 +10,5 @@ commands:
 permissions:
   lavarise.admin:
     default: op
+  lavarise.updatechecker:
+    default: op

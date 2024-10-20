@@ -8,6 +8,7 @@ import me.goodbyepavlyi.lavarise.configs.Config;
 import me.goodbyepavlyi.lavarise.configs.Messages;
 import me.goodbyepavlyi.lavarise.game.listeners.GameGracePhaseEventListener;
 import me.goodbyepavlyi.lavarise.queue.listeners.QueueEventListener;
+import me.goodbyepavlyi.lavarise.updater.UpdateChecker;
 import me.goodbyepavlyi.lavarise.utils.Logger;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -15,6 +16,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.lang.management.ManagementFactory;
 
 public class LavaRiseInstance extends JavaPlugin {
+    private final String SPIGOT_RESOURCE_ID = "111135";
+    private final int BSTATS_METRICS_ID = 23679;
     private final boolean DEBUG;
 
     private Config config;
@@ -41,8 +44,13 @@ public class LavaRiseInstance extends JavaPlugin {
 
         if (this.config.Metrics() && !this.DEBUG) {
             Logger.debug("Enabling bStats metrics");
-            new Metrics(this, 23679);
+            new Metrics(this, BSTATS_METRICS_ID);
         } else Logger.debug("bStats metrics are disabled, skipping");
+
+        new UpdateChecker(this, SPIGOT_RESOURCE_ID)
+            .checkEveryXHours(24)
+            .setNotifyByPermissionOnJoin("lavarise.updatechecker")
+            .checkNow();
     }
 
     @Override
