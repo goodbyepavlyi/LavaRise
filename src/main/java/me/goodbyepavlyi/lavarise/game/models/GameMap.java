@@ -96,33 +96,31 @@ public class GameMap {
         Location gameAreaBottom = this.arena.getConfig().getGameArea(ArenaConfig.GameArea.BOTTOM);
         Location gameAreaTop = this.arena.getConfig().getGameArea(ArenaConfig.GameArea.TOP);
 
-        if (this.game.getCurrentLavaY() >= gameAreaTop.getBlockY()) {
-            Logger.debug(String.format("Lava has reached the top of the map in arena '%s'.", this.arena.getName()));
-            this.stopLavaFillTask();
-            return;
-        }
-
+        this.game.setCurrentLavaY(this.game.getCurrentLavaY() + 1);
         this.fillArea(
             Material.LAVA,
             gameAreaBottom.getBlockX(), gameAreaBottom.getBlockY(), gameAreaBottom.getBlockZ(),
             gameAreaTop.getBlockX(), this.game.getCurrentLavaY(), gameAreaTop.getBlockZ()
         );
 
-        this.game.setCurrentLavaY(this.game.getCurrentLavaY() + 1);
+        Logger.debug(String.format("Lava filled on level Y %d in arena '%s'.", this.game.getCurrentLavaY(), this.arena.getName()));
         this.game.getGameScoreboard().update();
 
-        Logger.debug(String.format("Lava filled up to Y level %d in arena '%s'.", this.game.getCurrentLavaY(), this.arena.getName()));
+        if (this.game.getCurrentLavaY() >= gameAreaTop.getBlockY()) {
+            Logger.debug(String.format("Lava has reached the top of the map in arena '%s'.", this.arena.getName()));
+            this.stopLavaFillTask();
+        }
     }
 
     public void fillLavaPeriodically() {
         this.lavaFillTask = this.instance.getServer().getScheduler().runTaskTimer(
-                this.instance,
-                () -> {
-                    if (!this.game.getGamePhase().equals(Game.GamePhase.LAVA)) return;
-                    this.fillLava();
-                },
-                0L,
-                (this.instance.getConfiguration().GameLavaRisingTime() * 20L)
+            this.instance,
+            () -> {
+                if (!this.game.getGamePhase().equals(Game.GamePhase.LAVA)) return;
+                this.fillLava();
+            },
+            0L,
+            (this.instance.getConfiguration().GameLavaRisingTime() * 20L)
         );
 
         Logger.debug(String.format("Lava fill task started for arena '%s'.", this.arena.getName()));
