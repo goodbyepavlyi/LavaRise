@@ -119,7 +119,7 @@ public class Game {
 
         this.gameScoreboard.stopScoreboardUpdateTask();
 
-        this.gameMap.getLavaFillTask().cancel();
+        this.gameMap.stopLavaFillTask();
         this.gameMap.restoreOriginalBlocks();
 
         this.arena.doForAllPlayers(player -> {

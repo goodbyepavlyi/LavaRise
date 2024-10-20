@@ -33,10 +33,6 @@ public class GameMap {
         this.originalBlocks = new HashMap<>();
     }
 
-    public BukkitTask getLavaFillTask() {
-        return this.lavaFillTask;
-    }
-
     public List<Location> getSpawnpoints() {
         return this.spawnpoints;
     }
@@ -112,6 +108,13 @@ public class GameMap {
         );
 
         Logger.debug(String.format("Lava fill task started for arena %s", this.arena.getName()));
+    }
+
+    public void stopLavaFillTask() {
+        if (this.lavaFillTask != null) {
+            this.lavaFillTask.cancel();
+            Logger.debug(String.format("Lava fill task stopped for arena %s", this.arena.getName()));
+        }
     }
 
     public void saveOriginalBlocks() {
