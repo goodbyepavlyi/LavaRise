@@ -37,6 +37,7 @@ public class GameMap {
             this.createSpawnpoints();
             Logger.debug(String.format("Spawnpoints created for arena '%s'.", arena.getName()));
         }
+
         return this.spawnpoints;
     }
 
@@ -49,19 +50,28 @@ public class GameMap {
         for (int i = 0; i < amount; i++) {
             double x = (gameAreaBottom.getX() + gameAreaTop.getX()) / 2.0 + (Math.random() - 0.5) * 10.0;
             double z = (gameAreaBottom.getZ() + gameAreaTop.getZ()) / 2.0 + (Math.random() - 0.5) * 10.0;
-            double y = gameAreaBottom.getWorld().getHighestBlockYAt((int) x, (int) z) + 1.0;
+
+            // Get the highest block in the area but limit the height to within the game area
+            double highestY = gameAreaBottom.getWorld().getHighestBlockYAt((int) x, (int) z);
+            double minY = gameAreaBottom.getY();
+            double maxY = gameAreaTop.getY();
+
+            // Ensure the Y-coordinate is within bounds
+            double y = Math.min(Math.max(highestY, minY), maxY);
 
             Location randomLocation = new Location(gameAreaBottom.getWorld(), x, y, z);
             Block block = randomLocation.getBlock();
-            int yOffset = 0;
 
-            while (!block.getType().isSolid()) {
+            int yOffset = 0;
+            while (!block.getType().isSolid() && randomLocation.getY() <= maxY) {
                 yOffset += 1;
                 randomLocation.add(0, 1, 0);
                 block = randomLocation.getBlock();
-                // Prevent infinite loop
-                if (yOffset >= 256)
+
+                if (yOffset >= 10) {
+                    Logger.debug(String.format("Failed to create spawnpoint at %s for arena '%s'.", randomLocation, arena.getName()));
                     break;
+                }
             }
 
             spawnpoints.add(randomLocation);
