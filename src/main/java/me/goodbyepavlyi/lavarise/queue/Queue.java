@@ -73,7 +73,7 @@ public class Queue {
         player.getInventory().setArmorContents(null);
         player.getInventory().clear();
         player.getInventory().setItem(8, this.getLeaveItem());
-        this.arena.delayFireTicks(player);
+        this.arena.delayAction(player, p -> p.setFireTicks(0));
 
         // Start the countdown if the minimum players are met
         if (this.hasEnoughPlayersToStart() && this.arena.getState() == Arena.State.WAITING) {

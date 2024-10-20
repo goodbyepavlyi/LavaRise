@@ -117,13 +117,13 @@ public class Arena {
         return this.tasks;
     }
 
-    public void delayFireTicks(Player player) {
+    public void delayAction(Player player, Consumer<Player> callback) {
         new BukkitRunnable() {
             @Override
             public void run() {
-                player.setFireTicks(0);
+                callback.accept(player);
             }
-        }.runTaskLater(this.arenaManager.getInstance(), 2L);
+        }.runTaskLater(this.arenaManager.getInstance(), 1L);
     }
 
     public void removePlayer(Player player, boolean dontRemove) {
@@ -131,7 +131,10 @@ public class Arena {
         if (arenaPlayer == null) return;
 
         arenaPlayer.restoreData();
-        this.delayFireTicks(player);
+        this.delayAction(player, p -> {
+            p.setFireTicks(0);
+            p.setFallDistance(0.0F);
+        });
 
         if (!dontRemove) {
             if (this.getState().equals(Arena.State.IN_GAME)) this.getGame().removePlayer(arenaPlayer);

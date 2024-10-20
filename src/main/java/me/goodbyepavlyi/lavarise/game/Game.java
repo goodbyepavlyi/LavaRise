@@ -222,7 +222,7 @@ public class Game {
         player.setFoodLevel(20);
         player.getInventory().clear();
         player.getInventory().setArmorContents(null);
-        this.arena.delayFireTicks(player);
+        this.arena.delayAction(player, p -> p.setFireTicks(0));
         Logger.debug(String.format("Player %s has become a spectator in arena %s", player.getName(), this.arena.getName()));
 
         this.checkForWinner();
