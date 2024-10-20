@@ -49,8 +49,6 @@ public class LavaRiseInstance extends JavaPlugin {
     public void onDisable() {
         this.arenaManager.getArenaList().forEach(arena -> {
             if (!arena.getState().equals(Arena.State.IN_GAME)) return;
-
-            Logger.debug(String.format("Stopping game in arena %s", arena.getName()));
             arena.getGame().stop();
         });
 

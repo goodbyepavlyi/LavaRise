@@ -81,8 +81,8 @@ public class Game {
 
     public Set<ArenaPlayer> getSpectators() {
         return this.arena.getPlayers().stream()
-            .filter(ArenaPlayer::isSpectator)
-            .collect(Collectors.toSet());
+                .filter(ArenaPlayer::isSpectator)
+                .collect(Collectors.toSet());
     }
 
     public boolean isSpectator(Player player) {
@@ -94,7 +94,6 @@ public class Game {
         this.gameTime = System.currentTimeMillis();
 
         this.gameMap.saveOriginalBlocks();
-
         this.currentLavaY = this.arena.getConfig().getGameArea(ArenaConfig.GameArea.BOTTOM).getBlockY();
 
         this.gameScoreboard.startScoreboardUpdates();
@@ -104,8 +103,7 @@ public class Game {
             @Override
             public void run() {
                 gamePhase = GamePhase.LAVA;
-                Logger.debug(String.format("Switched to Lava mode in arena %s", arena.getName()));
-
+                Logger.debug(String.format("Game phase transitioned to %s in arena '%s'.", gamePhase, arena.getName()));
                 gameMap.fillLavaPeriodically();
             }
         }.runTaskLater(this.instance, (this.instance.getConfiguration().GameGracePhaseTime() * 20L));
@@ -114,10 +112,10 @@ public class Game {
     }
 
     public void stop() {
+        Logger.debug(String.format("Stopping game in arena '%s'.", this.arena.getName()));
         this.arena.announceMessage(Arena.AnnouncementType.GAME_END);
 
         this.gameScoreboard.stopScoreboardUpdateTask();
-
         this.gameMap.stopLavaFillTask();
         this.gameMap.restoreOriginalBlocks();
 
@@ -127,7 +125,7 @@ public class Game {
         });
 
         this.arena.reset();
-        Logger.debug(String.format("Game stopped in arena %s", this.arena.getName()));
+        Logger.debug(String.format("Game in arena '%s' has been stopped and reset.", this.arena.getName()));
     }
 
     public void spawnPlayers() {
@@ -149,7 +147,7 @@ public class Game {
                             .toArray(ItemStack[]::new)
             );
 
-            Logger.debug(String.format("Player %s has been spawned in arena %s", player.getName(), this.arena.getName()));
+            Logger.debug(String.format("Player '%s' has been spawned at %s in arena '%s'.", player.getName(), spawnPoint, this.arena.getName()));
         });
     }
 
@@ -167,16 +165,20 @@ public class Game {
             spectatorLocation.add(0, 1, 0);
 
         spectatorLocation.add(0, GameSpectatorSpawnYLavaOffset, 0);
+        Logger.debug(String.format("Created spectator spawn point at %s for arena '%s'.", spectatorLocation, this.arena.getName()));
         return spectatorLocation;
     }
 
     public void checkForWinner() {
+        Logger.debug(String.format("Checking for a winner in arena '%s'.", this.arena.getName()));
         long remainingPlayers = this.arena.getPlayers().stream()
                 .filter(arenaPlayer -> !arenaPlayer.isSpectator())
                 .count();
 
-        if (remainingPlayers > 1)
+        if (remainingPlayers > 1) {
+            Logger.debug(String.format("Multiple players remaining (%d) in arena '%s', cannot determine winner yet.", remainingPlayers, this.arena.getName()));
             return;
+        }
 
         if (remainingPlayers == 1) {
             ArenaPlayer winner = this.arena.getPlayers().stream()
@@ -185,6 +187,7 @@ public class Game {
                     .orElse(null);
 
             assert winner != null;
+            Logger.debug(String.format("Winner found: '%s' in arena '%s'.", winner.getPlayer().getName(), this.arena.getName()));
             this.instance.getConfiguration().GameCommandsWinner().forEach(command -> {
                 String winnerCommand = command.replace("%winner%", winner.getPlayer().getName());
                 this.instance.getServer().dispatchCommand(this.instance.getServer().getConsoleSender(), winnerCommand);
@@ -192,11 +195,10 @@ public class Game {
         }
 
         this.stop();
-        Logger.debug(String.format("Checked for winner in arena %s", this.arena.getName()));
     }
 
     public void removePlayer(ArenaPlayer arenaPlayer) {
-        Logger.debug(String.format("Player %s removed from the game in arena %s", arenaPlayer.getPlayer().getName(), this.arena.getName()));
+        Logger.debug(String.format("Removing player '%s' from the game in arena '%s'.", arenaPlayer.getPlayer().getName(), this.arena.getName()));
         this.arena.getPlayers().remove(arenaPlayer);
 
         this.arena.announceMessage(Arena.AnnouncementType.PLAYER_DEATH, arenaPlayer.getPlayer().getName());
@@ -205,9 +207,12 @@ public class Game {
 
     public void makeSpectator(Player player) {
         ArenaPlayer arenaPlayer = this.arena.getPlayer(player.getUniqueId());
-        if (arenaPlayer == null) return;
+        if (arenaPlayer == null) {
+            Logger.debug(String.format("Player '%s' could not be found in arena '%s'.", player.getName(), this.arena.getName()));
+            return;
+        }
         if (arenaPlayer.isSpectator()) {
-            Logger.debug(String.format("Player %s is already a spectator in arena %s", player.getName(), this.arena.getName()));
+            Logger.debug(String.format("Player '%s' is already a spectator in arena '%s'.", player.getName(), this.arena.getName()));
             return;
         }
 
@@ -222,7 +227,7 @@ public class Game {
         player.getInventory().clear();
         player.getInventory().setArmorContents(null);
         this.arena.delayAction(player, p -> p.setFireTicks(0));
-        Logger.debug(String.format("Player %s has become a spectator in arena %s", player.getName(), this.arena.getName()));
+        Logger.debug(String.format("Player '%s' has become a spectator in arena '%s'.", player.getName(), this.arena.getName()));
 
         this.checkForWinner();
     }

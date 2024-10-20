@@ -111,6 +111,7 @@ public class Arena {
 
     public void setState(State state) {
         this.state = state;
+        Logger.debug(String.format("Arena %s state changed to %s", this.name, state));
     }
 
     public List<BukkitTask> getTasks() {
@@ -128,12 +129,16 @@ public class Arena {
 
     public void removePlayer(Player player, boolean dontRemove) {
         ArenaPlayer arenaPlayer = this.getPlayer(player.getUniqueId());
-        if (arenaPlayer == null) return;
+        if (arenaPlayer == null) {
+            Logger.debug(String.format("Player %s is not in arena %s", player.getName(), this.name));
+            return;
+        }
 
         arenaPlayer.restoreData();
         this.delayAction(player, p -> {
             p.setFireTicks(0);
             p.setFallDistance(0.0F);
+            Logger.debug(String.format("Restored player %s data in arena %s", player.getName(), this.name));
         });
 
         if (!dontRemove) {
@@ -143,6 +148,7 @@ public class Arena {
 
         // Clear the player's scoreboard
         player.setScoreboard(this.arenaManager.getInstance().getServer().getScoreboardManager().getMainScoreboard());
+        Logger.debug(String.format("Cleared scoreboard for player %s in arena %s", player.getName(), this.name));
     }
 
     public void removePlayer(Player player) {
@@ -167,7 +173,7 @@ public class Arena {
 
                 message = arenaManager.getInstance().getMessages().QUEUE_PLAYERLEAVE(
                         arguments[0],
-                        this.getPlayers().size()-1, // Decrease by 1 since the player is being removed later
+                        this.getPlayers().size() - 1, // Decrease by 1 since the player is being removed later
                         this.getConfig().getMaximumPlayers()
                 );
                 break;
@@ -203,7 +209,6 @@ public class Arena {
     }
 
     public void doForAllPlayers(Consumer<Player> callback) {
-        Logger.debug(String.format("Running callback for all Players (%d) in arena %s", this.getPlayers().size(), this.name));
         this.getPlayers().stream()
             .filter(Objects::nonNull)
             .map(ArenaPlayer::getPlayer)

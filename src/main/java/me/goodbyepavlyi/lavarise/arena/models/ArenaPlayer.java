@@ -14,7 +14,6 @@ public class ArenaPlayer {
     public ArenaPlayer(Player player) {
         this.player = player;
         this.playerUUID = player.getUniqueId();
-        Logger.debug(String.format("Creating new ArenaPlayer for player %s, UUID: %s", player.getName(), playerUUID));
         this.arenaPlayerData = new ArenaPlayerData(this);
     }
 

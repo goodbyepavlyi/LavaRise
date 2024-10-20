@@ -53,7 +53,7 @@ public class LavaRiseArenaCommand {
             }
         }
 
-        if (args.length == 4 || args.length == 5 && args[1].equalsIgnoreCase("set")) {
+        if (args.length >= 4 && (args.length <= 5 && args[1].equalsIgnoreCase("set"))) {
             String arenaName = args[2];
             Arena arena = lavaRiseInstance.getArenaManager().getArena(arenaName);
 
@@ -63,7 +63,7 @@ public class LavaRiseArenaCommand {
             }
 
             String action = args[3];
-            if (args.length == 4 && action.equalsIgnoreCase("lobby")) {
+            if (action.equalsIgnoreCase("lobby")) {
                 arena.getConfig().setLobby(player.getLocation());
                 CommandUtils.sendMessage(player, lavaRiseInstance.getMessages().COMMAND_ARENA_SET_LOBBY_SUCCESS(player.getLocation()));
                 return true;
@@ -71,59 +71,62 @@ public class LavaRiseArenaCommand {
 
             if (args.length == 5) {
                 String actionValue = args[4];
-
-                if (action.equalsIgnoreCase("minplayers")) {
-                    try {
-                        int minimumPlayers = Integer.parseInt(actionValue);
-                        int maximumPlayers = arena.getConfig().getMaximumPlayers();
-
-                        if (minimumPlayers <= 0 || (maximumPlayers > 0 && minimumPlayers > maximumPlayers)) {
-                            CommandUtils.sendMessage(player, lavaRiseInstance.getMessages().COMMAND_ARENA_SET_MINPLAYERS_LOW_VALUE());
-                            return true;
-                        }
-
-                        arena.getConfig().setMinimumPlayers(minimumPlayers);
-                        CommandUtils.sendMessage(player, lavaRiseInstance.getMessages().COMMAND_ARENA_SET_MINPLAYERS_SUCCESS(minimumPlayers));
-                    } catch (NumberFormatException numberFormatException) {
-                        CommandUtils.sendMessage(player, lavaRiseInstance.getMessages().COMMAND_EXPECTEDNUMBER());
-                    }
-
-                    return true;
-                }
-
-                if (action.equalsIgnoreCase("maxplayers")) {
-                    try {
-                        int minimumPlayers = arena.getConfig().getMinimumPlayers();
-                        int maximumPlayers = Integer.parseInt(actionValue);
-
-                        if (maximumPlayers <= 0 || (minimumPlayers > 0 && maximumPlayers < minimumPlayers)) {
-                            CommandUtils.sendMessage(player, lavaRiseInstance.getMessages().COMMAND_ARENA_SET_MAXPLAYERS_LOW_VALUE());
-                            return true;
-                        }
-
-                        arena.getConfig().setMaximumPlayers(maximumPlayers);
-                        CommandUtils.sendMessage(player, lavaRiseInstance.getMessages().COMMAND_ARENA_SET_MAXPLAYERS_SUCCESS(maximumPlayers));
-                    } catch (NumberFormatException numberFormatException) {
-                        CommandUtils.sendMessage(player, lavaRiseInstance.getMessages().COMMAND_EXPECTEDNUMBER());
-                    }
-
-                    return true;
-                }
-
-                if (action.equalsIgnoreCase("gamearea")) {
-                    try {
-                        ArenaConfig.GameArea gameArea = ArenaConfig.GameArea.valueOf(actionValue.toUpperCase());
-                        arena.getConfig().setGameAreaLocation(gameArea, player.getLocation());
-                        CommandUtils.sendMessage(player, lavaRiseInstance.getMessages().COMMAND_ARENA_SET_GAMEAREA_SUCCESS(gameArea, player.getLocation()));
-                    } catch (IllegalArgumentException illegalArgumentException) {
-                        CommandUtils.sendMessage(player, lavaRiseInstance.getMessages().COMMAND_INVALID_GAMEAREA());
-                    }
-
-                    return true;
+                switch (action) {
+                    case "minplayers":
+                        setMinimumPlayers(lavaRiseInstance, player, arena, actionValue);
+                        return true;
+                    case "maxplayers":
+                        setMaximumPlayers(lavaRiseInstance, player, arena, actionValue);
+                        return true;
+                    case "gamearea":
+                        setGameArea(lavaRiseInstance, player, arena, actionValue);
+                        return true;
                 }
             }
         }
 
         return false;
+    }
+
+    private static void setMinimumPlayers(LavaRiseInstance lavaRiseInstance, Player player, Arena arena, String actionValue) {
+        try {
+            int minimumPlayers = Integer.parseInt(actionValue);
+            int maximumPlayers = arena.getConfig().getMaximumPlayers();
+
+            if (minimumPlayers <= 0 || (maximumPlayers > 0 && minimumPlayers > maximumPlayers)) {
+                CommandUtils.sendMessage(player, lavaRiseInstance.getMessages().COMMAND_ARENA_SET_MINPLAYERS_LOW_VALUE());
+            }
+
+            arena.getConfig().setMinimumPlayers(minimumPlayers);
+            CommandUtils.sendMessage(player, lavaRiseInstance.getMessages().COMMAND_ARENA_SET_MINPLAYERS_SUCCESS(minimumPlayers));
+        } catch (NumberFormatException e) {
+            CommandUtils.sendMessage(player, lavaRiseInstance.getMessages().COMMAND_EXPECTEDNUMBER());
+        }
+    }
+
+    private static void setMaximumPlayers(LavaRiseInstance lavaRiseInstance, Player player, Arena arena, String actionValue) {
+        try {
+            int maximumPlayers = Integer.parseInt(actionValue);
+            int minimumPlayers = arena.getConfig().getMinimumPlayers();
+
+            if (maximumPlayers <= 0 || (minimumPlayers > 0 && maximumPlayers < minimumPlayers)) {
+                CommandUtils.sendMessage(player, lavaRiseInstance.getMessages().COMMAND_ARENA_SET_MAXPLAYERS_LOW_VALUE());
+            }
+
+            arena.getConfig().setMaximumPlayers(maximumPlayers);
+            CommandUtils.sendMessage(player, lavaRiseInstance.getMessages().COMMAND_ARENA_SET_MAXPLAYERS_SUCCESS(maximumPlayers));
+        } catch (NumberFormatException e) {
+            CommandUtils.sendMessage(player, lavaRiseInstance.getMessages().COMMAND_EXPECTEDNUMBER());
+        }
+    }
+
+    private static void setGameArea(LavaRiseInstance lavaRiseInstance, Player player, Arena arena, String actionValue) {
+        try {
+            ArenaConfig.GameArea gameArea = ArenaConfig.GameArea.valueOf(actionValue.toUpperCase());
+            arena.getConfig().setGameAreaLocation(gameArea, player.getLocation());
+            CommandUtils.sendMessage(player, lavaRiseInstance.getMessages().COMMAND_ARENA_SET_GAMEAREA_SUCCESS(gameArea, player.getLocation()));
+        } catch (IllegalArgumentException e) {
+            CommandUtils.sendMessage(player, lavaRiseInstance.getMessages().COMMAND_INVALID_GAMEAREA());
+        }
     }
 }

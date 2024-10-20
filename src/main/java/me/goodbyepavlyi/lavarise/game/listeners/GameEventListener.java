@@ -124,4 +124,3 @@ public class GameEventListener implements Listener {
         Logger.debug(String.format("Cancelling block place event for player %s in arena %s (Outside game map)", player.getName(), arena.getName()));
     }
 }
-

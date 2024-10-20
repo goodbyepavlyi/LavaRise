@@ -29,19 +29,20 @@ public class GameMap {
         this.instance = instance;
         this.game = game;
         this.arena = arena;
-
         this.originalBlocks = new HashMap<>();
     }
 
     public List<Location> getSpawnpoints() {
-        if (this.spawnpoints == null) this.createSpawnpoints();
+        if (this.spawnpoints == null) {
+            this.createSpawnpoints();
+            Logger.debug(String.format("Spawnpoints created for arena '%s'.", arena.getName()));
+        }
         return this.spawnpoints;
     }
 
     public void createSpawnpoints() {
         Location gameAreaTop = this.arena.getConfig().getGameArea(ArenaConfig.GameArea.TOP);
         Location gameAreaBottom = this.arena.getConfig().getGameArea(ArenaConfig.GameArea.BOTTOM);
-
         int amount = this.arena.getConfig().getMaximumPlayers();
         List<Location> spawnpoints = new ArrayList<>(amount);
 
@@ -58,13 +59,13 @@ public class GameMap {
                 yOffset += 1;
                 randomLocation.add(0, 1, 0);
                 block = randomLocation.getBlock();
-
                 // Prevent infinite loop
                 if (yOffset >= 256)
                     break;
             }
 
-            spawnpoints.add(new Location(gameAreaBottom.getWorld(), x, y, z));
+            spawnpoints.add(randomLocation);
+            Logger.debug(String.format("Spawnpoint created at %s for arena '%s'.", randomLocation, arena.getName()));
         }
 
         this.spawnpoints = spawnpoints;
@@ -72,6 +73,8 @@ public class GameMap {
 
     public void fillArea(Material material, int x1, int y1, int z1, int x2, int y2, int z2) {
         World gameAreaWorld = this.arena.getConfig().getGameAreaWorld();
+        Logger.debug(String.format("Filling area in arena '%s' with %s from (%d, %d, %d) to (%d, %d, %d).",
+                arena.getName(), material, x1, y1, z1, x2, y2, z2));
 
         for (int x = Math.min(x1, x2); x <= Math.max(x1, x2); x++)
             for (int y = Math.min(y1, y2); y <= Math.max(y1, y2); y++)
@@ -79,13 +82,12 @@ public class GameMap {
                     gameAreaWorld.getBlockAt(x, y, z).setType(material);
     }
 
-
     public void fillLava() {
         Location gameAreaBottom = this.arena.getConfig().getGameArea(ArenaConfig.GameArea.BOTTOM);
         Location gameAreaTop = this.arena.getConfig().getGameArea(ArenaConfig.GameArea.TOP);
 
         if (this.game.getCurrentLavaY() >= gameAreaTop.getBlockY()) {
-            Logger.debug(String.format("Lava has reached the top of the map in arena %s", this.arena.getName()));
+            Logger.debug(String.format("Lava has reached the top of the map in arena '%s'.", this.arena.getName()));
             this.stopLavaFillTask();
             return;
         }
@@ -99,7 +101,7 @@ public class GameMap {
         this.game.setCurrentLavaY(this.game.getCurrentLavaY() + 1);
         this.game.getGameScoreboard().update();
 
-        Logger.debug(String.format("Lava filled up to Y level %d in arena %s", this.game.getCurrentLavaY(), this.arena.getName()));
+        Logger.debug(String.format("Lava filled up to Y level %d in arena '%s'.", this.game.getCurrentLavaY(), this.arena.getName()));
     }
 
     public void fillLavaPeriodically() {
@@ -107,20 +109,19 @@ public class GameMap {
                 this.instance,
                 () -> {
                     if (!this.game.getGamePhase().equals(Game.GamePhase.LAVA)) return;
-
                     this.fillLava();
                 },
                 0L,
                 (this.instance.getConfiguration().GameLavaRisingTime() * 20L)
         );
 
-        Logger.debug(String.format("Lava fill task started for arena %s", this.arena.getName()));
+        Logger.debug(String.format("Lava fill task started for arena '%s'.", this.arena.getName()));
     }
 
     public void stopLavaFillTask() {
         if (this.lavaFillTask != null) {
             this.lavaFillTask.cancel();
-            Logger.debug(String.format("Lava fill task stopped for arena %s", this.arena.getName()));
+            Logger.debug(String.format("Lava fill task stopped for arena '%s'.", this.arena.getName()));
         }
     }
 
@@ -134,11 +135,10 @@ public class GameMap {
                 for (int y = 0; y <= gameAreaWorld.getMaxHeight(); y++) {
                     Location blockLocation = new Location(gameAreaWorld, x, y, z);
                     BlockState blockState = blockLocation.getBlock().getState();
-
                     this.originalBlocks.put(blockLocation, blockState);
                 }
 
-        Logger.debug(String.format("Original blocks saved for arena %s", this.arena.getName()));
+        Logger.debug(String.format("Original blocks saved for arena '%s'.", this.arena.getName()));
     }
 
     public void restoreOriginalBlocks() {
@@ -151,7 +151,7 @@ public class GameMap {
             block.getState().update(true, false);
         }
 
-        Logger.debug(String.format("Original blocks restored for arena %s", this.arena.getName()));
+        Logger.debug(String.format("Original blocks restored for arena '%s'.", this.arena.getName()));
     }
 
     public boolean isLocationInsideMap(Location location) {
@@ -174,8 +174,7 @@ public class GameMap {
                 && (locationY >= bottomY && locationY <= topY)
                 && (locationZ >= bottomZ && locationZ <= topZ);
 
-        Logger.debug(String.format("Location %s is%s inside the map of arena %s", location, insideMap ? "" : " not", this.arena.getName()));
-
+        Logger.debug(String.format("Location %s is%s inside the map of arena '%s'.", location, insideMap ? "" : " not", this.arena.getName()));
         return insideMap;
     }
 }

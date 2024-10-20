@@ -46,11 +46,7 @@ public class Queue {
     }
 
     public boolean hasEnoughPlayersToStart() {
-        boolean result = this.arena.getPlayers().size() >= this.arena.getConfig().getMinimumPlayers();
-
-        Logger.debug(String.format("canStart - Arena %s, Current Players: %s, Minimum Players: %s, State: %s, Result: %s",
-                this.arena.getName(), this.arena.getPlayers().size(), this.arena.getConfig().getMinimumPlayers(), this.arena.getState(), result));
-        return result;
+        return this.arena.getPlayers().size() >= this.arena.getConfig().getMinimumPlayers();
     }
 
     public boolean isFull() {
@@ -78,6 +74,7 @@ public class Queue {
         // Start the countdown if the minimum players are met
         if (this.hasEnoughPlayersToStart() && this.arena.getState() == Arena.State.WAITING) {
             this.arena.setState(Arena.State.STARTING);
+            Logger.debug(String.format("Minimum players reached in arena %s, starting countdown", arena.getName()));
             this.startCountdown();
         }
 
@@ -100,6 +97,7 @@ public class Queue {
 
         if (!this.hasEnoughPlayersToStart()) {
             this.arena.setState(Arena.State.WAITING);
+            Logger.debug(String.format("Not enough players to start the game in arena %s, reverting to WAITING state", arena.getName()));
             this.arena.announceMessage(Arena.AnnouncementType.QUEUE_CANCELLED);
             this.stopCountdown();
         }
@@ -117,6 +115,7 @@ public class Queue {
                 if (countdown <= 0) {
                     stopCountdown();
                     arena.announceMessage(Arena.AnnouncementType.GAME_START);
+                    Logger.debug(String.format("Countdown finished in arena %s, starting the game", arena.getName()));
                     arena.getGame().start();
                     return;
                 }
@@ -129,7 +128,7 @@ public class Queue {
         }.runTaskTimer(this.instance, 0L, 20L);
 
         this.arena.getTasks().add(this.countdownTask);
-        Logger.debug(String.format("Countdown started in arena %s", arena.getName()));
+        Logger.debug(String.format("Countdown started in arena %s with initial time %s", arena.getName(), this.countdown));
     }
 
     public void stopCountdown() {

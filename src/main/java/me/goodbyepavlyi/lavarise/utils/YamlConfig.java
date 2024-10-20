@@ -59,6 +59,8 @@ public class YamlConfig {
 
             while ((bytesRead = inputStream.read(buffer)) != -1)
                 outStream.write(buffer, 0, bytesRead);
+
+            Logger.debug(String.format("Default config file copied: %s", this.file.getAbsolutePath()));
         } catch (IOException exception) {
             Logger.log(Level.SEVERE, String.format("Failed to save default config file: %s", this.file.getAbsolutePath()));
         }

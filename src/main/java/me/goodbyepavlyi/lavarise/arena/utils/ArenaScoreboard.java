@@ -39,6 +39,7 @@ public class ArenaScoreboard {
         String arenaName = this.arena.getName().length() >= 16 ? this.arena.getName().substring(0, 16) : this.arena.getName();
         this.scoreboardObjective = this.scoreboard.registerNewObjective(arenaName, "dummy");
         this.scoreboardObjective.setDisplaySlot(DisplaySlot.SIDEBAR);
+        Logger.debug(String.format("Scoreboard created for arena: %s", this.arena.getName()));
     }
 
     public void clear() {
@@ -60,6 +61,7 @@ public class ArenaScoreboard {
 
     public void show() {
         this.arena.doForAllPlayers(player -> player.setScoreboard(this.scoreboard));
+        Logger.debug(String.format("Scoreboard displayed to all players in arena: %s", this.arena.getName()));
     }
 
     public void startScoreboardUpdateTask(Runnable updateMethod) {

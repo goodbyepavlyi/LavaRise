@@ -50,18 +50,24 @@ public class ArenaConfig {
 
     public void setMinimumPlayers(int minimumPlayers) {
         this.config.set("minimumPlayers", minimumPlayers);
+        Logger.debug(String.format("Set minimum players to %d for arena %s", minimumPlayers, this.arena.getName()));
     }
 
     public int getMinimumPlayers() {
-        return this.config.getInt("minimumPlayers");
+        int minPlayers = this.config.getInt("minimumPlayers");
+        Logger.debug(String.format("Retrieved minimum players (%d) for arena %s", minPlayers, this.arena.getName()));
+        return minPlayers;
     }
 
     public void setMaximumPlayers(int maximumPlayers) {
         this.config.set("maximumPlayers", maximumPlayers);
+        Logger.debug(String.format("Set maximum players to %d for arena %s", maximumPlayers, this.arena.getName()));
     }
 
     public int getMaximumPlayers() {
-        return this.config.getInt("maximumPlayers");
+        int maxPlayers = this.config.getInt("maximumPlayers");
+        Logger.debug(String.format("Retrieved maximum players (%d) for arena %s", maxPlayers, this.arena.getName()));
+        return maxPlayers;
     }
 
     public void setLobby(Location lobby) {
@@ -71,6 +77,8 @@ public class ArenaConfig {
         this.config.set("lobby.z", lobby.getBlockZ());
         this.config.set("lobby.yaw", lobby.getYaw());
         this.config.set("lobby.pitch", lobby.getPitch());
+        Logger.debug(String.format("Set lobby location to (%s, %d, %d, %d) for arena %s",
+                lobby.getWorld().getName(), lobby.getBlockX(), lobby.getBlockY(), lobby.getBlockZ(), this.arena.getName()));
     }
 
     public Location getLobby() {
@@ -84,6 +92,8 @@ public class ArenaConfig {
         float yaw = this.config.getInt("lobby.yaw");
         float pitch = this.config.getInt("lobby.pitch");
 
+        Logger.debug(String.format("Retrieved lobby location for arena %s: (%s, %d, %d, %d) with yaw %.2f and pitch %.2f",
+                this.arena.getName(), worldName, blockX, blockY, blockZ, yaw, pitch));
         return new Location(world, blockX, blockY, blockZ, yaw, pitch);
     }
 
@@ -92,12 +102,16 @@ public class ArenaConfig {
         this.config.set("gameArea." + gameArea + ".x", gameAreaLocation.getBlockX());
         this.config.set("gameArea." + gameArea + ".y", gameAreaLocation.getBlockY());
         this.config.set("gameArea." + gameArea + ".z", gameAreaLocation.getBlockZ());
+        Logger.debug(String.format("Set %s game area location to (%s, %d, %d, %d) for arena %s",
+                gameArea, gameAreaLocation.getWorld().getName(), gameAreaLocation.getBlockX(),
+                gameAreaLocation.getBlockY(), gameAreaLocation.getBlockZ(), this.arena.getName()));
     }
 
     public World getGameAreaWorld() {
         String worldName = this.config.getString("gameArea.world");
         if (worldName == null) return null;
 
+        Logger.debug(String.format("Retrieved game area world %s for arena %s", worldName, this.arena.getName()));
         return this.arena.getArenaManager().getInstance().getServer().getWorld(worldName);
     }
 
@@ -107,6 +121,8 @@ public class ArenaConfig {
         int blockY = this.config.getInt("gameArea." + gameArea + ".y");
         int blockZ = this.config.getInt("gameArea." + gameArea + ".z");
 
+        Logger.debug(String.format("Retrieved %s game area location for arena %s: (%s, %d, %d, %d)",
+                gameArea, this.arena.getName(), world.getName(), blockX, blockY, blockZ));
         return new Location(world, blockX, blockY, blockZ);
     }
 }
