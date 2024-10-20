@@ -12,7 +12,7 @@
   <name>LavaRise</name>
 
   <properties>
-    <java.version>11</java.version>
+    <java.version>16</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
@@ -55,10 +55,10 @@
         <id>spigotmc-repo</id>
         <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
       </repository>
-    <repository>
-      <id>sonatype</id>
-      <url>https://oss.sonatype.org/content/groups/public/</url>
-    </repository>
+      <repository>
+        <id>sonatype</id>
+        <url>https://oss.sonatype.org/content/groups/public/</url>
+      </repository>
   </repositories>
 
   <dependencies>
