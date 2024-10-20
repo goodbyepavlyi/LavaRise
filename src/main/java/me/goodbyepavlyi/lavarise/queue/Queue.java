@@ -121,7 +121,7 @@ public class Queue {
                     return;
                 }
 
-                if (countdown % 15 == 0 || countdown <= 3)
+                if (countdown % 15 == 0 || (countdown <= 3 && countdown != HalfFullQueueCountdown))
                     arena.announceMessage(Arena.AnnouncementType.QUEUE_GAME_STARTING_IN, String.valueOf(countdown));
 
                 countdown--;
