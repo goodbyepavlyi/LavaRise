@@ -81,6 +81,21 @@ public class ArenaConfig {
         return pvp;
     }
 
+    public void setLavaLevel(int lavaLevel) {
+        this.config.set("lavaLevel", lavaLevel);
+        Logger.debug(String.format("Set lava level to %d for arena %s", lavaLevel, this.arena.getName()));
+    }
+
+    public boolean isLavaLevelSet() {
+        return this.config.getInt("lavaLevel", -1) != -1;
+    }
+
+    public int getLavaLevel() {
+        int lavaLevel = this.config.getInt("lavaLevel");
+        Logger.debug(String.format("Retrieved lava level (%d) for arena %s", lavaLevel, this.arena.getName()));
+        return lavaLevel;
+    }
+
     public void setLobby(Location lobby) {
         this.config.set("lobby.world", lobby.getWorld().getName());
         this.config.set("lobby.x", lobby.getBlockX());
@@ -116,6 +131,9 @@ public class ArenaConfig {
         Logger.debug(String.format("Set %s game area location to (%s, %d, %d, %d) for arena %s",
                 gameArea, gameAreaLocation.getWorld().getName(), gameAreaLocation.getBlockX(),
                 gameAreaLocation.getBlockY(), gameAreaLocation.getBlockZ(), this.arena.getName()));
+
+        Logger.debug(String.format("Resetting lava level for arena %s", this.arena.getName()));
+        this.setLavaLevel(-1);
     }
 
     public World getGameAreaWorld() {

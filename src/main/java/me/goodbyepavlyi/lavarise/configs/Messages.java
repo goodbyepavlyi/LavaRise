@@ -132,6 +132,21 @@ public class Messages extends YamlConfig {
                 .replaceAll("%type%", pvp ? "true" : "false");
     }
 
+    public String COMMAND_ARENA_SET_LAVALEVEL_NOGAMEAREA() {
+        return this.getString("command.arena.set.lavalevel.noGameArea");
+    }
+
+    public String COMMAND_ARENA_SET_LAVALEVEL_OUTOFRANGE(int minY, int maxY) {
+        return this.getString("command.arena.set.lavalevel.outOfRange")
+                .replaceAll("%minY%", String.valueOf(minY))
+                .replaceAll("%maxY%", String.valueOf(maxY));
+    }
+
+    public String COMMAND_ARENA_SET_LAVALEVEL_SUCCESS(int lavaLevel) {
+        return this.getString("command.arena.set.lavalevel.success")
+                .replaceAll("%lavaLevel%", String.valueOf(lavaLevel));
+    }
+
     public String COMMAND_JOIN_ALREADYINARENA() {
         return this.getString("command.join.alreadyInArena");
     }

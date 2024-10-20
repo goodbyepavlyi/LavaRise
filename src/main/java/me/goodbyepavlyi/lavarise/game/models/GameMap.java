@@ -106,7 +106,8 @@ public class GameMap {
         Logger.debug(String.format("Lava filled on level Y %d in arena '%s'.", this.game.getCurrentLavaY(), this.arena.getName()));
         this.game.getGameScoreboard().update();
 
-        if (this.game.getCurrentLavaY() >= gameAreaTop.getBlockY()) {
+        if (this.game.getCurrentLavaY() >= gameAreaTop.getBlockY()
+                || this.arena.getConfig().isLavaLevelSet() && this.game.getCurrentLavaY() >= this.arena.getConfig().getLavaLevel()) {
             Logger.debug(String.format("Lava has reached the top of the map in arena '%s'.", this.arena.getName()));
             this.stopLavaFillTask();
         }

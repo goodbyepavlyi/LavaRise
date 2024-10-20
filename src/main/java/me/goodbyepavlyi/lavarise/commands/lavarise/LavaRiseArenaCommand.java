@@ -4,6 +4,7 @@ import me.goodbyepavlyi.lavarise.LavaRiseInstance;
 import me.goodbyepavlyi.lavarise.arena.Arena;
 import me.goodbyepavlyi.lavarise.arena.utils.ArenaConfig;
 import me.goodbyepavlyi.lavarise.utils.CommandUtils;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
@@ -84,6 +85,9 @@ public class LavaRiseArenaCommand {
                     case "pvp":
                         setPVP(lavaRiseInstance, player, arena, actionValue);
                         return true;
+                    case "lavalevel":
+                        setLavaLevel(lavaRiseInstance, player, arena, actionValue);
+                        return true;
                 }
             }
         }
@@ -142,5 +146,27 @@ public class LavaRiseArenaCommand {
         boolean pvp = Boolean.parseBoolean(actionValue);
         arena.getConfig().setPVP(pvp);
         CommandUtils.sendMessage(player, lavaRiseInstance.getMessages().COMMAND_ARENA_SET_PVP_SUCCESS(pvp));
+    }
+
+    private static void setLavaLevel(LavaRiseInstance lavaRiseInstance, Player player, Arena arena, String actionValue) {
+        try {
+            int lavaLevel = Integer.parseInt(actionValue);
+            Location gameAreaTop = arena.getConfig().getGameArea(ArenaConfig.GameArea.TOP);
+            Location gameAreaBottom = arena.getConfig().getGameArea(ArenaConfig.GameArea.BOTTOM);
+            if (gameAreaTop == null || gameAreaBottom == null) {
+                CommandUtils.sendMessage(player, lavaRiseInstance.getMessages().COMMAND_ARENA_SET_LAVALEVEL_NOGAMEAREA());
+                return;
+            }
+
+            if (lavaLevel < gameAreaBottom.getBlockY() || lavaLevel > gameAreaTop.getBlockY()) {
+                CommandUtils.sendMessage(player, lavaRiseInstance.getMessages().COMMAND_ARENA_SET_LAVALEVEL_OUTOFRANGE(gameAreaBottom.getBlockY(), gameAreaTop.getBlockY()));
+                return;
+            }
+
+            arena.getConfig().setLavaLevel(lavaLevel);
+            CommandUtils.sendMessage(player, lavaRiseInstance.getMessages().COMMAND_ARENA_SET_LAVALEVEL_SUCCESS(lavaLevel));
+        } catch (NumberFormatException e) {
+            CommandUtils.sendMessage(player, lavaRiseInstance.getMessages().COMMAND_EXPECTEDNUMBER());
+        }
     }
 }

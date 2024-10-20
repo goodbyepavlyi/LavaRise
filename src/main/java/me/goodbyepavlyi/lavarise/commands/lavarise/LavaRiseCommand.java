@@ -137,7 +137,7 @@ public class LavaRiseCommand implements CommandExecutor, TabCompleter {
 
             // Complete options for "set"
             if (args.length == 4 && args[1].equalsIgnoreCase("set"))
-                completions.addAll(filterOptions(Arrays.asList("lobby", "gamearea", "minplayers", "maxplayers", "pvp"), args[3]));
+                completions.addAll(filterOptions(Arrays.asList("lobby", "gamearea", "minplayers", "maxplayers", "pvp", "lavalevel"), args[3]));
 
             if (args.length == 5 && args[1].equalsIgnoreCase("set")) {
                 // Complete GameArea options for "set gamearea"
