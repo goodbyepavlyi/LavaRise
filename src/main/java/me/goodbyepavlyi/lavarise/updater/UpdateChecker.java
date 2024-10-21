@@ -2,7 +2,6 @@ package me.goodbyepavlyi.lavarise.updater;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.BufferedReader;
@@ -55,7 +54,7 @@ public class UpdateChecker {
     public UpdateChecker checkNow() {
         this.checkedAtLeastOnce = true;
 
-        Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
+        this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () -> {
             try {
                 HttpURLConnection httpConnection = (HttpURLConnection) new URL(this.apiLink).openConnection();
 
@@ -79,6 +78,8 @@ public class UpdateChecker {
     }
 
     private boolean isOtherVersionNewer(String myVersion, String otherVersion) {
+        if (myVersion == null || otherVersion == null) return false;
+
         String[] myParts = myVersion.split("\\.");
         String[] otherParts = otherVersion.split("\\.");
 
