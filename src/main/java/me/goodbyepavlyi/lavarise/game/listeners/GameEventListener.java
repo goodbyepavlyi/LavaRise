@@ -3,6 +3,7 @@ package me.goodbyepavlyi.lavarise.game.listeners;
 import me.goodbyepavlyi.lavarise.LavaRiseInstance;
 import me.goodbyepavlyi.lavarise.arena.Arena;
 import me.goodbyepavlyi.lavarise.utils.Logger;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,6 +13,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 public class GameEventListener implements Listener {
@@ -132,5 +134,22 @@ public class GameEventListener implements Listener {
 
         event.setCancelled(true);
         Logger.debug(String.format("Cancelled PVP between players %s and %s in arena %s", killer.getName(), victim.getName(), arena.getName()));
+    }
+
+    @EventHandler
+    public void blockMoveOutsideGameMap(PlayerMoveEvent event) {
+        Player player = event.getPlayer();
+        Arena arena = this.instance.getArenaManager().getArenaByPlayer(player.getUniqueId());
+        if (arena == null || arena.getState() != Arena.State.IN_GAME) return;
+
+        Location from = event.getFrom();
+        Location to = event.getTo();
+        if (from.getBlockX() == to.getBlockX() && from.getBlockY() == to.getBlockY() && from.getBlockZ() == to.getBlockZ()) return;
+        if (arena.getGame().getGameMap().isLocationInsideMap(to)) return;
+
+        from.setYaw(to.getYaw());
+        from.setPitch(to.getPitch());
+        event.setTo(from);
+        Logger.debug(String.format("Cancelled player %s move event in arena %s (Outside game map)", player.getName(), arena.getName()));
     }
 }
