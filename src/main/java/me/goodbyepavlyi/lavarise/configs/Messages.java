@@ -247,4 +247,12 @@ public class Messages extends YamlConfig {
                 .replaceAll("%playerName%", playerName)
                 .replaceAll("%killerName%", killerName);
     }
+
+    public String GAME_EVENTS_LAVAPHASESTART() {
+        return this.getString("game.events.lavaPhaseStart");
+    }
+
+    public String GAME_EVENTS_LAVAPHASEEND() {
+        return this.getString("game.events.lavaPhaseEnd");
+    }
 }

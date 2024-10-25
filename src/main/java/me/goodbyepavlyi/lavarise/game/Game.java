@@ -104,6 +104,7 @@ public class Game {
             public void run() {
                 gamePhase = GamePhase.LAVA;
                 Logger.debug(String.format("Game phase transitioned to %s in arena '%s'.", gamePhase, arena.getName()));
+                arena.announceMessage(Arena.AnnouncementType.GAME_LAVAPHASE_START);
                 gameMap.fillLavaPeriodically();
             }
         }.runTaskLater(this.instance, (this.instance.getConfiguration().GameGracePhaseTime() * 20L));

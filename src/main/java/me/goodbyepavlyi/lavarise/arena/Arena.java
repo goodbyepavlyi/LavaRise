@@ -59,6 +59,9 @@ public class Arena {
         GAME_END,
         PLAYER_DEATH,
         PLAYER_KILLED
+        PLAYER_KILLED,
+        GAME_LAVAPHASE_START,
+        GAME_LAVAPHASE_END
     }
 
     public Arena(ArenaManager arenaManager, String name) {
@@ -199,6 +202,12 @@ public class Arena {
             case PLAYER_KILLED:
                 if (arguments.length < 2) break;
                 message = arenaManager.getInstance().getMessages().GAME_EVENTS_PLAYERKILLED(arguments[0], arguments[1]);
+                break;
+            case GAME_LAVAPHASE_START:
+                message = arenaManager.getInstance().getMessages().GAME_EVENTS_LAVAPHASESTART();
+                break;
+            case GAME_LAVAPHASE_END:
+                message = arenaManager.getInstance().getMessages().GAME_EVENTS_LAVAPHASEEND();
                 break;
         }
 
