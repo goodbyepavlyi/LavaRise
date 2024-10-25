@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class Messages extends YamlConfig {
     public Messages(LavaRiseInstance instance) {
-        super(instance, "messages.yml", true, 1);
+        super(instance, "messages.yml", true, 2);
     }
 
     public String getString(String path) {
