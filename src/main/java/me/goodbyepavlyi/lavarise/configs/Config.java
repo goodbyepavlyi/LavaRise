@@ -8,10 +8,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Config extends YamlConfig {
-    private final int CONFIG_VERSION = 1;
-
     public Config(LavaRiseInstance instance) {
-        super(instance, "config.yml", true);
+        super(instance, "config.yml", true, 1);
     }
 
     public int GameGracePhaseTime() {
