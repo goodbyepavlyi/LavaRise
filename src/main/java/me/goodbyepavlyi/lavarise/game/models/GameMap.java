@@ -44,7 +44,7 @@ public class GameMap {
     public void createSpawnpoints() {
         Location gameAreaTop = this.arena.getConfig().getGameArea(ArenaConfig.GameArea.TOP);
         Location gameAreaBottom = this.arena.getConfig().getGameArea(ArenaConfig.GameArea.BOTTOM);
-        int amount = this.arena.getConfig().getMaximumPlayers();
+        int amount = this.arena.getPlayers().size();
         List<Location> spawnpoints = new ArrayList<>(amount);
 
         for (int i = 0; i < amount; i++) {
