@@ -81,6 +81,22 @@ public class GameMap {
         this.spawnpoints = spawnpoints;
     }
 
+    public Location createSpectatorSpawnpoint() {
+        Location gameAreaTop = this.arena.getConfig().getGameArea(ArenaConfig.GameArea.TOP);
+        Location gameAreaBottom = this.arena.getConfig().getGameArea(ArenaConfig.GameArea.BOTTOM);
+
+        int x = (gameAreaTop.getBlockX() + gameAreaBottom.getBlockX()) / 2;
+        int z = (gameAreaTop.getBlockZ() + gameAreaBottom.getBlockZ()) / 2;
+
+        // Get the highest block in the area but limit the height to within the game area
+        double highestY = gameAreaBottom.getWorld().getHighestBlockYAt(x, z);
+        double y = Math.min(Math.max(highestY, this.game.getCurrentLavaY()), gameAreaTop.getY());
+
+        Location spectatorLocation = new Location(gameAreaBottom.getWorld(), x, y + Game.GameSpectatorSpawnYLavaOffset, z);
+        Logger.debug(String.format("Created spectator spawn point at %s for arena '%s'.", spectatorLocation, this.arena.getName()));
+        return spectatorLocation;
+    }
+
     public void fillArea(Material material, int x1, int y1, int z1, int x2, int y2, int z2) {
         World gameAreaWorld = this.arena.getConfig().getGameAreaWorld();
         Logger.debug(String.format("Filling area in arena '%s' with %s from (%d, %d, %d) to (%d, %d, %d).",

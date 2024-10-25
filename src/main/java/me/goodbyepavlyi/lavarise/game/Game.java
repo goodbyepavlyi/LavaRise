@@ -156,24 +156,6 @@ public class Game {
         });
     }
 
-    public Location createSpectatorSpawnpoint() {
-        Location topLocation = this.arena.getConfig().getGameArea(ArenaConfig.GameArea.TOP);
-        Location bottomLocation = this.arena.getConfig().getGameArea(ArenaConfig.GameArea.BOTTOM);
-
-        Location spectatorLocation = new Location(
-            topLocation.getWorld(),
-            (topLocation.getX() + bottomLocation.getX()) / 2,
-            this.currentLavaY,
-            (topLocation.getZ() + bottomLocation.getZ()) / 2);
-
-        while (spectatorLocation.getWorld().getBlockAt(spectatorLocation).getType().isSolid())
-            spectatorLocation.add(0, 1, 0);
-
-        spectatorLocation.add(0, GameSpectatorSpawnYLavaOffset, 0);
-        Logger.debug(String.format("Created spectator spawn point at %s for arena '%s'.", spectatorLocation, this.arena.getName()));
-        return spectatorLocation;
-    }
-
     private void executeCommands(List<String> commands, String playerName) {
         commands.forEach(command ->
                 this.instance.getServer().dispatchCommand(this.instance.getServer().getConsoleSender(), command.replace("%player%", playerName))
@@ -233,7 +215,7 @@ public class Game {
         player.setGameMode(GameMode.ADVENTURE);
         player.setAllowFlight(true);
         player.setFlying(true);
-        player.teleport(this.createSpectatorSpawnpoint(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+        player.teleport(this.gameMap.createSpectatorSpawnpoint(), PlayerTeleportEvent.TeleportCause.PLUGIN);
         player.setHealth(20);
         player.setFoodLevel(20);
         player.getInventory().clear();
