@@ -63,7 +63,7 @@ public class GameMap {
             Block block = randomLocation.getBlock();
 
             int yOffset = 0;
-            while (!block.getType().isSolid() && randomLocation.getY() <= maxY) {
+            while (block.getType() != Material.AIR && randomLocation.getY() <= maxY) {
                 yOffset += 1;
                 randomLocation.add(0, 1, 0);
                 block = randomLocation.getBlock();
