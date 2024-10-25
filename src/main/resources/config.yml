@@ -5,6 +5,7 @@ game:
   gracePhaseTime: 60  # Duration of the grace phase in seconds
   lavaRisingTime: 10  # Time it takes for the lava to rise in seconds
   spectatorSpawnYLavaOffset: 10  # Y offset from the lava where spectators will spawn
+  endGameDelay: 5  # Delay in seconds before the game ends
 
   # List of items that players will receive during the game
   items:

@@ -9,6 +9,7 @@ import me.goodbyepavlyi.lavarise.game.models.GameScoreboard;
 import me.goodbyepavlyi.lavarise.utils.Logger;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
@@ -19,7 +20,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Game {
-    private static int GameSpectatorSpawnYLavaOffset;
+    public static int GameSpectatorSpawnYLavaOffset;
 
     private final Arena arena;
     private final LavaRiseInstance instance;
@@ -122,15 +123,21 @@ public class Game {
 
         this.gameScoreboard.stopScoreboardUpdateTask();
         this.gameMap.stopLavaFillTask();
-        this.gameMap.restoreOriginalBlocks();
 
-        this.arena.doForAllPlayers(player -> {
-            this.arena.removePlayer(player, true);
-            this.getSpectators().forEach(spectator -> player.showPlayer(this.instance, spectator.getPlayer()));
-        });
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                gameMap.restoreOriginalBlocks();
 
-        this.arena.reset();
-        Logger.debug(String.format("Game in arena '%s' has been stopped and reset.", this.arena.getName()));
+                arena.doForAllPlayers(player -> {
+                    arena.removePlayer(player, true);
+                    getSpectators().forEach(spectator -> player.showPlayer(instance, spectator.getPlayer()));
+                });
+
+                arena.reset();
+                Logger.debug(String.format("Game in arena '%s' has been stopped and reset.", arena.getName()));
+            }
+        }.runTaskLater(this.instance, this.instance.getConfiguration().GameEndGameDelay() * 20L);
     }
 
     public void spawnPlayers() {

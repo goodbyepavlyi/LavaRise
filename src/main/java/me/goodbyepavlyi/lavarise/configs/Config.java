@@ -57,6 +57,10 @@ public class Config extends YamlConfig {
         return this.getConfig().getInt("game.spectatorSpawnYLavaOffset");
     }
 
+    public int GameEndGameDelay() {
+        return this.getConfig().getInt("game.endGameDelay");
+    }
+
     public List<Material> GameItems() {
         List<String> materialNames = this.getConfig().getStringList("game.items");
         return materialNames.stream()
