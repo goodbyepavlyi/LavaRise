@@ -26,5 +26,8 @@ queue:
   halfFullQueueCountdown:  # Countdown time when the queue is half full
     enabled: true
     value: 10  # Countdown time in seconds before the game starts when the queue is half full
+  leaveItem: # Configuration for the item players use to leave the queue
+    material: "BARRIER"
+    slot: 8
 
 metrics: true # Enable or disable metrics collection

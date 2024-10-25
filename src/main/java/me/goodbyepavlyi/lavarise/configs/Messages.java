@@ -32,7 +32,6 @@ public class Messages extends YamlConfig {
         FileConfiguration resourceConfig = this.getResourceConfig();
         if (resourceConfig == null) return;
 
-
         for (String key : resourceConfig.getKeys(true)) {
             if (this.getConfig().contains(key)) continue;
             Logger.debug(String.format("Migrating config key: %s", key));
@@ -216,6 +215,10 @@ public class Messages extends YamlConfig {
 
     public String QUEUE_ITEMS_LEAVE_NAME() {
         return this.getString("queue.items.leave.name");
+    }
+
+    public List<String> QUEUE_ITEMS_LEAVE_LORE() {
+        return this.getList("queue.items.leave.lore");
     }
 
     public String QUEUE_SCOREBOARD_TITLE() {

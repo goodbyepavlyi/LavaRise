@@ -88,6 +88,14 @@ public class Config extends YamlConfig {
         return this.getConfig().getInt("queue.halfFullQueueCountdown.value");
     }
 
+    public Material QueueLeaveItemMaterial() {
+        return Material.getMaterial(this.getConfig().getString("queue.leaveItem.material"));
+    }
+
+    public int QueueLeaveItemSlot() {
+        return this.getConfig().getInt("queue.leaveItem.slot");
+    }
+
     public boolean Metrics() {
         return this.getConfig().getBoolean("metrics");
     }

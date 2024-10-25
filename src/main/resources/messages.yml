@@ -80,6 +80,8 @@ queue:
   items:
     leave:
       name: "&cLeave"
+      lore:
+        - "&8Right-click to leave the game"
 
   scoreboard:
     title: "&6&lLavaRise"

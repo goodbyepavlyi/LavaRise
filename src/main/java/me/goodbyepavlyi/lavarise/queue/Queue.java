@@ -38,9 +38,10 @@ public class Queue {
     public ItemStack getLeaveItem() {
         if (leaveItem != null) return leaveItem;
 
-        leaveItem = new ItemStack(Material.BARRIER);
+        leaveItem = new ItemStack(this.instance.getConfiguration().QueueLeaveItemMaterial());
         ItemMeta itemMeta = leaveItem.getItemMeta();
-        itemMeta.setDisplayName(instance.getMessages().QUEUE_ITEMS_LEAVE_NAME());
+        itemMeta.setDisplayName(this.instance.getMessages().QUEUE_ITEMS_LEAVE_NAME());
+        itemMeta.setLore(this.instance.getMessages().QUEUE_ITEMS_LEAVE_LORE());
         leaveItem.setItemMeta(itemMeta);
         return leaveItem;
     }
@@ -68,7 +69,7 @@ public class Queue {
         player.setFoodLevel(20);
         player.getInventory().setArmorContents(null);
         player.getInventory().clear();
-        player.getInventory().setItem(8, this.getLeaveItem());
+        player.getInventory().setItem(this.instance.getConfiguration().QueueLeaveItemSlot(), this.getLeaveItem());
         this.arena.delayAction(player, p -> p.setFireTicks(0));
 
         // Start the countdown if the minimum players are met
