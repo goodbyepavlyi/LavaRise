@@ -13,8 +13,6 @@ import java.nio.file.Files;
 import java.util.logging.Level;
 
 public class YamlConfig {
-    private int CONFIG_VERSION;
-
     private static File pluginDirectory;
     private final LavaRiseInstance instance;
     private final String path;
@@ -41,11 +39,8 @@ public class YamlConfig {
         this.config = YamlConfiguration.loadConfiguration(this.file);
     }
 
-    public YamlConfig(LavaRiseInstance instance, String path, boolean copyFromResources, int configVersion) {
-        this(instance, path, copyFromResources);
-
-        this.CONFIG_VERSION = configVersion;
-        this.migrateConfigVersion();
+    public LavaRiseInstance getInstance() {
+        return this.instance;
     }
 
     public File getFile() {
@@ -54,6 +49,20 @@ public class YamlConfig {
 
     public FileConfiguration getConfig() {
         return this.config;
+    }
+
+    public FileConfiguration getResourceConfig() {
+        try (InputStream inputStream = this.getInstance().getResource(this.path)) {
+            if (inputStream == null) {
+                Logger.severe(String.format("Failed to load default config file: %s", this.path));
+                return null;
+            }
+
+            return YamlConfiguration.loadConfiguration(new InputStreamReader(inputStream));
+        } catch (IOException e) {
+            Logger.severe(String.format("Error while reading default config file: %s", e.getMessage()));
+            return null;
+        }
     }
 
     public int getConfigVersion() {
@@ -86,33 +95,6 @@ public class YamlConfig {
             Logger.debug(String.format("Config file saved: %s", this.file.getAbsolutePath()));
         } catch (IOException ioException) {
             Logger.log(Level.SEVERE, String.format("Failed to save config file: %s", this.file.getAbsolutePath()));
-        }
-    }
-
-    public void migrateConfigVersion() {
-        Logger.debug(String.format("Checking config file version: %s", this.file.getName()));
-        if (this.getConfigVersion() == this.CONFIG_VERSION) return;
-
-        Logger.warning(String.format("The config file %s is outdated. Migrating to version %d...", this.getFile().getName(), this.CONFIG_VERSION));
-
-        try (InputStream inputStream = this.instance.getResource(this.path)) {
-            if (inputStream == null) {
-                Logger.severe(String.format("Failed to load default config file: %s", this.path));
-                return;
-            }
-
-            FileConfiguration resourceConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(inputStream));
-            for (String key : resourceConfig.getKeys(true)) {
-                if (this.getConfig().contains(key)) continue;
-                Logger.debug(String.format("Migrating config key: %s", key));
-                this.getConfig().set(key, resourceConfig.get(key));
-            }
-
-            this.setConfigVersion(this.CONFIG_VERSION);
-            Logger.info(String.format("Config file %s migrated to version %d", this.getFile().getName(), this.CONFIG_VERSION));
-            this.save();
-        } catch (IOException e) {
-            Logger.severe(String.format("Error while reading default config file: %s", e.getMessage()));
         }
     }
 }

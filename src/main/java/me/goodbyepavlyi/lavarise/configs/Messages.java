@@ -4,8 +4,10 @@ import me.goodbyepavlyi.lavarise.LavaRiseInstance;
 import me.goodbyepavlyi.lavarise.arena.utils.ArenaConfig;
 import me.goodbyepavlyi.lavarise.game.Game;
 import me.goodbyepavlyi.lavarise.utils.ChatUtils;
+import me.goodbyepavlyi.lavarise.utils.Logger;
 import me.goodbyepavlyi.lavarise.utils.YamlConfig;
 import org.bukkit.Location;
+import org.bukkit.configuration.file.FileConfiguration;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -14,8 +16,32 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Messages extends YamlConfig {
+    private final int CONFIG_VERSION = 2;
+
     public Messages(LavaRiseInstance instance) {
-        super(instance, "messages.yml", true, 2);
+        super(instance, "messages.yml", true);
+        this.migrateConfigVersion();
+    }
+
+    public void migrateConfigVersion() {
+        Logger.debug(String.format("Checking config file version: %s", this.getFile().getName()));
+        if (this.getConfigVersion() == this.CONFIG_VERSION) return;
+
+        Logger.warning(String.format("The config file %s is outdated. Migrating to version %d...", this.getFile().getName(), this.CONFIG_VERSION));
+
+        FileConfiguration resourceConfig = this.getResourceConfig();
+        if (resourceConfig == null) return;
+
+
+        for (String key : resourceConfig.getKeys(true)) {
+            if (this.getConfig().contains(key)) continue;
+            Logger.debug(String.format("Migrating config key: %s", key));
+            this.getConfig().set(key, resourceConfig.get(key));
+        }
+
+        this.setConfigVersion(this.CONFIG_VERSION);
+        Logger.info(String.format("Config file %s migrated to version %d", this.getFile().getName(), this.CONFIG_VERSION));
+        this.save();
     }
 
     public String getString(String path) {
