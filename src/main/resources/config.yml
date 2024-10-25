@@ -1,4 +1,4 @@
-version: 1
+version: 2
 
 # Configuration for the game settings
 game:
@@ -11,10 +11,14 @@ game:
     - "IRON_AXE"  # Example of an item that players will receive
     - "IRON_PICKAXE"  # Another example of an item
 
-  # Commands to be executed when a player wins the game
+  # Commands to be executed for the winner and players when the game ends
   commands:
     winner:
-      - "tell %winner% You won the game!"  # Send a congratulatory message to the winner using %winner% placeholder
+      - "tell %player% You won the game!"  # Send a congratulatory message to the winner using %winner% placeholder
+    losers:
+      - "tell %player% You lost the game!"  # Send a message to the players using %player% placeholder
+    players: # Commands to be executed for all players (losers and winner)
+      - "tell %player% You have been teleported to the lobby!"  # Send a message to the players using %player% placeholder
 
 # Configuration for the queue settings
 queue:

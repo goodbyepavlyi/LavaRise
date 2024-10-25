@@ -222,6 +222,21 @@ public class Arena {
         this.doForAllPlayers(player -> player.sendMessage(ChatUtils.color(message)));
     }
 
+    public void doForAllArenaPlayers(Consumer<ArenaPlayer> callback) {
+        this.getPlayers()
+            .stream()
+            .filter(Objects::nonNull)
+            .forEach(callback);
+    }
+
+    public void doForAllArenaPlayersExcept(Consumer<ArenaPlayer> callback, ArenaPlayer... exceptions) {
+        this.getPlayers()
+            .stream()
+            .filter(Objects::nonNull)
+            .filter(player -> !List.of(exceptions).contains(player))
+            .forEach(callback);
+    }
+
     public void doForAllPlayers(Consumer<Player> callback) {
         this.getPlayers().stream()
             .filter(Objects::nonNull)

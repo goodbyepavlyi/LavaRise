@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public class Config extends YamlConfig {
     public Config(LavaRiseInstance instance) {
-        super(instance, "config.yml", true, 1);
+        super(instance, "config.yml", true, 2);
     }
 
     public int GameGracePhaseTime() {
@@ -33,6 +33,14 @@ public class Config extends YamlConfig {
 
     public List<String> GameCommandsWinner() {
         return this.getConfig().getStringList("game.commands.winner");
+    }
+
+    public List<String> GameCommandsLosers() {
+        return this.getConfig().getStringList("game.commands.losers");
+    }
+
+    public List<String> GameCommandsPlayers() {
+        return this.getConfig().getStringList("game.commands.players");
     }
 
     public int QueueCountdown() {

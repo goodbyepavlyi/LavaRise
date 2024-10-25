@@ -14,6 +14,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -173,6 +174,12 @@ public class Game {
         return spectatorLocation;
     }
 
+    private void executeCommands(List<String> commands, String playerName) {
+        commands.forEach(command ->
+                this.instance.getServer().dispatchCommand(this.instance.getServer().getConsoleSender(), command.replace("%player%", playerName))
+        );
+    }
+
     public void checkForWinner() {
         Logger.debug(String.format("Checking for a winner in arena '%s'.", this.arena.getName()));
         long remainingPlayers = this.arena.getPlayers().stream()
@@ -184,19 +191,20 @@ public class Game {
             return;
         }
 
-        if (remainingPlayers == 1) {
-            ArenaPlayer winner = this.arena.getPlayers().stream()
-                    .filter(arenaPlayer -> !arenaPlayer.isSpectator())
-                    .findFirst()
-                    .orElse(null);
+        ArenaPlayer winner = this.arena.getPlayers().stream()
+            .filter(arenaPlayer -> !arenaPlayer.isSpectator())
+            .findFirst()
+            .orElse(null);
 
-            assert winner != null;
+        if (winner != null) {
             Logger.debug(String.format("Winner found: '%s' in arena '%s'.", winner.getPlayer().getName(), this.arena.getName()));
-            this.instance.getConfiguration().GameCommandsWinner().forEach(command -> {
-                String winnerCommand = command.replace("%winner%", winner.getPlayer().getName());
-                this.instance.getServer().dispatchCommand(this.instance.getServer().getConsoleSender(), winnerCommand);
-            });
+            this.executeCommands(this.instance.getConfiguration().GameCommandsWinner(), winner.getPlayer().getName());
         }
+
+        this.arena.doForAllArenaPlayersExcept(arenaPlayer ->
+            this.executeCommands(this.instance.getConfiguration().GameCommandsLosers(), arenaPlayer.getPlayer().getName()), winner);
+        this.arena.doForAllArenaPlayers(arenaPlayer ->
+            this.executeCommands(this.instance.getConfiguration().GameCommandsPlayers(), arenaPlayer.getPlayer().getName()));
 
         this.stop();
     }
