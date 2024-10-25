@@ -181,10 +181,11 @@ public class Game {
         if (winner != null) {
             Logger.debug(String.format("Winner found: '%s' in arena '%s'.", winner.getPlayer().getName(), this.arena.getName()));
             this.executeCommands(this.instance.getConfiguration().GameCommandsWinner(), winner.getPlayer().getName());
+
+            this.arena.doForAllArenaPlayersExcept(arenaPlayer ->
+                this.executeCommands(this.instance.getConfiguration().GameCommandsLosers(), arenaPlayer.getPlayer().getName()), winner);
         }
 
-        this.arena.doForAllArenaPlayersExcept(arenaPlayer ->
-            this.executeCommands(this.instance.getConfiguration().GameCommandsLosers(), arenaPlayer.getPlayer().getName()), winner);
         this.arena.doForAllArenaPlayers(arenaPlayer ->
             this.executeCommands(this.instance.getConfiguration().GameCommandsPlayers(), arenaPlayer.getPlayer().getName()));
 
