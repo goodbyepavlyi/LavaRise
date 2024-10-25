@@ -106,6 +106,9 @@ public class Game {
                 Logger.debug(String.format("Game phase transitioned to %s in arena '%s'.", gamePhase, arena.getName()));
                 arena.announceMessage(Arena.AnnouncementType.GAME_LAVAPHASE_START);
                 gameMap.fillLavaPeriodically();
+
+                if (arena.getConfig().getPVP())
+                    arena.announceMessage(Arena.AnnouncementType.GAME_PVP_ENABLED);
             }
         }.runTaskLater(this.instance, (this.instance.getConfiguration().GameGracePhaseTime() * 20L));
 

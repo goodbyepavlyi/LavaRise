@@ -103,6 +103,6 @@ game:
     gameEnded: "&8[&6&lLavaRise&8] Game ended! Thanks for playing."
     playerDeath: "&8[&6&lLavaRise&8] &6%playerName% &8died!"
     playerKilled: "&8[&6&lLavaRise&8] &6%playerName% &8killed by &6%killerName%&8!"
-
     lavaPhaseStart: "&8[&6&lLavaRise&8] Lava is &6rising&8!"
     lavaPhaseEnd: "&8[&6&lLavaRise&8] Lava &6stopped rising&8!"
+    pvpEnabled: "&8[&6&lLavaRise&8] PVP has been &6enabled&8!"

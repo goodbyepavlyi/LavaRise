@@ -255,4 +255,8 @@ public class Messages extends YamlConfig {
     public String GAME_EVENTS_LAVAPHASEEND() {
         return this.getString("game.events.lavaPhaseEnd");
     }
+
+    public String GAME_EVENTS_PVPENABLED() {
+        return this.getString("game.events.pvpEnabled");
+    }
 }

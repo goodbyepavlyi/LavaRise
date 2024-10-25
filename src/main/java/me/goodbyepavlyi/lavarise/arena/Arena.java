@@ -58,10 +58,10 @@ public class Arena {
         GAME_START,
         GAME_END,
         PLAYER_DEATH,
-        PLAYER_KILLED
         PLAYER_KILLED,
         GAME_LAVAPHASE_START,
-        GAME_LAVAPHASE_END
+        GAME_LAVAPHASE_END,
+        GAME_PVP_ENABLED
     }
 
     public Arena(ArenaManager arenaManager, String name) {
@@ -208,6 +208,9 @@ public class Arena {
                 break;
             case GAME_LAVAPHASE_END:
                 message = arenaManager.getInstance().getMessages().GAME_EVENTS_LAVAPHASEEND();
+                break;
+            case GAME_PVP_ENABLED:
+                message = arenaManager.getInstance().getMessages().GAME_EVENTS_PVPENABLED();
                 break;
         }
 
