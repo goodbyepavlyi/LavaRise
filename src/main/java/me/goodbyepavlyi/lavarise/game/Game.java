@@ -9,7 +9,6 @@ import me.goodbyepavlyi.lavarise.game.models.GameScoreboard;
 import me.goodbyepavlyi.lavarise.utils.Logger;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
@@ -95,7 +94,7 @@ public class Game {
         this.arena.setState(Arena.State.IN_GAME);
         this.gameTime = System.currentTimeMillis();
 
-        this.gameMap.saveOriginalBlocks();
+        this.gameMap.createGameWorld();
         this.currentLavaY = this.arena.getConfig().getGameArea(ArenaConfig.GameArea.BOTTOM).getBlockY();
 
         this.gameScoreboard.startScoreboardUpdates();
@@ -127,12 +126,12 @@ public class Game {
         new BukkitRunnable() {
             @Override
             public void run() {
-                gameMap.restoreOriginalBlocks();
-
                 arena.doForAllPlayers(player -> {
                     arena.removePlayer(player, true);
                     getSpectators().forEach(spectator -> player.showPlayer(instance, spectator.getPlayer()));
                 });
+
+                gameMap.deleteGameWorld();
 
                 arena.reset();
                 Logger.debug(String.format("Game in arena '%s' has been stopped and reset.", arena.getName()));

@@ -5,31 +5,28 @@ import me.goodbyepavlyi.lavarise.arena.Arena;
 import me.goodbyepavlyi.lavarise.arena.utils.ArenaConfig;
 import me.goodbyepavlyi.lavarise.game.Game;
 import me.goodbyepavlyi.lavarise.utils.Logger;
+import me.goodbyepavlyi.lavarise.utils.WorldUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class GameMap {
     private final LavaRiseInstance instance;
     private final Game game;
     private final Arena arena;
+    private World gameWorld;
     private List<Location> spawnpoints;
-    private final Map<Location, BlockState> originalBlocks;
     private BukkitTask lavaFillTask;
 
     public GameMap(LavaRiseInstance instance, Game game, Arena arena) {
         this.instance = instance;
         this.game = game;
         this.arena = arena;
-        this.originalBlocks = new HashMap<>();
     }
 
     public List<Location> getSpawnpoints() {
@@ -59,7 +56,7 @@ public class GameMap {
             // Ensure the Y-coordinate is within bounds
             double y = Math.min(Math.max(highestY, minY), maxY);
 
-            Location randomLocation = new Location(gameAreaBottom.getWorld(), x, y, z);
+            Location randomLocation = new Location(this.gameWorld, x, y, z);
             Block block = randomLocation.getBlock();
 
             int yOffset = 0;
@@ -89,23 +86,22 @@ public class GameMap {
         int z = (gameAreaTop.getBlockZ() + gameAreaBottom.getBlockZ()) / 2;
 
         // Get the highest block in the area but limit the height to within the game area
-        double highestY = gameAreaBottom.getWorld().getHighestBlockYAt(x, z);
+        double highestY = this.gameWorld.getHighestBlockYAt(x, z);
         double y = Math.min(Math.max(highestY, this.game.getCurrentLavaY()), gameAreaTop.getY());
 
-        Location spectatorLocation = new Location(gameAreaBottom.getWorld(), x, y + Game.GameSpectatorSpawnYLavaOffset, z);
+        Location spectatorLocation = new Location(this.gameWorld, x, y + Game.GameSpectatorSpawnYLavaOffset, z);
         Logger.debug(String.format("Created spectator spawn point at %s for arena '%s'.", spectatorLocation, this.arena.getName()));
         return spectatorLocation;
     }
 
     public void fillArea(Material material, int x1, int y1, int z1, int x2, int y2, int z2) {
-        World gameAreaWorld = this.arena.getConfig().getGameAreaWorld();
         Logger.debug(String.format("Filling area in arena '%s' with %s from (%d, %d, %d) to (%d, %d, %d).",
                 arena.getName(), material, x1, y1, z1, x2, y2, z2));
 
         for (int x = Math.min(x1, x2); x <= Math.max(x1, x2); x++)
             for (int y = Math.min(y1, y2); y <= Math.max(y1, y2); y++)
                 for (int z = Math.min(z1, z2); z <= Math.max(z1, z2); z++)
-                    gameAreaWorld.getBlockAt(x, y, z).setType(material);
+                    this.gameWorld.getBlockAt(x, y, z).setType(material);
     }
 
     public void fillLava() {
@@ -151,35 +147,6 @@ public class GameMap {
         }
     }
 
-    public void saveOriginalBlocks() {
-        World gameAreaWorld = this.arena.getConfig().getGameAreaWorld();
-        Location gameAreaTop = this.arena.getConfig().getGameArea(ArenaConfig.GameArea.TOP);
-        Location gameAreaBottom = this.arena.getConfig().getGameArea(ArenaConfig.GameArea.BOTTOM);
-
-        for (int x = Math.min(gameAreaTop.getBlockX(), gameAreaBottom.getBlockX()); x <= Math.max(gameAreaTop.getBlockX(), gameAreaBottom.getBlockX()); x++)
-            for (int z = Math.min(gameAreaTop.getBlockZ(), gameAreaBottom.getBlockZ()); z <= Math.max(gameAreaTop.getBlockZ(), gameAreaBottom.getBlockZ()); z++)
-                for (int y = 0; y <= gameAreaWorld.getMaxHeight(); y++) {
-                    Location blockLocation = new Location(gameAreaWorld, x, y, z);
-                    BlockState blockState = blockLocation.getBlock().getState();
-                    this.originalBlocks.put(blockLocation, blockState);
-                }
-
-        Logger.debug(String.format("Original blocks saved for arena '%s'.", this.arena.getName()));
-    }
-
-    public void restoreOriginalBlocks() {
-        for (Map.Entry<Location, BlockState> entry : this.originalBlocks.entrySet()) {
-            Location blockLocation = entry.getKey();
-            BlockState originalBlockState = entry.getValue();
-
-            Block block = blockLocation.getBlock();
-            block.setType(originalBlockState.getType());
-            block.getState().update(true, false);
-        }
-
-        Logger.debug(String.format("Original blocks restored for arena '%s'.", this.arena.getName()));
-    }
-
     public boolean isLocationInsideMap(Location location) {
         Location gameAreaBottom = this.arena.getConfig().getGameArea(ArenaConfig.GameArea.BOTTOM);
         Location gameAreaTop = this.arena.getConfig().getGameArea(ArenaConfig.GameArea.TOP);
@@ -202,5 +169,17 @@ public class GameMap {
 
         Logger.debug(String.format("Location %s is%s inside the map of arena '%s'.", location, insideMap ? "" : " not", this.arena.getName()));
         return insideMap;
+    }
+
+    public String getMapName() {
+        return String.format("LavaRise-%s_%d", this.arena.getName(), this.arena.getGame().getGameTime());
+    }
+
+    public void createGameWorld() {
+        this.gameWorld = WorldUtils.copyWorld(this.instance, this.arena.getConfig().getGameAreaWorld(), this.getMapName());
+    }
+
+    public void deleteGameWorld() {
+        WorldUtils.deleteWorld(this.instance, this.gameWorld.getName());
     }
 }
