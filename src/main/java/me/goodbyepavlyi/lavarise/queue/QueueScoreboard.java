@@ -15,10 +15,10 @@ public class QueueScoreboard extends ArenaScoreboard {
     }
 
     public void update() {
-        String title = this.instance.getMessages().QUEUE_SCOREBOARD_TITLE();
-        List<String> boardLines = this.instance.getMessages().QUEUE_SCOREBOARD_LINES(
+        String title = this.instance.getMessages().QueueScoreboardTitle();
+        List<String> boardLines = this.instance.getMessages().QueueScoreboardLines(
             this.queue.getCountdown() == 0
-                ? this.instance.getMessages().QUEUE_SCOREBOARD_DURATIONWAITING()
+                ? this.instance.getMessages().QueueScoreboardDurationWaiting()
                 : String.valueOf(this.queue.getCountdown()),
             this.getArena().getPlayers().size(),
             this.getArena().getConfig().getMaximumPlayers()

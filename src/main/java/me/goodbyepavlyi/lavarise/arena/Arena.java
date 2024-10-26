@@ -167,7 +167,7 @@ public class Arena {
             case QUEUE_PLAYERJOIN:
                 if (arguments.length < 1) break;
 
-                message = arenaManager.getInstance().getMessages().QUEUE_PLAYERJOIN(
+                message = arenaManager.getInstance().getMessages().QueuePlayerJoin(
                         arguments[0],
                         this.getPlayers().size(),
                         this.getConfig().getMaximumPlayers()
@@ -176,41 +176,41 @@ public class Arena {
             case QUEUE_PLAYERLEAVE:
                 if (arguments.length < 1) break;
 
-                message = arenaManager.getInstance().getMessages().QUEUE_PLAYERLEAVE(
+                message = arenaManager.getInstance().getMessages().QueuePlayerLeave(
                         arguments[0],
                         this.getPlayers().size() - 1, // Decrease by 1 since the player is being removed later
                         this.getConfig().getMaximumPlayers()
                 );
                 break;
             case QUEUE_CANCELLED:
-                message = arenaManager.getInstance().getMessages().QUEUE_CANCELLED();
+                message = arenaManager.getInstance().getMessages().QueueCancelled();
                 break;
             case QUEUE_GAME_STARTING_IN:
                 if (arguments.length < 1) break;
-                message = arenaManager.getInstance().getMessages().QUEUE_GAMESTARTINGIN(Integer.parseInt(arguments[0]));
+                message = arenaManager.getInstance().getMessages().QueueGameStartingIn(Integer.parseInt(arguments[0]));
                 break;
             case GAME_START:
-                message = arenaManager.getInstance().getMessages().GAME_EVENTS_GAMESTART();
+                message = arenaManager.getInstance().getMessages().GameEventsGameStart();
                 break;
             case GAME_END:
-                message = arenaManager.getInstance().getMessages().GAME_EVENTS_GAMEENDED();
+                message = arenaManager.getInstance().getMessages().GameEventsGameEnded();
                 break;
             case PLAYER_DEATH:
                 if (arguments.length < 1) break;
-                message = arenaManager.getInstance().getMessages().GAME_EVENTS_PLAYERDEATH(arguments[0]);
+                message = arenaManager.getInstance().getMessages().GameEventsPlayerDeath(arguments[0]);
                 break;
             case PLAYER_KILLED:
                 if (arguments.length < 2) break;
-                message = arenaManager.getInstance().getMessages().GAME_EVENTS_PLAYERKILLED(arguments[0], arguments[1]);
+                message = arenaManager.getInstance().getMessages().GameEventsPlayerKilled(arguments[0], arguments[1]);
                 break;
             case GAME_LAVAPHASE_START:
-                message = arenaManager.getInstance().getMessages().GAME_EVENTS_LAVAPHASESTART();
+                message = arenaManager.getInstance().getMessages().GameEventsLavaPhaseStart();
                 break;
             case GAME_LAVAPHASE_END:
-                message = arenaManager.getInstance().getMessages().GAME_EVENTS_LAVAPHASEEND();
+                message = arenaManager.getInstance().getMessages().GameEventsLavaPhaseEnd();
                 break;
             case GAME_PVP_ENABLED:
-                message = arenaManager.getInstance().getMessages().GAME_EVENTS_PVPENABLED();
+                message = arenaManager.getInstance().getMessages().GameEventsPvpEnabled();
                 break;
         }
 

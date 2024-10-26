@@ -16,8 +16,8 @@ public class GameScoreboard extends ArenaScoreboard {
     }
 
     public void update() {
-        String title = this.instance.getMessages().GAME_SCOREBOARD_TITLE();
-        List<String> boardLines = this.instance.getMessages().GAME_SCOREBOARD_LINES(
+        String title = this.instance.getMessages().GameScoreboardTitle();
+        List<String> boardLines = this.instance.getMessages().GameScoreboardLines(
             (int) this.getArena().getPlayers()
                 .stream()
                 .filter(player -> !player.isSpectator())

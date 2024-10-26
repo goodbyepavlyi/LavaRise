@@ -40,12 +40,12 @@ public class LavaRiseCommand implements CommandExecutor, TabCompleter {
 
     public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
         if (!(commandSender instanceof Player player)) {
-            CommandUtils.sendMessage(commandSender, this.instance.getMessages().COMMAND_ONLYPLAYER());
+            CommandUtils.sendMessage(commandSender, this.instance.getMessages().CommandOnlyPlayer());
             return true;
         }
 
         if (args.length == 0) {
-            CommandUtils.sendMessage(player, this.instance.getMessages().COMMAND_USAGE());
+            CommandUtils.sendMessage(player, this.instance.getMessages().CommandUsage());
             return true;
         }
 
@@ -55,25 +55,25 @@ public class LavaRiseCommand implements CommandExecutor, TabCompleter {
         if (args[0].equalsIgnoreCase("join") && args.length == 2) {
             Arena arena = this.instance.getArenaManager().getArena(args[1]);
             if (arena == null) {
-                CommandUtils.sendMessage(commandSender, this.instance.getMessages().COMMAND_ARENANOTFOUND());
+                CommandUtils.sendMessage(commandSender, this.instance.getMessages().CommandArenaNotFound());
                 return true;
             }
 
             switch (this.instance.getArenaManager().joinArena(arena, player)) {
                 case PLAYER_IN_ARENA:
-                    CommandUtils.sendMessage(commandSender, this.instance.getMessages().COMMAND_JOIN_ALREADYINARENA());
+                    CommandUtils.sendMessage(commandSender, this.instance.getMessages().CommandJoinAlreadyInArena());
                     break;
 
                 case ARENA_IS_NOT_SETUP:
-                    CommandUtils.sendMessage(commandSender, this.instance.getMessages().COMMAND_JOIN_ARENAISNTSETUP());
+                    CommandUtils.sendMessage(commandSender, this.instance.getMessages().CommandJoinArenaIsntSetup());
                     break;
 
                 case ARENA_FULL:
-                    CommandUtils.sendMessage(commandSender, this.instance.getMessages().COMMAND_JOIN_ARENAFULL());
+                    CommandUtils.sendMessage(commandSender, this.instance.getMessages().CommandJoinArenaFull());
                     break;
 
                 case ARENA_IN_GAME:
-                    CommandUtils.sendMessage(commandSender, this.instance.getMessages().COMMAND_JOIN_ARENAINGAME());
+                    CommandUtils.sendMessage(commandSender, this.instance.getMessages().CommandJoinArenaInGame());
                     break;
             }
 
@@ -82,13 +82,13 @@ public class LavaRiseCommand implements CommandExecutor, TabCompleter {
 
         if (args[0].equalsIgnoreCase("leave") && args.length == 1) {
             if (Objects.requireNonNull(this.instance.getArenaManager().leaveArena(player)) == ArenaManager.ArenaStateResult.PLAYER_NOT_IN_ARENA) {
-                CommandUtils.sendMessage(commandSender, this.instance.getMessages().COMMAND_LEAVE_NOTINARENA());
+                CommandUtils.sendMessage(commandSender, this.instance.getMessages().CommandLeaveNotInArena());
             }
 
             return true;
         }
 
-        CommandUtils.sendMessage(commandSender, this.instance.getMessages().COMMAND_USAGE());
+        CommandUtils.sendMessage(commandSender, this.instance.getMessages().CommandUsage());
         return true;
     }
 

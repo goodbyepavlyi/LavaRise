@@ -5,7 +5,6 @@ import me.goodbyepavlyi.lavarise.arena.Arena;
 import me.goodbyepavlyi.lavarise.arena.models.ArenaPlayer;
 import me.goodbyepavlyi.lavarise.utils.Logger;
 import org.bukkit.GameMode;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
@@ -40,8 +39,8 @@ public class Queue {
 
         leaveItem = new ItemStack(this.instance.getConfiguration().QueueLeaveItemMaterial());
         ItemMeta itemMeta = leaveItem.getItemMeta();
-        itemMeta.setDisplayName(this.instance.getMessages().QUEUE_ITEMS_LEAVE_NAME());
-        itemMeta.setLore(this.instance.getMessages().QUEUE_ITEMS_LEAVE_LORE());
+        itemMeta.setDisplayName(this.instance.getMessages().QueueItemsLeaveName());
+        itemMeta.setLore(this.instance.getMessages().QueueItemsLeaveLore());
         leaveItem.setItemMeta(itemMeta);
         return leaveItem;
     }
