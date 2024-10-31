@@ -24,6 +24,10 @@
 
 [Command List and Usage](https://github.com/goodbyepavlyi/LavaRise/blob/master/docs/commands.md)
 
+## Config
+
+[Configuration Guide](https://github.com/goodbyepavlyi/LavaRise/blob/master/docs/config.md)
+
 ## Installation
 
 1. Download the latest LavaRise release from the [GitHub releases](https://github.com/goodbyepavlyi/LavaRise/releases).
