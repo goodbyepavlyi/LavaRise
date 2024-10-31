@@ -52,6 +52,9 @@ public class LavaRiseCommand implements CommandExecutor, TabCompleter {
         if (args[0].equalsIgnoreCase("arena") && LavaRiseArenaCommand.onCommand(this.instance, player, command, label, args))
             return true;
 
+        if (args[0].equalsIgnoreCase("_plugin") && LavaRisePluginCommand.onCommand(this.instance, player, command, label, args))
+            return true;
+
         if (args[0].equalsIgnoreCase("join") && args.length == 2) {
             Arena arena = this.instance.getArenaManager().getArena(args[1]);
             if (arena == null) {
@@ -124,10 +127,10 @@ public class LavaRiseCommand implements CommandExecutor, TabCompleter {
 
             // Complete subcommands
             if (args.length == 2)
-                completions.addAll(filterOptions(Arrays.asList("list", "create", "delete", "set"), args[1]));
+                completions.addAll(filterOptions(Arrays.asList("list", "create", "delete", "set", "info"), args[1]));
 
             // Complete arena names for "delete" and "set"
-            if (args.length == 3 && (args[1].equalsIgnoreCase("delete") || args[1].equalsIgnoreCase("set"))) {
+            if (args.length == 3 && (args[1].equalsIgnoreCase("delete") || args[1].equalsIgnoreCase("set") || args[1].equalsIgnoreCase("info"))) {
                 completions.addAll(this.instance.getArenaManager().getArenaList().stream()
                     .map(Arena::getName)
                     .filter(name -> name.toLowerCase().startsWith(args[2].toLowerCase()))

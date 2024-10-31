@@ -1,22 +1,29 @@
 package me.goodbyepavlyi.lavarise.configs;
 
 import me.goodbyepavlyi.lavarise.LavaRiseInstance;
+import me.goodbyepavlyi.lavarise.arena.Arena;
 import me.goodbyepavlyi.lavarise.arena.utils.ArenaConfig;
 import me.goodbyepavlyi.lavarise.game.Game;
 import me.goodbyepavlyi.lavarise.utils.ChatUtils;
 import me.goodbyepavlyi.lavarise.utils.Logger;
 import me.goodbyepavlyi.lavarise.utils.YamlConfig;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Messages extends YamlConfig {
-    private final int CONFIG_VERSION = 2;
+    private final int CONFIG_VERSION = 3;
 
     public Messages(LavaRiseInstance instance) {
         super(instance, "messages.yml", true);
@@ -49,6 +56,41 @@ public class Messages extends YamlConfig {
 
     public List<String> getList(String path) {
         return ChatUtils.color(this.getConfig().getStringList(path));
+    }
+
+    private String getLastColorCode(String text) {
+        StringBuilder colorCodes = new StringBuilder();
+        Matcher matcher = Pattern.compile("(?i)(?:&[0-9A-FK-OR])+").matcher(text);
+
+        while (matcher.find()) {
+            colorCodes.setLength(0);
+            colorCodes.append(matcher.group());
+        }
+
+        return colorCodes.toString();
+    }
+
+    private void addLocationComponent(String line, String placeholder, Location location, Player player, TextComponent textComponent) {
+        String[] split = line.split(placeholder);
+        textComponent.setText(ChatUtils.color(split[0]));
+
+        String colorCode = getLastColorCode(split[0]);
+        if (location != null) {
+            TextComponent locationComponent = new TextComponent(ChatUtils.color(
+                String.format("%s&n%s, %d, %d, %d", colorCode, location.getWorld().getName(), location.getBlockX(), location.getBlockY(), location.getBlockZ()))
+            );
+
+            locationComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,
+                String.format("/lavarise _plugin world_teleport %s %d %d %d", location.getWorld().getName(), location.getBlockX(), location.getBlockY(), location.getBlockZ())));
+
+            textComponent.addExtra(locationComponent);
+        } else {
+            textComponent.addExtra(new TextComponent(ChatUtils.color(colorCode + "N/A")));
+        }
+
+        if (split.length > 1) {
+            textComponent.addExtra(ChatUtils.color(split[1]));
+        }
     }
 
     public List<String> CommandUsage() {
@@ -165,6 +207,31 @@ public class Messages extends YamlConfig {
     public String CommandArenaSetLavalevelSuccess(int lavaLevel) {
         return this.getString("command.arena.set.lavalevel.success")
                 .replaceAll("%lavaLevel%", String.valueOf(lavaLevel));
+    }
+
+    public List<TextComponent> CommandArenaInfoSuccess(Player player, Arena arena) {
+        List<TextComponent> message = new ArrayList<>();
+
+        for (String line : this.getConfig().getStringList("command.arena.info.success")) {
+            line = line.replace("%arenaName%", arena.getName())
+                    .replace("%minimumPlayers%", String.valueOf(arena.getConfig().getMinimumPlayers()))
+                    .replace("%maximumPlayers%", String.valueOf(arena.getConfig().getMaximumPlayers()))
+                    .replace("%lavaLevel%", String.valueOf(arena.getConfig().getLavaLevel()))
+                    .replace("%pvp%", String.valueOf(arena.getConfig().getPVP()));
+
+            TextComponent textComponent = new TextComponent(ChatUtils.color(line));
+            if (line.contains("%lobby%")) {
+                addLocationComponent(line, "%lobby%", arena.getConfig().getLobby(), player, textComponent);
+            } else if (line.contains("%gameAreaBottom%")) {
+                addLocationComponent(line, "%gameAreaBottom%", arena.getConfig().getGameArea(ArenaConfig.GameArea.BOTTOM), player, textComponent);
+            } else if (line.contains("%gameAreaTop%")) {
+                addLocationComponent(line, "%gameAreaTop%", arena.getConfig().getGameArea(ArenaConfig.GameArea.TOP), player, textComponent);
+            }
+
+            message.add(textComponent);
+        }
+
+        return message;
     }
 
     public String CommandJoinAlreadyInArena() {

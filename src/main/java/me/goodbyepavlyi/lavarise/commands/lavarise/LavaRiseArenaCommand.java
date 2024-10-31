@@ -52,6 +52,17 @@ public class LavaRiseArenaCommand {
                 CommandUtils.sendMessage(player, userMessage);
                 return true;
             }
+
+            if (args[1].equalsIgnoreCase("info")) {
+                Arena arena = lavaRiseInstance.getArenaManager().getArena(arenaName);
+                if (arena == null) {
+                    CommandUtils.sendMessage(player, lavaRiseInstance.getMessages().CommandArenaNotFound());
+                    return true;
+                }
+
+                CommandUtils.sendMessage(player, lavaRiseInstance.getMessages().CommandArenaInfoSuccess(player, arena));
+                return true;
+            }
         }
 
         if (args.length >= 4 && (args.length <= 5 && args[1].equalsIgnoreCase("set"))) {
