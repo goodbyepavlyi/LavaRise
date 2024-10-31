@@ -123,20 +123,29 @@ public class Game {
         this.gameScoreboard.stopScoreboardUpdateTask();
         this.gameMap.stopLavaFillTask();
 
+        if (!this.instance.isEnabled()) {
+            _stop();
+            return;
+        }
+
         new BukkitRunnable() {
             @Override
             public void run() {
-                arena.doForAllPlayers(player -> {
-                    arena.removePlayer(player, true);
-                    getSpectators().forEach(spectator -> player.showPlayer(instance, spectator.getPlayer()));
-                });
-
-                gameMap.deleteGameWorld();
-
-                arena.reset();
-                Logger.debug(String.format("Game in arena '%s' has been stopped and reset.", arena.getName()));
+                _stop();
             }
         }.runTaskLater(this.instance, this.instance.getConfiguration().GameEndGameDelay() * 20L);
+    }
+
+    private void _stop() {
+        arena.doForAllPlayers(player -> {
+            arena.removePlayer(player, true);
+            getSpectators().forEach(spectator -> player.showPlayer(instance, spectator.getPlayer()));
+        });
+
+        gameMap.deleteGameWorld();
+
+        arena.reset();
+        Logger.debug(String.format("Game in arena '%s' has been stopped and reset.", arena.getName()));
     }
 
     public void spawnPlayers() {
