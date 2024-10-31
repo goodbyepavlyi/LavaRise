@@ -146,6 +146,8 @@ public class ArenaConfig {
 
     public Location getGameArea(GameArea gameArea) {
         World world = this.getGameAreaWorld();
+        if (world == null) return null;
+
         int blockX = this.config.getInt("gameArea." + gameArea + ".x");
         int blockY = this.config.getInt("gameArea." + gameArea + ".y");
         int blockZ = this.config.getInt("gameArea." + gameArea + ".z");
