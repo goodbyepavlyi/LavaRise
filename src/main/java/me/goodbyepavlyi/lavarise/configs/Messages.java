@@ -48,10 +48,7 @@ public class Messages extends YamlConfig {
     }
 
     public List<String> getList(String path) {
-        return this.getConfig().getStringList(path)
-                .stream()
-                .map(ChatUtils::color)
-                .collect(Collectors.toList());
+        return ChatUtils.color(this.getConfig().getStringList(path));
     }
 
     public List<String> CommandUsage() {

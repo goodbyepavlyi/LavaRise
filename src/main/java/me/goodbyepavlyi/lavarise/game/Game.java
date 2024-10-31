@@ -162,9 +162,8 @@ public class Game {
             // Default inventory
             player.getInventory().clear();
             player.getInventory().addItem(
-                    this.instance.getConfiguration().GameItems().stream()
-                            .map(ItemStack::new)
-                            .toArray(ItemStack[]::new)
+                this.instance.getConfiguration().GameItems()
+                    .toArray(ItemStack[]::new)
             );
 
             Logger.debug(String.format("Player '%s' has been spawned at %s in arena '%s'.", player.getName(), spawnPoint, this.arena.getName()));

@@ -1,16 +1,23 @@
 package me.goodbyepavlyi.lavarise.configs;
 
 import me.goodbyepavlyi.lavarise.LavaRiseInstance;
+import me.goodbyepavlyi.lavarise.utils.ChatUtils;
+import me.goodbyepavlyi.lavarise.utils.EnchantmentParser;
 import me.goodbyepavlyi.lavarise.utils.Logger;
 import me.goodbyepavlyi.lavarise.utils.YamlConfig;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Config extends YamlConfig {
-    private final int CONFIG_VERSION = 2;
+    private final int CONFIG_VERSION = 3;
 
     public Config(LavaRiseInstance instance) {
         super(instance, "config.yml", true);
@@ -32,6 +39,24 @@ public class Config extends YamlConfig {
                 .stream()
                 .map(command -> command.replace("%winner%", "%player%"))
                 .collect(Collectors.toList()));
+        }
+
+        if (this.getConfigVersion() == 1 || this.getConfigVersion() == 2) {
+            List<String> materialNames = this.getConfig().getStringList("game.items");
+            this.getConfig().set("game.items", null);
+
+            List<Map<String, Object>> itemList = new ArrayList<>();
+            for (String materialName : materialNames) {
+                Map<String, Object> itemMap = new HashMap<>();
+                itemMap.put("material", materialName);
+                itemMap.put("name", null);
+                itemMap.put("amount", 1);
+                itemMap.put("lore", new ArrayList<String>());
+                itemMap.put("enchantments", new ArrayList<String>());
+                itemList.add(itemMap);
+            }
+
+            this.getConfig().set("game.items", itemList);
         }
 
         for (String key : resourceConfig.getKeys(true)) {
@@ -61,11 +86,38 @@ public class Config extends YamlConfig {
         return this.getConfig().getInt("game.endGameDelay");
     }
 
-    public List<Material> GameItems() {
-        List<String> materialNames = this.getConfig().getStringList("game.items");
-        return materialNames.stream()
-                .map(Material::getMaterial)
-                .collect(Collectors.toList());
+    public List<ItemStack> GameItems() {
+        List<Map<?, ?>> items = this.getConfig().getMapList("game.items");
+        List<ItemStack> itemStacks = new ArrayList<>();
+
+        for (Map<?, ?> item : items) {
+            String materialName = (String) item.get("material");
+            String name = (String) item.get("name");
+            int amount = (int) item.get("amount");
+            List<String> lore = (List<String>) item.get("lore");
+            List<String> enchantments = (List<String>) item.get("enchantments");
+
+            ItemStack itemStack = new ItemStack(Material.getMaterial(materialName), amount);
+            ItemMeta itemMeta = itemStack.getItemMeta();
+
+            if (name != null) itemMeta.setDisplayName(ChatUtils.color(name));
+            if (lore != null) itemMeta.setLore(ChatUtils.color(lore));
+            itemStack.setItemMeta(itemMeta);
+
+            if (enchantments != null) {
+                for (String enchantment : enchantments) {
+                    String[] enchantmentParts = enchantment.split(":");
+                    itemStack.addUnsafeEnchantment(
+                            EnchantmentParser.getEnchantment(enchantmentParts[0]),
+                            Integer.parseInt(enchantmentParts[1])
+                    );
+                }
+            }
+
+            itemStacks.add(itemStack);
+        }
+
+        return itemStacks;
     }
 
     public List<String> GameCommandsWinner() {

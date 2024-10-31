@@ -1,4 +1,4 @@
-version: 2
+version: 3
 
 # Configuration for the game settings
 game:
@@ -9,8 +9,22 @@ game:
 
   # List of items that players will receive during the game
   items:
-    - "IRON_AXE"  # Example of an item that players will receive
-    - "IRON_PICKAXE"  # Another example of an item
+    - material: "IRON_AXE"
+      amount: 1
+      name: "&6Starter Axe"
+      lore:
+        - "&8A basic axe to chop down trees"
+      enchantments:
+        - "EFFICIENCY:2"
+        - "UNBREAKING:1"
+    - material: "IRON_PICKAXE"
+      amount: 1
+      name: "&6Starter Pickaxe"
+      lore:
+        - "&8A basic pickaxe to mine ores"
+      enchantments:
+        - "EFFICIENCY:2"
+        - "UNBREAKING:1"
 
   # Commands to be executed for the winner and players when the game ends
   commands:
