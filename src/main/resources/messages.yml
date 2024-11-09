@@ -1,4 +1,4 @@
-version: 2
+version: 3
 
 command:
   usage:
@@ -112,6 +112,10 @@ game:
       - ""
       - "&8Lava Y: &6%lavaY%"
       - "&8Time: &6%gameTime%"
+
+  phase:
+    grace: "Grace"
+    lava: "Lava"
 
   events:
     gameStart: "&8[&6&lLavaRise&8] Game started! Have fun!"

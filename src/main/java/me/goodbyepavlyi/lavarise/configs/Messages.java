@@ -93,6 +93,13 @@ public class Messages extends YamlConfig {
         }
     }
 
+    public String getGamePhaseMessage(Game.GamePhase gamePhase) {
+        return switch (gamePhase) {
+            case GRACE -> this.getString("game.phase.grace");
+            case LAVA -> this.getString("game.phase.lava");
+        };
+    }
+
     public List<String> CommandUsage() {
         return this.getList("command.usage");
     }
@@ -308,16 +315,16 @@ public class Messages extends YamlConfig {
         return this.getString("game.scoreboard.title");
     }
 
-    public List<String> GameScoreboardLines(int playersLeft, int lavaY, long gameTime, Game.GamePhase gamePhase) {
+    public List<String> GameScoreboardLines(int playersLeft, int lavaY, long gameTime, String gamePhase) {
         String gameTimeFormatted = new SimpleDateFormat("mm:ss").format(new Date(gameTime));
 
         return this.getList("game.scoreboard.lines")
                 .stream()
                 .map(line -> line
-                        .replaceAll("%playersLeft%", String.valueOf(playersLeft))
-                        .replaceAll("%lavaY%", String.valueOf(lavaY))
-                        .replaceAll("%gameTime%", gameTimeFormatted)
-                        .replaceAll("%event%", gamePhase.toString())
+                    .replaceAll("%playersLeft%", String.valueOf(playersLeft))
+                    .replaceAll("%lavaY%", String.valueOf(lavaY))
+                    .replaceAll("%gameTime%", gameTimeFormatted)
+                    .replaceAll("%event%", gamePhase)
                 )
                 .collect(Collectors.toList());
     }

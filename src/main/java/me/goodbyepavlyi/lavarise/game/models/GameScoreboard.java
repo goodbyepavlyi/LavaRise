@@ -24,7 +24,7 @@ public class GameScoreboard extends ArenaScoreboard {
                 .count(),
             this.game.getCurrentLavaY(),
             (System.currentTimeMillis() - this.game.getGameTime()),
-            this.game.getGamePhase()
+            this.instance.getMessages().getGamePhaseMessage(this.game.getGamePhase())
         );
 
         this.update(title, boardLines);
