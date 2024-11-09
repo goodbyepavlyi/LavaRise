@@ -5,6 +5,7 @@ game:
   gracePhaseTime: 60  # Duration of the grace phase in seconds
   spectatorSpawnYLavaOffset: 10  # Y offset from the lava where spectators will spawn
   endGameDelay: 5  # Delay in seconds before the game ends
+  pvpGracePeriod: 30 # Duration of the grace period for PVP in seconds (set to 0 to disable grace period)
 
   lavaRisingTime:
     default: 5  # Default time in seconds for the lava to rise

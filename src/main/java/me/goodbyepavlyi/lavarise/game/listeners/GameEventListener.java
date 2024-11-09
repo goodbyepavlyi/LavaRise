@@ -130,7 +130,7 @@ public class GameEventListener implements Listener {
         if (!(event.getEntity() instanceof Player victim && event.getDamager() instanceof Player killer)) return;
 
         Arena arena = this.instance.getArenaManager().getArenaByPlayer(victim.getUniqueId());
-        if (arena == null || arena.getState() != Arena.State.IN_GAME || arena.getConfig().getPVP()) return;
+        if (arena == null || arena.getState() != Arena.State.IN_GAME || arena.getGame().isPVPEnabled) return;
 
         event.setCancelled(true);
         Logger.debug(String.format("Cancelled PVP between players %s and %s in arena %s", killer.getName(), victim.getName(), arena.getName()));

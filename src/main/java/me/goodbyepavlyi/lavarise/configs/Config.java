@@ -127,6 +127,10 @@ public class Config extends YamlConfig {
         return this.getConfig().getInt("game.endGameDelay");
     }
 
+    public int GamePVPGracePeriod() {
+        return this.getConfig().getInt("game.pvpGracePeriod");
+    }
+
     public List<ItemStack> GameItems() {
         List<Map<?, ?>> items = this.getConfig().getMapList("game.items");
         List<ItemStack> itemStacks = new ArrayList<>();

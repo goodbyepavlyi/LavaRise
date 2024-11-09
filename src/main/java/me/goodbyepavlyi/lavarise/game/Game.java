@@ -28,6 +28,7 @@ public class Game {
     private final GameScoreboard gameScoreboard;
     private long gameTime;
     private int currentLavaY;
+    public boolean isPVPEnabled = false;
 
     public Game(Arena arena, LavaRiseInstance instance) {
         this.arena = arena;
@@ -116,7 +117,7 @@ public class Game {
                 gameMap.fillLavaPeriodically();
 
                 if (arena.getConfig().getPVP())
-                    arena.announceMessage(Arena.AnnouncementType.GAME_PVP_ENABLED);
+                    enablePVP();
             }
         }.runTaskLater(this.instance, (this.instance.getConfiguration().GameGracePhaseTime() * 20L));
 
@@ -246,5 +247,26 @@ public class Game {
         Logger.debug(String.format("Player '%s' has become a spectator in arena '%s'.", player.getName(), this.arena.getName()));
 
         this.checkForWinner();
+    }
+
+    private void enablePVP() {
+        if (this.isPVPEnabled) {
+            Logger.debug(String.format("PVP is already enabled in arena '%s'.", this.arena.getName()));
+            return;
+        }
+
+        if (this.instance.getConfiguration().GamePVPGracePeriod() == 0) {
+            isPVPEnabled = true;
+            this.arena.announceMessage(Arena.AnnouncementType.GAME_PVP_ENABLED);
+            return;
+        }
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                isPVPEnabled = true;
+                arena.announceMessage(Arena.AnnouncementType.GAME_PVP_ENABLED);
+            }
+        }.runTaskLater(this.instance, this.instance.getConfiguration().GamePVPGracePeriod() * 20L);
     }
 }
