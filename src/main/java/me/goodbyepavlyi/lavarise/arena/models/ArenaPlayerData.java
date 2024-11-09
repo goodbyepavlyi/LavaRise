@@ -46,41 +46,36 @@ public class ArenaPlayerData {
         restoreFoodLevel();
         restoreGameMode();
         restoreAllowFlight();
+
+        Logger.debug(String.format("Restored data for player %s", this.arenaPlayer.getPlayer().getName()));
     }
 
     public void restoreInventoryContents() {
         this.arenaPlayer.getPlayer().getInventory().setContents(this.inventoryContents);
         this.arenaPlayer.getPlayer().updateInventory();
-        Logger.debug(String.format("Restored inventory contents for player %s", this.arenaPlayer.getPlayer().getName()));
     }
 
     public void restoreArmorContents() {
         this.arenaPlayer.getPlayer().getInventory().setArmorContents(this.armorContents);
-        Logger.debug(String.format("Restored armor contents for player %s", this.arenaPlayer.getPlayer().getName()));
     }
 
     public void restoreLocation() {
         this.arenaPlayer.getPlayer().teleport(this.location, PlayerTeleportEvent.TeleportCause.PLUGIN);
-        Logger.debug(String.format("Restored location for player %s to %s", this.arenaPlayer.getPlayer().getName(), this.location));
     }
 
     public void restoreHealth() {
         this.arenaPlayer.getPlayer().setHealth(this.health);
-        Logger.debug(String.format("Restored health for player %s", this.arenaPlayer.getPlayer().getName()));
     }
 
     public void restoreFoodLevel() {
         this.arenaPlayer.getPlayer().setFoodLevel(this.foodLevel);
-        Logger.debug(String.format("Restored food level for player %s", this.arenaPlayer.getPlayer().getName()));
     }
 
     public void restoreGameMode() {
         this.arenaPlayer.getPlayer().setGameMode(this.gameMode);
-        Logger.debug(String.format("Restored game mode for player %s", this.arenaPlayer.getPlayer().getName()));
     }
 
     public void restoreAllowFlight() {
         this.arenaPlayer.getPlayer().setAllowFlight(this.allowFlight);
-        Logger.debug(String.format("Restored allow flight for player %s", this.arenaPlayer.getPlayer().getName()));
     }
 }

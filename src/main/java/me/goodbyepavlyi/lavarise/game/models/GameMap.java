@@ -163,12 +163,9 @@ public class GameMap {
         int topY = Math.max(gameAreaBottom.getBlockY(), gameAreaTop.getBlockY());
         int topZ = Math.max(gameAreaBottom.getBlockZ(), gameAreaTop.getBlockZ());
 
-        boolean insideMap = (locationX >= bottomX && locationX <= topX)
+        return (locationX >= bottomX && locationX <= topX)
                 && (locationY >= bottomY && locationY <= topY)
                 && (locationZ >= bottomZ && locationZ <= topZ);
-
-        Logger.debug(String.format("Location %s is%s inside the map of arena '%s'.", location, insideMap ? "" : " not", this.arena.getName()));
-        return insideMap;
     }
 
     public String getMapName() {

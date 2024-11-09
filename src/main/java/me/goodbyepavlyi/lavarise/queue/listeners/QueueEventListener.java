@@ -34,7 +34,7 @@ public class QueueEventListener implements Listener {
         if (arena == null || arena.getState() == Arena.State.IN_GAME) return;
 
         arena.removePlayer(player);
-        Logger.debug(String.format("Removed player %s from queue in arena %s", player.getName(), arena.getName()));
+        Logger.debug(String.format("Player %s left the server, removed from queue", player.getName()));
     }
 
     @EventHandler

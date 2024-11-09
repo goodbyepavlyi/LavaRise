@@ -54,9 +54,7 @@ public class ArenaConfig {
     }
 
     public int getMinimumPlayers() {
-        int minPlayers = this.config.getInt("minimumPlayers");
-        Logger.debug(String.format("Retrieved minimum players (%d) for arena %s", minPlayers, this.arena.getName()));
-        return minPlayers;
+        return this.config.getInt("minimumPlayers");
     }
 
     public void setMaximumPlayers(int maximumPlayers) {
@@ -65,9 +63,7 @@ public class ArenaConfig {
     }
 
     public int getMaximumPlayers() {
-        int maxPlayers = this.config.getInt("maximumPlayers");
-        Logger.debug(String.format("Retrieved maximum players (%d) for arena %s", maxPlayers, this.arena.getName()));
-        return maxPlayers;
+        return this.config.getInt("maximumPlayers");
     }
 
     public void setPVP(boolean pvp) {
@@ -76,9 +72,7 @@ public class ArenaConfig {
     }
 
     public boolean getPVP() {
-        boolean pvp = this.config.getBoolean("pvp");
-        Logger.debug(String.format("Retrieved PVP (%b) for arena %s", pvp, this.arena.getName()));
-        return pvp;
+        return this.config.getBoolean("pvp");
     }
 
     public void setLavaLevel(int lavaLevel) {
@@ -91,9 +85,7 @@ public class ArenaConfig {
     }
 
     public int getLavaLevel() {
-        int lavaLevel = this.config.getInt("lavaLevel");
-        Logger.debug(String.format("Retrieved lava level (%d) for arena %s", lavaLevel, this.arena.getName()));
-        return lavaLevel;
+        return this.config.getInt("lavaLevel");
     }
 
     public void setLobby(Location lobby) {
@@ -118,8 +110,6 @@ public class ArenaConfig {
         float yaw = this.config.getInt("lobby.yaw");
         float pitch = this.config.getInt("lobby.pitch");
 
-        Logger.debug(String.format("Retrieved lobby location for arena %s: (%s, %d, %d, %d) with yaw %.2f and pitch %.2f",
-                this.arena.getName(), worldName, blockX, blockY, blockZ, yaw, pitch));
         return new Location(world, blockX, blockY, blockZ, yaw, pitch);
     }
 
@@ -132,7 +122,6 @@ public class ArenaConfig {
                 gameArea, gameAreaLocation.getWorld().getName(), gameAreaLocation.getBlockX(),
                 gameAreaLocation.getBlockY(), gameAreaLocation.getBlockZ(), this.arena.getName()));
 
-        Logger.debug(String.format("Resetting lava level for arena %s", this.arena.getName()));
         this.setLavaLevel(-1);
     }
 
@@ -140,7 +129,6 @@ public class ArenaConfig {
         String worldName = this.config.getString("gameArea.world");
         if (worldName == null) return null;
 
-        Logger.debug(String.format("Retrieved game area world %s for arena %s", worldName, this.arena.getName()));
         return this.arena.getArenaManager().getInstance().getServer().getWorld(worldName);
     }
 
@@ -152,8 +140,6 @@ public class ArenaConfig {
         int blockY = this.config.getInt("gameArea." + gameArea + ".y");
         int blockZ = this.config.getInt("gameArea." + gameArea + ".z");
 
-        Logger.debug(String.format("Retrieved %s game area location for arena %s: (%s, %d, %d, %d)",
-                gameArea, this.arena.getName(), world.getName(), blockX, blockY, blockZ));
         return new Location(world, blockX, blockY, blockZ);
     }
 }
