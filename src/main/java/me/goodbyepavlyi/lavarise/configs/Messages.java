@@ -97,6 +97,7 @@ public class Messages extends YamlConfig {
         return switch (gamePhase) {
             case GRACE -> this.getString("game.phase.grace");
             case LAVA -> this.getString("game.phase.lava");
+            case DEATHMATCH -> this.getString("game.phase.deathmatch");
         };
     }
 

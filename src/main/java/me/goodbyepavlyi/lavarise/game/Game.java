@@ -24,7 +24,7 @@ public class Game {
     private final Arena arena;
     private final LavaRiseInstance instance;
     private final GameMap gameMap;
-    private GamePhase gamePhase;
+    private GamePhase gamePhase = GamePhase.GRACE;
     private final GameScoreboard gameScoreboard;
     private long gameTime;
     private int currentLavaY;
@@ -34,15 +34,14 @@ public class Game {
         this.instance = instance;
         this.gameScoreboard = new GameScoreboard(instance, arena, this);
         this.gameMap = new GameMap(instance, this, arena);
-        this.gamePhase = GamePhase.GRACE;
 
         GameSpectatorSpawnYLavaOffset = this.instance.getConfiguration().GameSpectatorSpawnYLavaOffset();
     }
 
     public enum GamePhase {
         GRACE("Grace"),
-        LAVA("Lava");
-//        DEATHMATCH("Deathmatch");
+        LAVA("Lava"),
+        DEATHMATCH("Deathmatch");
 
         private final String name;
 
@@ -66,6 +65,15 @@ public class Game {
 
     public GamePhase getGamePhase() {
         return this.gamePhase;
+    }
+
+    public void setGamePhase(GamePhase gamePhase) {
+        switch (gamePhase) {
+            case LAVA -> this.arena.announceMessage(Arena.AnnouncementType.GAME_LAVAPHASE_START);
+            case DEATHMATCH -> this.arena.announceMessage(Arena.AnnouncementType.GAME_LAVAPHASE_END);
+        }
+
+        this.gamePhase = gamePhase;
     }
 
     public long getGameTime() {
@@ -103,9 +111,8 @@ public class Game {
         new BukkitRunnable() {
             @Override
             public void run() {
-                gamePhase = GamePhase.LAVA;
+                setGamePhase(GamePhase.LAVA);
                 Logger.debug(String.format("Game phase transitioned to %s in arena '%s'.", gamePhase, arena.getName()));
-                arena.announceMessage(Arena.AnnouncementType.GAME_LAVAPHASE_START);
                 gameMap.fillLavaPeriodically();
 
                 if (arena.getConfig().getPVP())

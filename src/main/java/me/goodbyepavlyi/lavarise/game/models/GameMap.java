@@ -122,7 +122,7 @@ public class GameMap {
         if (this.game.getCurrentLavaY() >= gameAreaTop.getBlockY()
                 || this.arena.getConfig().isLavaLevelSet() && this.game.getCurrentLavaY() >= this.arena.getConfig().getLavaLevel()) {
             Logger.debug(String.format("Lava has reached the top of the map in arena '%s'.", this.arena.getName()));
-            this.arena.announceMessage(Arena.AnnouncementType.GAME_LAVAPHASE_END);
+            this.game.setGamePhase(Game.GamePhase.DEATHMATCH);
             this.stopLavaFillTask();
         }
     }

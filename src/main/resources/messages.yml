@@ -116,6 +116,7 @@ game:
   phase:
     grace: "Grace"
     lava: "Lava"
+    deathmatch: "Deathmatch"
 
   events:
     gameStart: "&8[&6&lLavaRise&8] Game started! Have fun!"
