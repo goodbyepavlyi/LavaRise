@@ -59,6 +59,10 @@ public class Config extends YamlConfig {
             this.getConfig().set("game.items", itemList);
         }
 
+        if (this.getConfigVersion() <= 3) {
+            this.getConfig().set("game.lavaRisingTime.default", this.getConfig().getInt("game.lavaRisingTime"));
+        }
+
         for (String key : resourceConfig.getKeys(true)) {
             if (this.getConfig().contains(key)) continue;
             Logger.debug(String.format("Migrating config key: %s", key));
@@ -70,12 +74,49 @@ public class Config extends YamlConfig {
         this.save();
     }
 
+    public class LavaLevelConfig {
+        private final int level;
+        private final int time;
+
+        public LavaLevelConfig(int level, int time) {
+            this.level = level;
+            this.time = time;
+        }
+
+        public int getLevel() {
+            return level;
+        }
+
+        public int getTime() {
+            return time;
+        }
+    }
+
+    public LavaLevelConfig getGameLavaRisingTime(int level) {
+        return this.GameLavaRisingTimeLevels()
+            .stream()
+            .filter(lavaLevelConfig -> lavaLevelConfig.getLevel() >= level)
+            .findFirst()
+            .orElse(new LavaLevelConfig(0, this.GameLavaRisingTimeDefault()));
+    }
+
     public int GameGracePhaseTime() {
         return this.getConfig().getInt("game.gracePhaseTime");
     }
 
-    public int GameLavaRisingTime() {
-        return this.getConfig().getInt("game.lavaRisingTime");
+    public int GameLavaRisingTimeDefault() {
+        return this.getConfig().getInt("game.lavaRisingTime.default");
+    }
+
+    public List<LavaLevelConfig> GameLavaRisingTimeLevels() {
+        List<LavaLevelConfig> lavaLevelConfigs = new ArrayList<>();
+        for (Map<?, ?> lavaLevel : this.getConfig().getMapList("game.lavaRisingTime.levels")) {
+            int level = (int) lavaLevel.get("level");
+            int time = (int) lavaLevel.get("time");
+            lavaLevelConfigs.add(new LavaLevelConfig(level, time));
+        }
+
+        return lavaLevelConfigs;
     }
 
     public int GameSpectatorSpawnYLavaOffset() {

@@ -3,6 +3,7 @@ package me.goodbyepavlyi.lavarise.game.models;
 import me.goodbyepavlyi.lavarise.LavaRiseInstance;
 import me.goodbyepavlyi.lavarise.arena.Arena;
 import me.goodbyepavlyi.lavarise.arena.utils.ArenaConfig;
+import me.goodbyepavlyi.lavarise.configs.Config;
 import me.goodbyepavlyi.lavarise.game.Game;
 import me.goodbyepavlyi.lavarise.utils.Logger;
 import me.goodbyepavlyi.lavarise.utils.WorldUtils;
@@ -127,17 +128,28 @@ public class GameMap {
     }
 
     public void fillLavaPeriodically() {
+        this.fillLavaPeriodically(this.instance.getConfiguration().GameLavaRisingTimeDefault(), 0);
+    }
+
+    public void fillLavaPeriodically(int time, int delay) {
         this.lavaFillTask = this.instance.getServer().getScheduler().runTaskTimer(
             this.instance,
             () -> {
                 if (!this.game.getGamePhase().equals(Game.GamePhase.LAVA)) return;
                 this.fillLava();
-            },
-            0L,
-            (this.instance.getConfiguration().GameLavaRisingTime() * 20L)
+
+                Config.LavaLevelConfig lavaLevelConfig = this.instance.getConfiguration().getGameLavaRisingTime(this.game.getCurrentLavaY());
+                Config.LavaLevelConfig nextConfig = this.instance.getConfiguration().getGameLavaRisingTime(this.game.getCurrentLavaY() + 1);
+
+                if (lavaLevelConfig.getLevel() != nextConfig.getLevel()) {
+                    Logger.debug(String.format("Changing lava fill task time to %d for arena '%s'.", nextConfig.getTime(), this.arena.getName()));
+                    this.stopLavaFillTask();
+                    this.fillLavaPeriodically(lavaLevelConfig.getTime(), lavaLevelConfig.getTime());
+                }
+            }, delay * 20L, time * 20L
         );
 
-        Logger.debug(String.format("Lava fill task started for arena '%s'.", this.arena.getName()));
+        Logger.debug(String.format("Lava fill task started for arena '%s', with time %d and delay %d.", this.arena.getName(), time, delay));
     }
 
     public void stopLavaFillTask() {

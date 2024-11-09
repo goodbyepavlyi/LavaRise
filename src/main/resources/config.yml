@@ -3,9 +3,18 @@ version: 3
 # Configuration for the game settings
 game:
   gracePhaseTime: 60  # Duration of the grace phase in seconds
-  lavaRisingTime: 10  # Time it takes for the lava to rise in seconds
   spectatorSpawnYLavaOffset: 10  # Y offset from the lava where spectators will spawn
   endGameDelay: 5  # Delay in seconds before the game ends
+
+  lavaRisingTime:
+    default: 5  # Default time in seconds for the lava to rise
+    levels: # Configuration for the lava rising time based on the Y level (leave empty to use the default time)
+      - level: 60
+        time: 10
+      - level: 70
+        time: 15
+      - level: 80
+        time: 20
 
   # List of items that players will receive during the game
   items:
