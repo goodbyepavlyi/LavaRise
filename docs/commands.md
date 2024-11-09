@@ -8,6 +8,7 @@ Requires `lavarise.admin` permission.
 - `/lavarise arena list` - List all LavaRise arenas.
 - `/lavarise arena create <arena>` - Create a new LavaRise arena.
 - `/lavarise arena delete <arena>` - Delete a LavaRise arena.
+- `/lavarise arena info <arena>` - Get information about a LavaRise arena.
 - `/lavarise arena set <arena> lobby` - Set the lobby location for a LavaRise arena.
 - `/lavarise arena set <arena> gamearea <top|bottom>` - Set the top or bottom corner of the game area for a LavaRise arena.
 - `/lavarise arena set <arena> minplayers <number>` - Set the minimum number of players required to start a game in a LavaRise arena.
