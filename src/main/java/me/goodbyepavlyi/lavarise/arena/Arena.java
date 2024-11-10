@@ -244,6 +244,14 @@ public class Arena {
             .forEach(callback);
     }
 
+    public void doForAllPlayersExceptSpectators(Consumer<Player> callback) {
+        this.getPlayers().stream()
+            .filter(Objects::nonNull)
+            .filter(player -> !player.isSpectator())
+            .map(ArenaPlayer::getPlayer)
+            .forEach(callback);
+    }
+
     public Set<ArenaSetupResult> checkSetup() {
         Set<ArenaSetupResult> results = new HashSet<>();
 

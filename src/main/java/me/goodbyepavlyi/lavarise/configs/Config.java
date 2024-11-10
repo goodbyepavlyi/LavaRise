@@ -6,6 +6,7 @@ import me.goodbyepavlyi.lavarise.utils.EnchantmentParser;
 import me.goodbyepavlyi.lavarise.utils.Logger;
 import me.goodbyepavlyi.lavarise.utils.YamlConfig;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -92,6 +93,102 @@ public class Config extends YamlConfig {
         }
     }
 
+    public class VisualEffectConfig {
+        private final boolean enabled;
+        private final VisualEffectSoundConfig sound;
+        private final VisualEffectTitleConfig title;
+
+        public VisualEffectConfig(boolean enabled, VisualEffectSoundConfig sound, VisualEffectTitleConfig title) {
+            this.enabled = enabled;
+            this.sound = sound;
+            this.title = title;
+        }
+
+        public boolean isEnabled() {
+            return enabled;
+        }
+
+        public VisualEffectSoundConfig getSound() {
+            return sound;
+        }
+
+        public VisualEffectTitleConfig getTitle() {
+            return title;
+        }
+    }
+
+    public class VisualEffectSoundConfig {
+        private final boolean enabled;
+        private final Sound sound;
+        private final float volume;
+        private final float pitch;
+
+        public VisualEffectSoundConfig(boolean enabled, String sound, float volume, float pitch) {
+            this.enabled = enabled;
+            this.sound = Sound.valueOf(sound);
+            this.volume = volume;
+            this.pitch = pitch;
+        }
+
+        public boolean isEnabled() {
+            return enabled;
+        }
+
+        public Sound getSound() {
+            return sound;
+        }
+
+        public float getVolume() {
+            return volume;
+        }
+
+        public float getPitch() {
+            return pitch;
+        }
+    }
+
+    public class VisualEffectTitleConfig {
+        private final boolean enabled;
+        private final String title;
+        private final String subtitle;
+        private final int fadeIn;
+        private final int stay;
+        private final int fadeOut;
+
+        public VisualEffectTitleConfig(boolean enabled, String title, String subtitle, int fadeIn, int stay, int fadeOut) {
+            this.enabled = enabled;
+            this.title = ChatUtils.color(title);
+            this.subtitle = ChatUtils.color(subtitle);
+            this.fadeIn = fadeIn;
+            this.stay = stay;
+            this.fadeOut = fadeOut;
+        }
+
+        public boolean isEnabled() {
+            return enabled;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public String getSubtitle() {
+            return subtitle;
+        }
+
+        public int getFadeIn() {
+            return fadeIn;
+        }
+
+        public int getStay() {
+            return stay;
+        }
+
+        public int getFadeOut() {
+            return fadeOut;
+        }
+    }
+
     public LavaLevelConfig getGameLavaRisingTime(int level) {
         return this.GameLavaRisingTimeLevels()
             .stream()
@@ -175,6 +272,54 @@ public class Config extends YamlConfig {
 
     public List<String> GameCommandsPlayers() {
         return this.getConfig().getStringList("game.commands.players");
+    }
+
+    public VisualEffectConfig GameVisualEffectLava() {
+        VisualEffectSoundConfig sound = new VisualEffectSoundConfig(
+            this.getConfig().getBoolean("game.visualEffects.lava.sound.enabled"),
+            this.getConfig().getString("game.visualEffects.lava.sound.sound"),
+            (float) this.getConfig().getDouble("game.visualEffects.lava.sound.volume"),
+            (float) this.getConfig().getDouble("game.visualEffects.lava.sound.pitch")
+        );
+
+        VisualEffectTitleConfig title = new VisualEffectTitleConfig(
+            this.getConfig().getBoolean("game.visualEffects.lava.title.enabled"),
+            this.getConfig().getString("game.visualEffects.lava.title.titleMessage"),
+            this.getConfig().getString("game.visualEffects.lava.title.subtitleMessage"),
+            this.getConfig().getInt("game.visualEffects.lava.title.fadeIn"),
+            this.getConfig().getInt("game.visualEffects.lava.title.stay"),
+            this.getConfig().getInt("game.visualEffects.lava.title.fadeOut")
+        );
+
+        return new VisualEffectConfig(
+            this.getConfig().getBoolean("game.visualEffects.lava.enabled"),
+            sound,
+            title
+        );
+    }
+
+    public VisualEffectConfig GameVisualEffectDeathmatch() {
+        VisualEffectSoundConfig sound = new VisualEffectSoundConfig(
+            this.getConfig().getBoolean("game.visualEffects.deathmatch.sound.enabled"),
+            this.getConfig().getString("game.visualEffects.deathmatch.sound.sound"),
+            (float) this.getConfig().getDouble("game.visualEffects.deathmatch.sound.volume"),
+            (float) this.getConfig().getDouble("game.visualEffects.deathmatch.sound.pitch")
+        );
+
+        VisualEffectTitleConfig title = new VisualEffectTitleConfig(
+            this.getConfig().getBoolean("game.visualEffects.deathmatch.title.enabled"),
+            this.getConfig().getString("game.visualEffects.deathmatch.title.titleMessage"),
+            this.getConfig().getString("game.visualEffects.deathmatch.title.subtitleMessage"),
+            this.getConfig().getInt("game.visualEffects.deathmatch.title.fadeIn"),
+            this.getConfig().getInt("game.visualEffects.deathmatch.title.stay"),
+            this.getConfig().getInt("game.visualEffects.deathmatch.title.fadeOut")
+        );
+
+        return new VisualEffectConfig(
+            this.getConfig().getBoolean("game.visualEffects.deathmatch.enabled"),
+            sound,
+            title
+        );
     }
 
     public int QueueCountdown() {

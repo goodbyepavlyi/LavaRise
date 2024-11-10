@@ -45,6 +45,36 @@ game:
     players: # Commands to be executed for all players (losers and winner)
       - "tell %player% You have been teleported to the lobby!"  # Send a message to the players using %player% placeholder
 
+  visualEffects:
+    lava:
+      enabled: true  # Enable or disable visual effects during the lava phase
+      sound:
+        enabled: true  # Enable or disable sound effects during the lava phase
+        sound: "ENTITY_GENERIC_EXPLODE"  # Sound effect to be played during the lava phase
+        volume: 1.0  # Volume of the sound effect
+        pitch: 1.0  # Pitch of the sound effect
+      title:
+        enabled: true  # Enable or disable title messages during the lava phase
+        titleMessage: "&cLava is rising!"  # Title message to be displayed during the lava phase
+        subtitleMessage: "&7Get to higher ground!"  # Subtitle message to be displayed during the lava phase
+        fadeIn: 10  # Duration of the title fade-in in ticks
+        stay: 40  # Duration of the title stay in ticks
+        fadeOut: 10  # Duration of the title fade-out in ticks
+    deathmatch:
+      enabled: true  # Enable or disable visual effects during the death match
+      sound:
+        enabled: true  # Enable or disable sound effects during the death match
+        sound: "ENTITY_GENERIC_EXPLODE"  # Sound effect to be played during the death match
+        volume: 1.0  # Volume of the sound effect
+        pitch: 1.0  # Pitch of the sound effect
+      title:
+        enabled: true  # Enable or disable title messages during the death match
+        titleMessage: "&cDeath Match!"  # Title message to be displayed during the death match
+        subtitleMessage: "&7Last player standing wins!"  # Subtitle message to be displayed during the death match
+        fadeIn: 10  # Duration of the title fade-in in ticks
+        stay: 40  # Duration of the title stay in ticks
+        fadeOut: 10  # Duration of the title fade-out in ticks
+
 # Configuration for the queue settings
 queue:
   countdown: 45  # Countdown time in seconds before the game starts

@@ -4,6 +4,7 @@ import me.goodbyepavlyi.lavarise.LavaRiseInstance;
 import me.goodbyepavlyi.lavarise.arena.Arena;
 import me.goodbyepavlyi.lavarise.arena.utils.ArenaConfig;
 import me.goodbyepavlyi.lavarise.arena.models.ArenaPlayer;
+import me.goodbyepavlyi.lavarise.configs.Config;
 import me.goodbyepavlyi.lavarise.game.models.GameMap;
 import me.goodbyepavlyi.lavarise.game.models.GameScoreboard;
 import me.goodbyepavlyi.lavarise.utils.Logger;
@@ -76,10 +77,12 @@ public class Game {
         switch (gamePhase) {
             case LAVA -> {
                 this.arena.announceMessage(Arena.AnnouncementType.GAME_LAVAPHASE_START);
+                this.playVisualEffect(this.instance.getConfiguration().GameVisualEffectLava());
             }
             case DEATHMATCH -> {
                 this.enablePVP();
                 this.arena.announceMessage(Arena.AnnouncementType.GAME_LAVAPHASE_END);
+                this.playVisualEffect(this.instance.getConfiguration().GameVisualEffectDeathmatch());
             }
         }
     }
@@ -277,5 +280,19 @@ public class Game {
                 arena.announceMessage(Arena.AnnouncementType.GAME_PVP_ENABLED);
             }
         }.runTaskLater(this.instance, this.instance.getConfiguration().GamePVPGracePeriod() * 20L);
+    }
+
+    private void playVisualEffect(Config.VisualEffectConfig visualEffectConfig) {
+        if (visualEffectConfig.isEnabled() && visualEffectConfig.getSound().isEnabled()) {
+            this.arena.doForAllPlayersExceptSpectators(
+                player -> player.playSound(player.getLocation(), visualEffectConfig.getSound().getSound(), visualEffectConfig.getSound().getVolume(), visualEffectConfig.getSound().getPitch())
+            );
+        }
+
+        if (visualEffectConfig.isEnabled() && visualEffectConfig.getTitle().isEnabled()) {
+            this.arena.doForAllPlayersExceptSpectators(
+                player -> player.sendTitle(visualEffectConfig.getTitle().getTitle(), visualEffectConfig.getTitle().getSubtitle(), visualEffectConfig.getTitle().getFadeIn(), visualEffectConfig.getTitle().getStay(), visualEffectConfig.getTitle().getFadeOut())
+            );
+        }
     }
 }
