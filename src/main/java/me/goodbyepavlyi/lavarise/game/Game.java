@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.List;
 import java.util.Set;
@@ -29,6 +30,7 @@ public class Game {
     private long gameTime;
     private int currentLavaY;
     public boolean isPVPEnabled = false;
+    private BukkitTask _pvpGracePeriodTask;
 
     public Game(Arena arena, LavaRiseInstance instance) {
         this.arena = arena;
@@ -69,12 +71,17 @@ public class Game {
     }
 
     public void setGamePhase(GamePhase gamePhase) {
-        switch (gamePhase) {
-            case LAVA -> this.arena.announceMessage(Arena.AnnouncementType.GAME_LAVAPHASE_START);
-            case DEATHMATCH -> this.arena.announceMessage(Arena.AnnouncementType.GAME_LAVAPHASE_END);
-        }
-
         this.gamePhase = gamePhase;
+
+        switch (gamePhase) {
+            case LAVA -> {
+                this.arena.announceMessage(Arena.AnnouncementType.GAME_LAVAPHASE_START);
+            }
+            case DEATHMATCH -> {
+                this.enablePVP();
+                this.arena.announceMessage(Arena.AnnouncementType.GAME_LAVAPHASE_END);
+            }
+        }
     }
 
     public long getGameTime() {
@@ -255,13 +262,15 @@ public class Game {
             return;
         }
 
-        if (this.instance.getConfiguration().GamePVPGracePeriod() == 0) {
+        if (this.instance.getConfiguration().GamePVPGracePeriod() == 0 || this.gamePhase == GamePhase.DEATHMATCH) {
+            if (this._pvpGracePeriodTask != null) this._pvpGracePeriodTask.cancel();
+
             isPVPEnabled = true;
             this.arena.announceMessage(Arena.AnnouncementType.GAME_PVP_ENABLED);
             return;
         }
 
-        new BukkitRunnable() {
+        this._pvpGracePeriodTask = new BukkitRunnable() {
             @Override
             public void run() {
                 isPVPEnabled = true;
