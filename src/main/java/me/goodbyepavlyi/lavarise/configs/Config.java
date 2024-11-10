@@ -6,6 +6,7 @@ import me.goodbyepavlyi.lavarise.utils.EnchantmentParser;
 import me.goodbyepavlyi.lavarise.utils.Logger;
 import me.goodbyepavlyi.lavarise.utils.YamlConfig;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -93,13 +94,35 @@ public class Config extends YamlConfig {
         }
     }
 
+    public enum VisualEffectType {
+        LAVA("lava"),
+        DEATHMATCH("deathmatch"),
+        WINNER("winner");
+
+        private final String key;
+
+        VisualEffectType(String key) {
+            this.key = key;
+        }
+
+        public String getKey() {
+            return key;
+        }
+    }
+
     public class VisualEffectConfig {
-        private final VisualEffectSoundConfig sound;
-        private final VisualEffectTitleConfig title;
+        private VisualEffectSoundConfig sound;
+        private VisualEffectTitleConfig title;
+        private VisualEffectParticleConfig particle;
 
         public VisualEffectConfig(VisualEffectSoundConfig sound, VisualEffectTitleConfig title) {
             this.sound = sound;
             this.title = title;
+        }
+
+        public VisualEffectConfig(VisualEffectSoundConfig sound, VisualEffectParticleConfig particle) {
+            this.sound = sound;
+            this.particle = particle;
         }
 
         public VisualEffectSoundConfig getSound() {
@@ -108,6 +131,10 @@ public class Config extends YamlConfig {
 
         public VisualEffectTitleConfig getTitle() {
             return title;
+        }
+
+        public VisualEffectParticleConfig getParticle() {
+            return particle;
         }
     }
 
@@ -183,12 +210,97 @@ public class Config extends YamlConfig {
         }
     }
 
+    public class VisualEffectParticleConfig {
+        private final boolean enabled;
+        private final Particle particle;
+        private final int amount;
+        private final double offsetX;
+        private final double offsetY;
+        private final double offsetZ;
+        private final double speed;
+
+        public VisualEffectParticleConfig(boolean enabled, String particle, int amount, double offsetX, double offsetY, double offsetZ, double speed) {
+            this.enabled = enabled;
+            this.particle = Particle.valueOf(particle);
+            this.amount = amount;
+            this.offsetX = offsetX;
+            this.offsetY = offsetY;
+            this.offsetZ = offsetZ;
+            this.speed = speed;
+        }
+
+        public boolean isEnabled() {
+            return enabled;
+        }
+
+        public Particle getParticle() {
+            return particle;
+        }
+
+        public int getAmount() {
+            return amount;
+        }
+
+        public double getOffsetX() {
+            return offsetX;
+        }
+
+        public double getOffsetY() {
+            return offsetY;
+        }
+
+        public double getOffsetZ() {
+            return offsetZ;
+        }
+
+        public double getSpeed() {
+            return speed;
+        }
+    }
+
     public LavaLevelConfig getGameLavaRisingTime(int level) {
         return this.GameLavaRisingTimeLevels()
             .stream()
             .filter(lavaLevelConfig -> lavaLevelConfig.getLevel() >= level)
             .findFirst()
             .orElse(new LavaLevelConfig(0, this.GameLavaRisingTimeDefault()));
+    }
+
+    public VisualEffectConfig getGameVisualEffect(VisualEffectType type) {
+        VisualEffectSoundConfig sound = new VisualEffectSoundConfig(
+            this.getConfig().getBoolean(String.format("game.visualEffects.%s.sound.enabled", type.getKey())),
+            this.getConfig().getString(String.format("game.visualEffects.%s.sound.sound", type.getKey())),
+            (float) this.getConfig().getDouble(String.format("game.visualEffects.%s.sound.volume", type.getKey())),
+            (float) this.getConfig().getDouble(String.format("game.visualEffects.%s.sound.pitch", type.getKey()))
+        );
+
+        return switch (type) {
+            case LAVA, DEATHMATCH -> {
+                VisualEffectTitleConfig title = new VisualEffectTitleConfig(
+                        this.getConfig().getBoolean(String.format("game.visualEffects.%s.title.enabled", type.getKey())),
+                        this.getConfig().getString(String.format("game.visualEffects.%s.title.titleMessage", type.getKey())),
+                        this.getConfig().getString(String.format("game.visualEffects.%s.title.subtitleMessage", type.getKey())),
+                        this.getConfig().getInt(String.format("game.visualEffects.%s.title.fadeIn", type.getKey())),
+                        this.getConfig().getInt(String.format("game.visualEffects.%s.title.stay", type.getKey())),
+                        this.getConfig().getInt(String.format("game.visualEffects.%s.title.fadeOut", type.getKey()))
+                );
+
+                yield new VisualEffectConfig(sound, title);
+            }
+            case WINNER -> {
+                VisualEffectParticleConfig particle = new VisualEffectParticleConfig(
+                        this.getConfig().getBoolean(String.format("game.visualEffects.%s.particle.enabled", type.getKey())),
+                        this.getConfig().getString(String.format("game.visualEffects.%s.particle.particle", type.getKey())),
+                        this.getConfig().getInt(String.format("game.visualEffects.%s.particle.count", type.getKey())),
+                        this.getConfig().getDouble(String.format("game.visualEffects.%s.particle.offsetX", type.getKey())),
+                        this.getConfig().getDouble(String.format("game.visualEffects.%s.particle.offsetY", type.getKey())),
+                        this.getConfig().getDouble(String.format("game.visualEffects.%s.particle.offsetZ", type.getKey())),
+                        this.getConfig().getDouble(String.format("game.visualEffects.%s.particle.speed", type.getKey()))
+                );
+
+                yield new VisualEffectConfig(sound, particle);
+            }
+        };
     }
 
     public int GameGracePhaseTime() {
@@ -266,46 +378,6 @@ public class Config extends YamlConfig {
 
     public List<String> GameCommandsPlayers() {
         return this.getConfig().getStringList("game.commands.players");
-    }
-
-    public VisualEffectConfig GameVisualEffectLava() {
-        VisualEffectSoundConfig sound = new VisualEffectSoundConfig(
-            this.getConfig().getBoolean("game.visualEffects.lava.sound.enabled"),
-            this.getConfig().getString("game.visualEffects.lava.sound.sound"),
-            (float) this.getConfig().getDouble("game.visualEffects.lava.sound.volume"),
-            (float) this.getConfig().getDouble("game.visualEffects.lava.sound.pitch")
-        );
-
-        VisualEffectTitleConfig title = new VisualEffectTitleConfig(
-            this.getConfig().getBoolean("game.visualEffects.lava.title.enabled"),
-            this.getConfig().getString("game.visualEffects.lava.title.titleMessage"),
-            this.getConfig().getString("game.visualEffects.lava.title.subtitleMessage"),
-            this.getConfig().getInt("game.visualEffects.lava.title.fadeIn"),
-            this.getConfig().getInt("game.visualEffects.lava.title.stay"),
-            this.getConfig().getInt("game.visualEffects.lava.title.fadeOut")
-        );
-
-        return new VisualEffectConfig(sound, title);
-    }
-
-    public VisualEffectConfig GameVisualEffectDeathmatch() {
-        VisualEffectSoundConfig sound = new VisualEffectSoundConfig(
-            this.getConfig().getBoolean("game.visualEffects.deathmatch.sound.enabled"),
-            this.getConfig().getString("game.visualEffects.deathmatch.sound.sound"),
-            (float) this.getConfig().getDouble("game.visualEffects.deathmatch.sound.volume"),
-            (float) this.getConfig().getDouble("game.visualEffects.deathmatch.sound.pitch")
-        );
-
-        VisualEffectTitleConfig title = new VisualEffectTitleConfig(
-            this.getConfig().getBoolean("game.visualEffects.deathmatch.title.enabled"),
-            this.getConfig().getString("game.visualEffects.deathmatch.title.titleMessage"),
-            this.getConfig().getString("game.visualEffects.deathmatch.title.subtitleMessage"),
-            this.getConfig().getInt("game.visualEffects.deathmatch.title.fadeIn"),
-            this.getConfig().getInt("game.visualEffects.deathmatch.title.stay"),
-            this.getConfig().getInt("game.visualEffects.deathmatch.title.fadeOut")
-        );
-
-        return new VisualEffectConfig(sound, title);
     }
 
     public int QueueCountdown() {

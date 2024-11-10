@@ -72,6 +72,20 @@ game:
         fadeIn: 10  # Duration of the title fade-in in ticks
         stay: 40  # Duration of the title stay in ticks
         fadeOut: 10  # Duration of the title fade-out in ticks
+    winner:
+      sound:
+        enabled: true
+        sound: "ENTITY_PLAYER_LEVELUP"
+        volume: 1.0
+        pitch: 1.0
+      particle:
+        enabled: true
+        particle: "FIREWORKS_SPARK"
+        count: 25
+        offsetX: 0.5
+        offsetY: 0.5
+        offsetZ: 0.5
+        speed: 0.1
 
 # Configuration for the queue settings
 queue:

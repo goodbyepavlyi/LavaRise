@@ -77,12 +77,12 @@ public class Game {
         switch (gamePhase) {
             case LAVA -> {
                 this.arena.announceMessage(Arena.AnnouncementType.GAME_LAVAPHASE_START);
-                this.playVisualEffect(this.instance.getConfiguration().GameVisualEffectLava());
+                this.playVisualEffect(Config.VisualEffectType.LAVA);
             }
             case DEATHMATCH -> {
                 this.enablePVP();
                 this.arena.announceMessage(Arena.AnnouncementType.GAME_LAVAPHASE_END);
-                this.playVisualEffect(this.instance.getConfiguration().GameVisualEffectDeathmatch());
+                this.playVisualEffect(Config.VisualEffectType.DEATHMATCH);
             }
         }
     }
@@ -107,6 +107,13 @@ public class Game {
 
     public boolean isSpectator(Player player) {
         return this.arena.getPlayer(player.getUniqueId()).isSpectator();
+    }
+
+    public ArenaPlayer getWinner() {
+        return this.arena.getPlayers().stream()
+            .filter(arenaPlayer -> !arenaPlayer.isSpectator())
+            .findFirst()
+            .orElse(null);
     }
 
     public void start() {
@@ -205,17 +212,15 @@ public class Game {
             return;
         }
 
-        ArenaPlayer winner = this.arena.getPlayers().stream()
-            .filter(arenaPlayer -> !arenaPlayer.isSpectator())
-            .findFirst()
-            .orElse(null);
-
+        ArenaPlayer winner = this.getWinner();
         if (winner != null) {
             Logger.debug(String.format("Winner found: '%s' in arena '%s'.", winner.getPlayer().getName(), this.arena.getName()));
             this.executeCommands(this.instance.getConfiguration().GameCommandsWinner(), winner.getPlayer().getName());
 
             this.arena.doForAllArenaPlayersExcept(arenaPlayer ->
                 this.executeCommands(this.instance.getConfiguration().GameCommandsLosers(), arenaPlayer.getPlayer().getName()), winner);
+
+            this.playVisualEffect(Config.VisualEffectType.WINNER);
         }
 
         this.arena.doForAllArenaPlayers(arenaPlayer ->
@@ -282,17 +287,28 @@ public class Game {
         }.runTaskLater(this.instance, this.instance.getConfiguration().GamePVPGracePeriod() * 20L);
     }
 
-    private void playVisualEffect(Config.VisualEffectConfig visualEffectConfig) {
+    private void playVisualEffect(Config.VisualEffectType visualEffectType) {
+        Config.VisualEffectConfig visualEffectConfig = this.instance.getConfiguration().getGameVisualEffect(visualEffectType);
+
         if (visualEffectConfig.getSound().isEnabled()) {
             this.arena.doForAllPlayersExceptSpectators(
                 player -> player.playSound(player.getLocation(), visualEffectConfig.getSound().getSound(), visualEffectConfig.getSound().getVolume(), visualEffectConfig.getSound().getPitch())
             );
         }
 
-        if (visualEffectConfig.getTitle().isEnabled()) {
+        if (visualEffectConfig.getTitle() != null && visualEffectConfig.getTitle().isEnabled()) {
             this.arena.doForAllPlayersExceptSpectators(
                 player -> player.sendTitle(visualEffectConfig.getTitle().getTitle(), visualEffectConfig.getTitle().getSubtitle(), visualEffectConfig.getTitle().getFadeIn(), visualEffectConfig.getTitle().getStay(), visualEffectConfig.getTitle().getFadeOut())
             );
+        }
+
+        if (visualEffectConfig.getParticle() != null && visualEffectConfig.getParticle().isEnabled()) {
+            if (visualEffectType == Config.VisualEffectType.WINNER) {
+                Player winner = this.getWinner().getPlayer();
+                this.arena.doForAllPlayers(
+                    player -> player.spawnParticle(visualEffectConfig.getParticle().getParticle(), winner.getLocation(), visualEffectConfig.getParticle().getAmount(), visualEffectConfig.getParticle().getOffsetX(), visualEffectConfig.getParticle().getOffsetY(), visualEffectConfig.getParticle().getOffsetZ(), visualEffectConfig.getParticle().getSpeed())
+                );
+            }
         }
     }
 }
