@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Config extends YamlConfig {
-    private final int CONFIG_VERSION = 3;
+    private final int CONFIG_VERSION = 4;
 
     public Config(LavaRiseInstance instance) {
         super(instance, "config.yml", true);
