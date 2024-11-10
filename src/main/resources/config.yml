@@ -47,7 +47,6 @@ game:
 
   visualEffects:
     lava:
-      enabled: true  # Enable or disable visual effects during the lava phase
       sound:
         enabled: true  # Enable or disable sound effects during the lava phase
         sound: "ENTITY_GENERIC_EXPLODE"  # Sound effect to be played during the lava phase
@@ -61,7 +60,6 @@ game:
         stay: 40  # Duration of the title stay in ticks
         fadeOut: 10  # Duration of the title fade-out in ticks
     deathmatch:
-      enabled: true  # Enable or disable visual effects during the death match
       sound:
         enabled: true  # Enable or disable sound effects during the death match
         sound: "ENTITY_GENERIC_EXPLODE"  # Sound effect to be played during the death match

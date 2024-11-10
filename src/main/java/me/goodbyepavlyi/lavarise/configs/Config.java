@@ -94,18 +94,12 @@ public class Config extends YamlConfig {
     }
 
     public class VisualEffectConfig {
-        private final boolean enabled;
         private final VisualEffectSoundConfig sound;
         private final VisualEffectTitleConfig title;
 
-        public VisualEffectConfig(boolean enabled, VisualEffectSoundConfig sound, VisualEffectTitleConfig title) {
-            this.enabled = enabled;
+        public VisualEffectConfig(VisualEffectSoundConfig sound, VisualEffectTitleConfig title) {
             this.sound = sound;
             this.title = title;
-        }
-
-        public boolean isEnabled() {
-            return enabled;
         }
 
         public VisualEffectSoundConfig getSound() {
@@ -291,11 +285,7 @@ public class Config extends YamlConfig {
             this.getConfig().getInt("game.visualEffects.lava.title.fadeOut")
         );
 
-        return new VisualEffectConfig(
-            this.getConfig().getBoolean("game.visualEffects.lava.enabled"),
-            sound,
-            title
-        );
+        return new VisualEffectConfig(sound, title);
     }
 
     public VisualEffectConfig GameVisualEffectDeathmatch() {
@@ -315,11 +305,7 @@ public class Config extends YamlConfig {
             this.getConfig().getInt("game.visualEffects.deathmatch.title.fadeOut")
         );
 
-        return new VisualEffectConfig(
-            this.getConfig().getBoolean("game.visualEffects.deathmatch.enabled"),
-            sound,
-            title
-        );
+        return new VisualEffectConfig(sound, title);
     }
 
     public int QueueCountdown() {

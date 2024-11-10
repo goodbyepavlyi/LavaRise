@@ -283,13 +283,13 @@ public class Game {
     }
 
     private void playVisualEffect(Config.VisualEffectConfig visualEffectConfig) {
-        if (visualEffectConfig.isEnabled() && visualEffectConfig.getSound().isEnabled()) {
+        if (visualEffectConfig.getSound().isEnabled()) {
             this.arena.doForAllPlayersExceptSpectators(
                 player -> player.playSound(player.getLocation(), visualEffectConfig.getSound().getSound(), visualEffectConfig.getSound().getVolume(), visualEffectConfig.getSound().getPitch())
             );
         }
 
-        if (visualEffectConfig.isEnabled() && visualEffectConfig.getTitle().isEnabled()) {
+        if (visualEffectConfig.getTitle().isEnabled()) {
             this.arena.doForAllPlayersExceptSpectators(
                 player -> player.sendTitle(visualEffectConfig.getTitle().getTitle(), visualEffectConfig.getTitle().getSubtitle(), visualEffectConfig.getTitle().getFadeIn(), visualEffectConfig.getTitle().getStay(), visualEffectConfig.getTitle().getFadeOut())
             );
