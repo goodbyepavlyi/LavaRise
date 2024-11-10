@@ -54,8 +54,8 @@ game:
         pitch: 1.0  # Pitch of the sound effect
       title:
         enabled: true  # Enable or disable title messages during the lava phase
-        titleMessage: "&cLava is rising!"  # Title message to be displayed during the lava phase
-        subtitleMessage: "&7Get to higher ground!"  # Subtitle message to be displayed during the lava phase
+        titleMessage: "&6Lava is rising!"  # Title message to be displayed during the lava phase
+        subtitleMessage: "&8Get to higher ground!"  # Subtitle message to be displayed during the lava phase
         fadeIn: 10  # Duration of the title fade-in in ticks
         stay: 40  # Duration of the title stay in ticks
         fadeOut: 10  # Duration of the title fade-out in ticks
@@ -67,8 +67,8 @@ game:
         pitch: 1.0  # Pitch of the sound effect
       title:
         enabled: true  # Enable or disable title messages during the death match
-        titleMessage: "&cDeath Match!"  # Title message to be displayed during the death match
-        subtitleMessage: "&7Last player standing wins!"  # Subtitle message to be displayed during the death match
+        titleMessage: "&6Death Match!"  # Title message to be displayed during the death match
+        subtitleMessage: "&8Last player standing wins!"  # Subtitle message to be displayed during the death match
         fadeIn: 10  # Duration of the title fade-in in ticks
         stay: 40  # Duration of the title stay in ticks
         fadeOut: 10  # Duration of the title fade-out in ticks
