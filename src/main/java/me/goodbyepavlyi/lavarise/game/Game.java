@@ -272,6 +272,7 @@ public class Game {
 
         if (this.instance.getConfiguration().GamePVPGracePeriod() == 0 || this.gamePhase == GamePhase.DEATHMATCH) {
             if (this._pvpGracePeriodTask != null) this._pvpGracePeriodTask.cancel();
+            if (this.gamePhase != GamePhase.DEATHMATCH) this.playVisualEffect(Config.VisualEffectType.PVP);
 
             isPVPEnabled = true;
             this.arena.announceMessage(Arena.AnnouncementType.GAME_PVP_ENABLED);
@@ -282,6 +283,7 @@ public class Game {
             @Override
             public void run() {
                 isPVPEnabled = true;
+                playVisualEffect(Config.VisualEffectType.PVP);
                 arena.announceMessage(Arena.AnnouncementType.GAME_PVP_ENABLED);
             }
         }.runTaskLater(this.instance, this.instance.getConfiguration().GamePVPGracePeriod() * 20L);

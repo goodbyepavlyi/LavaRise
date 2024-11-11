@@ -59,6 +59,19 @@ game:
         fadeIn: 10  # Duration of the title fade-in in ticks
         stay: 40  # Duration of the title stay in ticks
         fadeOut: 10  # Duration of the title fade-out in ticks
+    pvp:
+      sound:
+        enabled: true  # Enable or disable sound effects during the PVP phase
+        sound: "ENTITY_GENERIC_EXPLODE"  # Sound effect to be played during the PVP phase
+        volume: 1.0  # Volume of the sound effect
+        pitch: 1.0  # Pitch of the sound effect
+      title:
+        enabled: true  # Enable or disable title messages during the PVP phase
+        titleMessage: "&6PVP is enabled!"  # Title message to be displayed during the PVP phase
+        subtitleMessage: "&8Fight to the death!"  # Subtitle message to be displayed during the PVP phase
+        fadeIn: 10  # Duration of the title fade-in in ticks
+        stay: 40  # Duration of the title stay in ticks
+        fadeOut: 10  # Duration of the title fade-out in ticks
     deathmatch:
       sound:
         enabled: true  # Enable or disable sound effects during the death match

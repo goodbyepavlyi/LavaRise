@@ -96,6 +96,7 @@ public class Config extends YamlConfig {
 
     public enum VisualEffectType {
         LAVA("lava"),
+        PVP("pvp"),
         DEATHMATCH("deathmatch"),
         WINNER("winner");
 
@@ -275,7 +276,7 @@ public class Config extends YamlConfig {
         );
 
         return switch (type) {
-            case LAVA, DEATHMATCH -> {
+            case LAVA, DEATHMATCH, PVP -> {
                 VisualEffectTitleConfig title = new VisualEffectTitleConfig(
                         this.getConfig().getBoolean(String.format("game.visualEffects.%s.title.enabled", type.getKey())),
                         this.getConfig().getString(String.format("game.visualEffects.%s.title.titleMessage", type.getKey())),
