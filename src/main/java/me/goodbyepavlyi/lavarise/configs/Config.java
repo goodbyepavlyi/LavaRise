@@ -98,7 +98,8 @@ public class Config extends YamlConfig {
         LAVA("lava"),
         PVP("pvp"),
         DEATHMATCH("deathmatch"),
-        WINNER("winner");
+        WINNER("winner"),
+        SPECTATOR("spectator");
 
         private final String key;
 
@@ -123,6 +124,12 @@ public class Config extends YamlConfig {
 
         public VisualEffectConfig(VisualEffectSoundConfig sound, VisualEffectParticleConfig particle) {
             this.sound = sound;
+            this.particle = particle;
+        }
+
+        public VisualEffectConfig(VisualEffectSoundConfig sound, VisualEffectTitleConfig title, VisualEffectParticleConfig particle) {
+            this.sound = sound;
+            this.title = title;
             this.particle = particle;
         }
 
@@ -267,6 +274,7 @@ public class Config extends YamlConfig {
             .orElse(new LavaLevelConfig(0, this.GameLavaRisingTimeDefault()));
     }
 
+    // TODO: refactor this code
     public VisualEffectConfig getGameVisualEffect(VisualEffectType type) {
         VisualEffectSoundConfig sound = new VisualEffectSoundConfig(
             this.getConfig().getBoolean(String.format("game.visualEffects.%s.sound.enabled", type.getKey())),
@@ -276,30 +284,39 @@ public class Config extends YamlConfig {
         );
 
         return switch (type) {
-            case LAVA, DEATHMATCH, PVP -> {
+            case LAVA, DEATHMATCH, PVP, SPECTATOR -> {
                 VisualEffectTitleConfig title = new VisualEffectTitleConfig(
-                        this.getConfig().getBoolean(String.format("game.visualEffects.%s.title.enabled", type.getKey())),
-                        this.getConfig().getString(String.format("game.visualEffects.%s.title.titleMessage", type.getKey())),
-                        this.getConfig().getString(String.format("game.visualEffects.%s.title.subtitleMessage", type.getKey())),
-                        this.getConfig().getInt(String.format("game.visualEffects.%s.title.fadeIn", type.getKey())),
-                        this.getConfig().getInt(String.format("game.visualEffects.%s.title.stay", type.getKey())),
-                        this.getConfig().getInt(String.format("game.visualEffects.%s.title.fadeOut", type.getKey()))
+                    this.getConfig().getBoolean(String.format("game.visualEffects.%s.title.enabled", type.getKey())),
+                    this.getConfig().getString(String.format("game.visualEffects.%s.title.titleMessage", type.getKey())),
+                    this.getConfig().getString(String.format("game.visualEffects.%s.title.subtitleMessage", type.getKey())),
+                    this.getConfig().getInt(String.format("game.visualEffects.%s.title.fadeIn", type.getKey())),
+                    this.getConfig().getInt(String.format("game.visualEffects.%s.title.stay", type.getKey())),
+                    this.getConfig().getInt(String.format("game.visualEffects.%s.title.fadeOut", type.getKey()))
                 );
 
                 yield new VisualEffectConfig(sound, title);
             }
             case WINNER -> {
-                VisualEffectParticleConfig particle = new VisualEffectParticleConfig(
-                        this.getConfig().getBoolean(String.format("game.visualEffects.%s.particle.enabled", type.getKey())),
-                        this.getConfig().getString(String.format("game.visualEffects.%s.particle.particle", type.getKey())),
-                        this.getConfig().getInt(String.format("game.visualEffects.%s.particle.count", type.getKey())),
-                        this.getConfig().getDouble(String.format("game.visualEffects.%s.particle.offsetX", type.getKey())),
-                        this.getConfig().getDouble(String.format("game.visualEffects.%s.particle.offsetY", type.getKey())),
-                        this.getConfig().getDouble(String.format("game.visualEffects.%s.particle.offsetZ", type.getKey())),
-                        this.getConfig().getDouble(String.format("game.visualEffects.%s.particle.speed", type.getKey()))
+                VisualEffectTitleConfig title = new VisualEffectTitleConfig(
+                    this.getConfig().getBoolean(String.format("game.visualEffects.%s.title.enabled", type.getKey())),
+                    this.getConfig().getString(String.format("game.visualEffects.%s.title.titleMessage", type.getKey())),
+                    this.getConfig().getString(String.format("game.visualEffects.%s.title.subtitleMessage", type.getKey())),
+                    this.getConfig().getInt(String.format("game.visualEffects.%s.title.fadeIn", type.getKey())),
+                    this.getConfig().getInt(String.format("game.visualEffects.%s.title.stay", type.getKey())),
+                    this.getConfig().getInt(String.format("game.visualEffects.%s.title.fadeOut", type.getKey()))
                 );
 
-                yield new VisualEffectConfig(sound, particle);
+                VisualEffectParticleConfig particle = new VisualEffectParticleConfig(
+                    this.getConfig().getBoolean(String.format("game.visualEffects.%s.particle.enabled", type.getKey())),
+                    this.getConfig().getString(String.format("game.visualEffects.%s.particle.particle", type.getKey())),
+                    this.getConfig().getInt(String.format("game.visualEffects.%s.particle.count", type.getKey())),
+                    this.getConfig().getDouble(String.format("game.visualEffects.%s.particle.offsetX", type.getKey())),
+                    this.getConfig().getDouble(String.format("game.visualEffects.%s.particle.offsetY", type.getKey())),
+                    this.getConfig().getDouble(String.format("game.visualEffects.%s.particle.offsetZ", type.getKey())),
+                    this.getConfig().getDouble(String.format("game.visualEffects.%s.particle.speed", type.getKey()))
+                );
+
+                yield new VisualEffectConfig(sound, title, particle);
             }
         };
     }

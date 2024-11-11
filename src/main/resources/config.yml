@@ -91,6 +91,13 @@ game:
         sound: "ENTITY_PLAYER_LEVELUP"
         volume: 1.0
         pitch: 1.0
+      title:
+        enabled: true
+        titleMessage: "&6You won!"
+        subtitleMessage: "&8Congratulations!"
+        fadeIn: 10
+        stay: 40
+        fadeOut: 10
       particle:
         enabled: true
         particle: "FIREWORKS_SPARK"
@@ -99,6 +106,19 @@ game:
         offsetY: 0.5
         offsetZ: 0.5
         speed: 0.1
+    spectator:
+      sound:
+        enabled: true
+        sound: "ENTITY_WITHER_DEATH"
+        volume: 1.0
+        pitch: 1.0
+      title:
+        enabled: true
+        titleMessage: "&cYou lost!"
+        subtitleMessage: "&8Better luck next time!"
+        fadeIn: 10
+        stay: 40
+        fadeOut: 10
 
 # Configuration for the queue settings
 queue:

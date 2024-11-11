@@ -202,8 +202,8 @@ public class Game {
     public void checkForWinner() {
         Logger.debug(String.format("Checking for a winner in arena '%s'.", this.arena.getName()));
         long remainingPlayers = this.arena.getPlayers().stream()
-                .filter(arenaPlayer -> !arenaPlayer.isSpectator())
-                .count();
+            .filter(arenaPlayer -> !arenaPlayer.isSpectator())
+            .count();
 
         if (remainingPlayers > 1) {
             Logger.debug(String.format("Multiple players remaining (%d) in arena '%s', cannot determine winner yet.", remainingPlayers, this.arena.getName()));
@@ -241,6 +241,7 @@ public class Game {
             Logger.debug(String.format("Player '%s' could not be found in arena '%s'.", player.getName(), this.arena.getName()));
             return;
         }
+
         if (arenaPlayer.isSpectator()) {
             Logger.debug(String.format("Player '%s' is already a spectator in arena '%s'.", player.getName(), this.arena.getName()));
             return;
@@ -260,6 +261,10 @@ public class Game {
         Logger.debug(String.format("Player '%s' has become a spectator in arena '%s'.", player.getName(), this.arena.getName()));
 
         this.checkForWinner();
+
+        Config.VisualEffectType type = this.getWinner().getPlayerUUID() == arenaPlayer.getPlayerUUID() ? Config.VisualEffectType.WINNER : Config.VisualEffectType.SPECTATOR;
+        Config.VisualEffectTitleConfig titleConfig = this.instance.getConfiguration().getGameVisualEffect(type).getTitle();
+        player.sendTitle(titleConfig.getTitle(), titleConfig.getSubtitle(), titleConfig.getFadeIn(), titleConfig.getStay(), titleConfig.getFadeOut());
     }
 
     private void enablePVP() {
