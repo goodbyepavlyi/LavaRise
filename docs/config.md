@@ -129,8 +129,27 @@
             fadeOut: 10
         ```
 
+- **PVP Announcement**
+    - **Effects Used**: Sound and Title
+    - Configuration:
+        ```yaml
+        pvp:
+          sound:
+            enabled: true
+            sound: "ENTITY_GENERIC_EXPLODE"
+            volume: 1.0
+            pitch: 1.0
+          title:
+            enabled: true
+            titleMessage: "&6PVP is enabled!"
+            subtitleMessage: "&8Fight to the death!"
+            fadeIn: 10
+            stay: 40
+            fadeOut: 10
+        ```
+
 - **Winner Announcement**
-    - **Effects Used**: Sound and Particle
+    - **Effects Used**: Sound, Title and Particle
     - Configuration:
         ```yaml
         winner:
@@ -139,6 +158,13 @@
             sound: "ENTITY_PLAYER_LEVELUP"
             volume: 1.0
             pitch: 1.0
+          title:
+            enabled: true
+            titleMessage: "&6You won!"
+            subtitleMessage: "&8Congratulations!"
+            fadeIn: 10
+            stay: 40
+            fadeOut: 10
           particle:
             enabled: true
             particle: "FIREWORKS_SPARK"
@@ -147,6 +173,25 @@
             offsetY: 0.5
             offsetZ: 0.5
             speed: 0.1
+        ```
+      
+- **Spectator Announcement**
+    - **Effects Used**: Sound and Title
+    - Configuration:
+        ```yaml
+        spectator:
+          sound:
+            enabled: true
+            sound: "ENTITY_WITHER_DEATH"
+            volume: 1.0
+            pitch: 1.0
+          title:
+            enabled: true
+            titleMessage: "&cYou lost!"
+            subtitleMessage: "&8Better luck next time!"
+            fadeIn: 10
+            stay: 40
+            fadeOut: 10
         ```
 
 ---

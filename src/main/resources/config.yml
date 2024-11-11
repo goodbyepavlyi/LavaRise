@@ -1,4 +1,4 @@
-version: 4
+version: 5
 
 # Configuration for the game settings
 game:
@@ -46,7 +46,7 @@ game:
       - "tell %player% You have been teleported to the lobby!"  # Send a message to the players using %player% placeholder
 
   visualEffects:
-    lava:
+    lava: # Configuration for the lava phase visual effects
       sound:
         enabled: true  # Enable or disable sound effects during the lava phase
         sound: "ENTITY_GENERIC_EXPLODE"  # Sound effect to be played during the lava phase
@@ -59,33 +59,33 @@ game:
         fadeIn: 10  # Duration of the title fade-in in ticks
         stay: 40  # Duration of the title stay in ticks
         fadeOut: 10  # Duration of the title fade-out in ticks
-    pvp:
+    pvp: # Configuration for the PVP phase visual effects
       sound:
-        enabled: true  # Enable or disable sound effects during the PVP phase
-        sound: "ENTITY_GENERIC_EXPLODE"  # Sound effect to be played during the PVP phase
-        volume: 1.0  # Volume of the sound effect
-        pitch: 1.0  # Pitch of the sound effect
+        enabled: true
+        sound: "ENTITY_GENERIC_EXPLODE"
+        volume: 1.0
+        pitch: 1.0
       title:
-        enabled: true  # Enable or disable title messages during the PVP phase
-        titleMessage: "&6PVP is enabled!"  # Title message to be displayed during the PVP phase
-        subtitleMessage: "&8Fight to the death!"  # Subtitle message to be displayed during the PVP phase
-        fadeIn: 10  # Duration of the title fade-in in ticks
-        stay: 40  # Duration of the title stay in ticks
-        fadeOut: 10  # Duration of the title fade-out in ticks
-    deathmatch:
+        enabled: true
+        titleMessage: "&6PVP is enabled!"
+        subtitleMessage: "&8Fight to the death!"
+        fadeIn: 10
+        stay: 40
+        fadeOut: 10
+    deathmatch: # Configuration for the death match visual effects
       sound:
-        enabled: true  # Enable or disable sound effects during the death match
-        sound: "ENTITY_GENERIC_EXPLODE"  # Sound effect to be played during the death match
-        volume: 1.0  # Volume of the sound effect
-        pitch: 1.0  # Pitch of the sound effect
+        enabled: true
+        sound: "ENTITY_GENERIC_EXPLODE"
+        volume: 1.0
+        pitch: 1.0
       title:
-        enabled: true  # Enable or disable title messages during the death match
-        titleMessage: "&6Death Match!"  # Title message to be displayed during the death match
-        subtitleMessage: "&8Last player standing wins!"  # Subtitle message to be displayed during the death match
-        fadeIn: 10  # Duration of the title fade-in in ticks
-        stay: 40  # Duration of the title stay in ticks
-        fadeOut: 10  # Duration of the title fade-out in ticks
-    winner:
+        enabled: true
+        titleMessage: "&6Death Match!"
+        subtitleMessage: "&8Last player standing wins!"
+        fadeIn: 10
+        stay: 40
+        fadeOut: 10
+    winner: # Configuration for the sound effect when player wins the game
       sound:
         enabled: true
         sound: "ENTITY_PLAYER_LEVELUP"
@@ -106,7 +106,7 @@ game:
         offsetY: 0.5
         offsetZ: 0.5
         speed: 0.1
-    spectator:
+    spectator: # Configuration for the sound effect when player dies and becomes a spectator
       sound:
         enabled: true
         sound: "ENTITY_WITHER_DEATH"
