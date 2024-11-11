@@ -124,12 +124,12 @@ public class Arena {
     public void delayAction(Player player, Consumer<Player> callback) {
         if (!this.arenaManager.getInstance().isEnabled()) return; // Prevents registering tasks when the plugin is being disabled
 
-        new BukkitRunnable() {
+        this.tasks.add(new BukkitRunnable() {
             @Override
             public void run() {
                 callback.accept(player);
             }
-        }.runTaskLater(this.arenaManager.getInstance(), 1L);
+        }.runTaskLater(this.arenaManager.getInstance(), 1L));
     }
 
     public void removePlayer(Player player, boolean dontRemove) {

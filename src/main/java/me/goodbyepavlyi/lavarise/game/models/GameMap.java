@@ -149,11 +149,14 @@ public class GameMap {
             }, delay * 20L, time * 20L
         );
 
+        this.arena.getTasks().add(this.lavaFillTask);
+
         Logger.debug(String.format("Lava fill task started for arena '%s', with time %d and delay %d.", this.arena.getName(), time, delay));
     }
 
     public void stopLavaFillTask() {
         if (this.lavaFillTask != null) {
+            this.arena.getTasks().remove(this.lavaFillTask);
             this.lavaFillTask.cancel();
             Logger.debug(String.format("Lava fill task stopped for arena '%s'.", this.arena.getName()));
         }

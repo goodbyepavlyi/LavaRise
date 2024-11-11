@@ -126,7 +126,7 @@ public class Game {
         this.gameScoreboard.startScoreboardUpdates();
         this.spawnPlayers();
 
-        new BukkitRunnable() {
+        this.arena.getTasks().add(new BukkitRunnable() {
             @Override
             public void run() {
                 setGamePhase(GamePhase.LAVA);
@@ -134,7 +134,7 @@ public class Game {
                 gameMap.fillLavaPeriodically();
                 enablePVP();
             }
-        }.runTaskLater(this.instance, (this.instance.getConfiguration().GameGracePhaseTime() * 20L));
+        }.runTaskLater(this.instance, (this.instance.getConfiguration().GameGracePhaseTime() * 20L)));
 
         Logger.debug(String.format("Game started in arena %s", this.arena.getName()));
     }
@@ -151,12 +151,12 @@ public class Game {
             return;
         }
 
-        new BukkitRunnable() {
+        this.arena.getTasks().add(new BukkitRunnable() {
             @Override
             public void run() {
                 _stop();
             }
-        }.runTaskLater(this.instance, this.instance.getConfiguration().GameEndGameDelay() * 20L);
+        }.runTaskLater(this.instance, this.instance.getConfiguration().GameEndGameDelay() * 20L));
     }
 
     private void _stop() {
@@ -295,6 +295,7 @@ public class Game {
                 arena.announceMessage(Arena.AnnouncementType.GAME_PVP_ENABLED);
             }
         }.runTaskLater(this.instance, this.instance.getConfiguration().GamePVPGracePeriod() * 20L);
+        this.arena.getTasks().add(this._pvpGracePeriodTask);
     }
 
     private void playVisualEffect(Config.VisualEffectType visualEffectType) {
