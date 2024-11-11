@@ -132,9 +132,7 @@ public class Game {
                 setGamePhase(GamePhase.LAVA);
                 Logger.debug(String.format("Game phase transitioned to %s in arena '%s'.", gamePhase, arena.getName()));
                 gameMap.fillLavaPeriodically();
-
-                if (arena.getConfig().getPVP())
-                    enablePVP();
+                enablePVP();
             }
         }.runTaskLater(this.instance, (this.instance.getConfiguration().GameGracePhaseTime() * 20L));
 
@@ -265,6 +263,11 @@ public class Game {
     }
 
     private void enablePVP() {
+        if (!arena.getConfig().getPVP()) {
+            Logger.debug(String.format("PVP is disabled in arena '%s'.", this.arena.getName()));
+            return;
+        }
+
         if (this.isPVPEnabled) {
             Logger.debug(String.format("PVP is already enabled in arena '%s'.", this.arena.getName()));
             return;
