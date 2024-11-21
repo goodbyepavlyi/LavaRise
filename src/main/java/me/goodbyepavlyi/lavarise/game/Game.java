@@ -262,9 +262,12 @@ public class Game {
 
         this.checkForWinner();
 
-        Config.VisualEffectType type = this.getWinner().getPlayerUUID() == arenaPlayer.getPlayerUUID() ? Config.VisualEffectType.WINNER : Config.VisualEffectType.SPECTATOR;
-        Config.VisualEffectTitleConfig titleConfig = this.instance.getConfiguration().getGameVisualEffect(type).getTitle();
-        player.sendTitle(titleConfig.getTitle(), titleConfig.getSubtitle(), titleConfig.getFadeIn(), titleConfig.getStay(), titleConfig.getFadeOut());
+        ArenaPlayer winner = this.getWinner();
+        if (winner != null) {
+            Config.VisualEffectType type = this.getWinner().getPlayerUUID() == arenaPlayer.getPlayerUUID() ? Config.VisualEffectType.WINNER : Config.VisualEffectType.SPECTATOR;
+            Config.VisualEffectTitleConfig titleConfig = this.instance.getConfiguration().getGameVisualEffect(type).getTitle();
+            player.sendTitle(titleConfig.getTitle(), titleConfig.getSubtitle(), titleConfig.getFadeIn(), titleConfig.getStay(), titleConfig.getFadeOut());
+        }
     }
 
     private void enablePVP() {
