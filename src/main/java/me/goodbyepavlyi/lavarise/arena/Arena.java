@@ -29,7 +29,20 @@ public class Arena {
     private final List<BukkitTask> tasks;
 
     public enum State {
-        WAITING, STARTING, IN_GAME
+        WAITING("Waiting"),
+        STARTING("Starting"),
+        IN_GAME("In game"),
+        ENDED("Ended");
+
+        private final String name;
+
+        State(String name) {
+            this.name = name;
+        }
+
+        public String toString() {
+            return this.name;
+        }
     }
 
     public enum ArenaSetupResult {
@@ -87,6 +100,13 @@ public class Arena {
 
     public Set<ArenaPlayer> getPlayers() {
         return this.players;
+    }
+
+    public Set<ArenaPlayer> getPlayersExceptSpectators() {
+        return this.players
+            .stream()
+            .filter(arenaPlayer -> !arenaPlayer.isSpectator())
+            .collect(HashSet::new, HashSet::add, HashSet::addAll);
     }
 
     public ArenaPlayer getPlayer(UUID playerUUID) {

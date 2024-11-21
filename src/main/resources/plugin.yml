@@ -2,6 +2,7 @@ name: LavaRise
 version: '${project.version}'
 main: me.goodbyepavlyi.lavarise.LavaRiseInstance
 author: goodbyepavlyi
+softdepend: ["PlaceholderAPI"]
 
 commands:
   lavarise:

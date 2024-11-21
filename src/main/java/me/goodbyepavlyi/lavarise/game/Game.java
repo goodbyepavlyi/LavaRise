@@ -141,6 +141,7 @@ public class Game {
 
     public void stop() {
         Logger.debug(String.format("Stopping game in arena '%s'.", this.arena.getName()));
+        this.arena.setState(Arena.State.ENDED);
         this.arena.announceMessage(Arena.AnnouncementType.GAME_END);
 
         this.gameScoreboard.stopScoreboardUpdateTask();

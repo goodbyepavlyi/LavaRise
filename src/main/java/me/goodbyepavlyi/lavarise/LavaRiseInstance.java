@@ -7,6 +7,7 @@ import me.goodbyepavlyi.lavarise.game.listeners.GameEventListener;
 import me.goodbyepavlyi.lavarise.configs.Config;
 import me.goodbyepavlyi.lavarise.configs.Messages;
 import me.goodbyepavlyi.lavarise.game.listeners.GameGracePhaseEventListener;
+import me.goodbyepavlyi.lavarise.papi.PlaceholderAPIExpansion;
 import me.goodbyepavlyi.lavarise.queue.listeners.QueueEventListener;
 import me.goodbyepavlyi.lavarise.updater.UpdateChecker;
 import me.goodbyepavlyi.lavarise.utils.Logger;
@@ -51,6 +52,11 @@ public class LavaRiseInstance extends JavaPlugin {
             .checkEveryXHours(24)
             .setNotifyByPermissionOnJoin("lavarise.updatechecker")
             .checkNow();
+
+        if (this.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            Logger.info("Hooking into PlaceholderAPI");
+            new PlaceholderAPIExpansion(this).register();
+        }
     }
 
     @Override
