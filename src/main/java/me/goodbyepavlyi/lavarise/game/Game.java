@@ -81,6 +81,7 @@ public class Game {
             }
             case DEATHMATCH -> {
                 this.enablePVP();
+                this.startDeathmatchDamage();
                 this.arena.announceMessage(Arena.AnnouncementType.GAME_LAVAPHASE_END);
                 this.playVisualEffect(Config.VisualEffectType.DEATHMATCH);
             }
@@ -325,5 +326,26 @@ public class Game {
                 );
             }
         }
+    }
+
+    private void startDeathmatchDamage() {
+        if (!this.instance.getConfiguration().GameDeathmatchDamageEnabled()) {
+            Logger.debug(String.format("Deathmatch damage is disabled in arena '%s'.", this.arena.getName()));
+            return;
+        }
+
+        Logger.debug(String.format("Starting deathmatch damage in arena '%s'.", this.arena.getName()));
+
+        this.arena.getTasks().add(new BukkitRunnable() {
+            @Override
+            public void run() {
+                arena.getPlayersExceptSpectators()
+                    .forEach(arenaPlayer -> arenaPlayer.getPlayer().damage(instance.getConfiguration().GameDeathmatchDamageAmount()));
+            }
+        }.runTaskTimer(
+            this.instance,
+            this.instance.getConfiguration().GameDeathmatchDamageDelay() * 20L,
+            this.instance.getConfiguration().GameDeathmatchDamageInterval() * 20L
+        ));
     }
 }

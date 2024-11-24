@@ -352,6 +352,22 @@ public class Config extends YamlConfig {
         return this.getConfig().getInt("game.pvpGracePeriod");
     }
 
+    public boolean GameDeathmatchDamageEnabled() {
+        return this.getConfig().getBoolean("game.deathmatch.damage.enabled");
+    }
+
+    public int GameDeathmatchDamageDelay() {
+        return this.getConfig().getInt("game.deathmatch.damage.delay");
+    }
+
+    public double GameDeathmatchDamageAmount() {
+        return this.getConfig().getDouble("game.deathmatch.damage.amount");
+    }
+
+    public int GameDeathmatchDamageInterval() {
+        return this.getConfig().getInt("game.deathmatch.damage.interval");
+    }
+
     public List<ItemStack> GameItems() {
         List<Map<?, ?>> items = this.getConfig().getMapList("game.items");
         List<ItemStack> itemStacks = new ArrayList<>();

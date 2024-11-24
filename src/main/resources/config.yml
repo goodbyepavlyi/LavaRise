@@ -7,6 +7,13 @@ game:
   endGameDelay: 5  # Delay in seconds before the game ends
   pvpGracePeriod: 30 # Duration of the grace period for PVP in seconds (set to 0 to disable grace period)
 
+  deathmatch:
+    damage: # Configuration for the damage dealt to players during the death match
+      enabled: true
+      delay: 30
+      interval: 20
+      amount: 0.5
+
   lavaRisingTime:
     default: 5  # Default time in seconds for the lava to rise
     levels: # Configuration for the lava rising time based on the Y level (leave empty to use the default time)
