@@ -37,6 +37,14 @@
               levels: []
             ```
 
+### Deathmatch Damage
+
+- `game.deathmatch.damage`:
+  - `enabled`: Toggle to enable or disable deathmatch damage.
+  - `delay`: Time in seconds before deathmatch damage begins.
+  - `damage`: Amount of damage dealt to players during each damage interval.
+  - `interval`: Interval in seconds between each instance of damage dealt to players during the deathmatch phase.
+
 ### Spectator and End Game Settings
 
 - `game.spectatorSpawnYLavaOffset`: Vertical offset above the lava level where spectators spawn.
