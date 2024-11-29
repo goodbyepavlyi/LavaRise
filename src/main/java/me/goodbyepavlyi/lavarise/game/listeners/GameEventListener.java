@@ -12,6 +12,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -151,5 +152,16 @@ public class GameEventListener implements Listener {
         from.setPitch(to.getPitch());
         event.setTo(from);
         Logger.debug(String.format("Cancelled player %s move event in arena %s (Outside game map)", player.getName(), arena.getName()));
+    }
+
+    @EventHandler
+    public void cancelSpectatorItemPickup(EntityPickupItemEvent event) {
+        if (!(event.getEntity() instanceof Player player)) return;
+
+        Arena arena = this.instance.getArenaManager().getArenaByPlayer(player.getUniqueId());
+        if (arena == null || arena.getState() != Arena.State.IN_GAME || !arena.getGame().isSpectator(player)) return;
+
+        event.setCancelled(true);
+        Logger.debug(String.format("Cancelled item pickup event for spectator %s in arena %s", player.getName(), arena.getName()));
     }
 }
