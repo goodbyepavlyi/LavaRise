@@ -30,13 +30,26 @@ public class GameMap {
         this.arena = arena;
     }
 
-    public List<Location> getSpawnpoints() {
-        if (this.spawnpoints == null) {
-            this.createSpawnpoints();
-            Logger.debug(String.format("Spawnpoints created for arena '%s'.", arena.getName()));
-        }
+    public String getMapName() {
+        return String.format("LavaRise-%s_%d", this.arena.getName(), this.arena.getGame().getGameTime());
+    }
 
-        return this.spawnpoints;
+    public void createGameWorld() {
+        this.gameWorld = WorldUtils.copyWorld(this.instance, this.arena.getConfig().getGameAreaWorld(), this.getMapName());
+    }
+
+    public void deleteGameWorld() {
+        WorldUtils.deleteWorld(this.instance, this.gameWorld.getName());
+    }
+
+    public Location getSpawnpoint() {
+        if (this.spawnpoints == null || this.spawnpoints.isEmpty()) this.createSpawnpoints();
+
+        int index = (int) (Math.random() * this.spawnpoints.size());
+        Location spawnpoint = this.spawnpoints.get(index);
+        this.spawnpoints.remove(index);
+
+        return spawnpoint;
     }
 
     public void createSpawnpoints() {
@@ -45,35 +58,27 @@ public class GameMap {
         int amount = this.arena.getPlayers().size();
         List<Location> spawnpoints = new ArrayList<>(amount);
 
-        for (int i = 0; i < amount; i++) {
-            double x = (gameAreaBottom.getX() + gameAreaTop.getX()) / 2.0 + (Math.random() - 0.5) * 10.0;
-            double z = (gameAreaBottom.getZ() + gameAreaTop.getZ()) / 2.0 + (Math.random() - 0.5) * 10.0;
+        int minX = Math.min(gameAreaTop.getBlockX(), gameAreaBottom.getBlockX());
+        int maxX = Math.max(gameAreaTop.getBlockX(), gameAreaBottom.getBlockX());
+        int minZ = Math.min(gameAreaTop.getBlockZ(), gameAreaBottom.getBlockZ());
+        int maxZ = Math.max(gameAreaTop.getBlockZ(), gameAreaBottom.getBlockZ());
 
-            // Get the highest block in the area but limit the height to within the game area
-            double highestY = gameAreaBottom.getWorld().getHighestBlockYAt((int) x, (int) z);
-            double minY = gameAreaBottom.getY();
-            double maxY = gameAreaTop.getY();
+        while (spawnpoints.size() < amount) {
+            int x = minX + (int) (Math.random() * (maxX - minX + 1));
+            int z = minZ + (int) (Math.random() * (maxZ - minZ + 1));
 
-            // Ensure the Y-coordinate is within bounds
-            double y = Math.min(Math.max(highestY, minY), maxY);
+            for (int y = gameAreaTop.getBlockY(); y >= gameAreaBottom.getBlockY(); y--) {
+                Location potentialLocation = new Location(this.gameWorld, x + 0.5, y, z + 0.5);
+                Block blockBelow = potentialLocation.clone().subtract(0, 1, 0).getBlock();
+                Block currentBlock = potentialLocation.getBlock();
 
-            Location randomLocation = new Location(this.gameWorld, x, y, z);
-            Block block = randomLocation.getBlock();
-
-            int yOffset = 0;
-            while (block.getType() != Material.AIR && randomLocation.getY() <= maxY) {
-                yOffset += 1;
-                randomLocation.add(0, 1, 0);
-                block = randomLocation.getBlock();
-
-                if (yOffset >= 10) {
-                    Logger.debug(String.format("Failed to create spawnpoint at %s for arena '%s'.", randomLocation, arena.getName()));
+                // Check if the block below is solid, and the current block is not obstructed
+                if (!blockBelow.isEmpty() && !blockBelow.isLiquid() && currentBlock.getType() == Material.AIR) {
+                    spawnpoints.add(potentialLocation);
+                    Logger.debug(String.format("Spawnpoint created at %s for arena '%s'.", potentialLocation, arena.getName()));
                     break;
                 }
             }
-
-            spawnpoints.add(randomLocation);
-            Logger.debug(String.format("Spawnpoint created at %s for arena '%s'.", randomLocation, arena.getName()));
         }
 
         this.spawnpoints = spawnpoints;
@@ -181,17 +186,5 @@ public class GameMap {
         return (locationX >= bottomX && locationX <= topX)
                 && (locationY >= bottomY && locationY <= topY)
                 && (locationZ >= bottomZ && locationZ <= topZ);
-    }
-
-    public String getMapName() {
-        return String.format("LavaRise-%s_%d", this.arena.getName(), this.arena.getGame().getGameTime());
-    }
-
-    public void createGameWorld() {
-        this.gameWorld = WorldUtils.copyWorld(this.instance, this.arena.getConfig().getGameAreaWorld(), this.getMapName());
-    }
-
-    public void deleteGameWorld() {
-        WorldUtils.deleteWorld(this.instance, this.gameWorld.getName());
     }
 }

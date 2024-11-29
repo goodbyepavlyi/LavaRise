@@ -175,8 +175,7 @@ public class Game {
 
     public void spawnPlayers() {
         this.arena.doForAllPlayers(player -> {
-            Location spawnPoint = this.gameMap.getSpawnpoints().remove((int) (Math.random() * this.gameMap.getSpawnpoints().size()));
-            player.teleport(spawnPoint, PlayerTeleportEvent.TeleportCause.PLUGIN);
+            player.teleport(this.gameMap.getSpawnpoint(), PlayerTeleportEvent.TeleportCause.PLUGIN);
             
             // Default initialization of player
             player.setGameMode(GameMode.SURVIVAL);
@@ -190,8 +189,6 @@ public class Game {
                 this.instance.getConfiguration().GameItems()
                     .toArray(ItemStack[]::new)
             );
-
-            Logger.debug(String.format("Player '%s' has been spawned at %s in arena '%s'.", player.getName(), spawnPoint, this.arena.getName()));
         });
     }
 
