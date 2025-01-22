@@ -102,6 +102,10 @@ queue:
     lines:
       - "&8Starting in: &6%duration%"
       - "&8Players: &6%currentPlayers%&8/&6%maximumPlayers%"
+  
+  tips:
+    - "&6Tip: Collect lots of blocks before the lava starts rising!"
+    - "&6Tip: Avoid falling into the lava!"
 
 game:
   scoreboard:

@@ -129,6 +129,9 @@ game:
 
 # Configuration for the queue settings
 queue:
+  tips:
+    enable: true  # Enable or disable tips during the queue
+    interval: 5 # Interval in seconds between tips
   countdown: 45  # Countdown time in seconds before the game starts
   halfFullQueueCountdown:  # Countdown time when the queue is half full
     enabled: true

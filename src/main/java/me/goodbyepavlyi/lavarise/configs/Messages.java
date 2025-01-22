@@ -314,6 +314,10 @@ public class Messages extends YamlConfig {
                 )
                 .collect(Collectors.toList());
     }
+    
+    public List<String> QueueTips() {
+        return this.getList("queue.tips");
+    }
 
     public String GameScoreboardTitle() {
         return this.getString("game.scoreboard.title");

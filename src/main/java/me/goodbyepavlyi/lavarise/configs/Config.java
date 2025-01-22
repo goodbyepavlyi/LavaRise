@@ -434,6 +434,14 @@ public class Config extends YamlConfig {
         return this.getConfig().getInt("queue.leaveItem.slot");
     }
 
+    public boolean QueueTipsEnable() {
+        return this.getConfig().getBoolean("queue.tips.enable");
+    }
+
+    public int QueueTipsInterval() {
+        return this.getConfig().getInt("queue.tips.interval");
+    }
+    
     public boolean Metrics() {
         return this.getConfig().getBoolean("metrics");
     }

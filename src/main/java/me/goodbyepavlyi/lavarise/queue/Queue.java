@@ -12,6 +12,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.util.List;
+
 public class Queue {
     private static ItemStack leaveItem;
     private static int HalfFullQueueCountdown;
@@ -21,6 +23,9 @@ public class Queue {
     private final QueueScoreboard queueScoreboard;
     private int countdown;
     private BukkitTask countdownTask;
+    private BukkitTask tipsTask;
+    
+    private int tipsIndex = 0;
 
     public Queue(Arena arena) {
         this.arena = arena;
@@ -43,6 +48,12 @@ public class Queue {
         itemMeta.setLore(this.instance.getMessages().QueueItemsLeaveLore());
         leaveItem.setItemMeta(itemMeta);
         return leaveItem;
+    }
+    
+    private String getTipAnnouncement() {
+        List<String> tips = this.instance.getMessages().QueueTips();
+        if (tipsIndex >= tips.size()) tipsIndex = 0;
+        return tips.get(tipsIndex++);
     }
 
     public boolean hasEnoughPlayersToStart() {
@@ -71,6 +82,8 @@ public class Queue {
         player.getInventory().setItem(this.instance.getConfiguration().QueueLeaveItemSlot(), this.getLeaveItem());
         this.arena.delayAction(player, p -> p.setFireTicks(0));
 
+        this.startTipsAnnouncement();
+        
         // Start the countdown if the minimum players are met
         if (this.hasEnoughPlayersToStart() && this.arena.getState() == Arena.State.WAITING) {
             this.arena.setState(Arena.State.STARTING);
@@ -113,6 +126,7 @@ public class Queue {
             @Override
             public void run() {
                 if (countdown <= 0) {
+                    stopTipsAnnouncement();
                     stopCountdown();
                     arena.announceMessage(Arena.AnnouncementType.GAME_START);
                     Logger.debug(String.format("Countdown finished in arena %s, starting the game", arena.getName()));
@@ -141,5 +155,35 @@ public class Queue {
         this.countdown = 0;
 
         Logger.debug(String.format("Countdown stopped in arena %s", arena.getName()));
+    }
+
+    public void startTipsAnnouncement() {
+        if (!this.instance.getConfiguration().QueueTipsEnable()) return;
+        
+        this.tipsTask = new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (arena.getPlayers().isEmpty()) {
+                    stopTipsAnnouncement();
+                    Logger.debug(String.format("No players in arena %s, stopping tips announcement", arena.getName()));
+                    return;
+                }
+
+                arena.announceActionBarMessage(getTipAnnouncement());
+            }
+        }.runTaskTimer(this.instance, 0L, this.instance.getConfiguration().QueueTipsInterval() * 20L);
+
+        this.arena.getTasks().add(this.tipsTask);
+        Logger.debug(String.format("Tips announcement started in arena %s", arena.getName()));
+    }
+
+    public void stopTipsAnnouncement() {
+        if (this.tipsTask == null) return;
+        this.tipsTask.cancel();
+        this.arena.stopAnnouncement();
+        this.arena.getTasks().remove(this.tipsTask);
+        this.tipsTask = null;
+
+        Logger.debug(String.format("Tips announcement stopped in arena %s", arena.getName()));
     }
 }

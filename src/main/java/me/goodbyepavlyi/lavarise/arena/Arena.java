@@ -6,6 +6,8 @@ import me.goodbyepavlyi.lavarise.arena.models.ArenaPlayer;
 import me.goodbyepavlyi.lavarise.queue.Queue;
 import me.goodbyepavlyi.lavarise.utils.ChatUtils;
 import me.goodbyepavlyi.lavarise.utils.Logger;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -26,6 +28,7 @@ public class Arena {
     private Game game;
     private Queue queue;
     private State state;
+    private BukkitTask actionbarTask;
     private final List<BukkitTask> tasks;
 
     public enum State {
@@ -236,6 +239,20 @@ public class Arena {
 
         if (message != null)
             this.sendMessage(message);
+    }
+    
+    public void stopAnnouncement() {
+        if (this.actionbarTask != null) this.actionbarTask.cancel();
+    }
+
+    public void announceActionBarMessage(String message) {
+        if (this.actionbarTask != null) this.actionbarTask.cancel();
+        this.actionbarTask = new BukkitRunnable() {
+            @Override
+            public void run() {
+                doForAllPlayers(player -> player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatUtils.color(message))));
+            }
+        }.runTaskTimer(this.arenaManager.getInstance(), 0L, 20L);
     }
 
     private void sendMessage(String message) {
