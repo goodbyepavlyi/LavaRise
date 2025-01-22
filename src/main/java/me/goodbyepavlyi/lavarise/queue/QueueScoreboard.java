@@ -15,14 +15,14 @@ public class QueueScoreboard extends ArenaScoreboard {
     }
 
     public void update() {
-        String title = this.instance.getMessages().QueueScoreboardTitle();
-        List<String> boardLines = this.instance.getMessages().QueueScoreboardLines(
-            this.queue.getCountdown() == 0
-                ? this.instance.getMessages().QueueScoreboardDurationWaiting()
-                : String.valueOf(this.queue.getCountdown()),
-            this.getArena().getPlayers().size(),
-            this.getArena().getConfig().getMaximumPlayers()
-        );
+        String duration = this.queue.getCountdown() == 0
+            ? this.instance.getMessages().QueueScoreboardDurationWaiting()
+            : String.valueOf(this.queue.getCountdown());
+        int currentPlayers = this.getArena().getPlayers().size();
+        int maxPlayers = this.getArena().getConfig().getMaximumPlayers();
+        
+        String title = this.instance.getMessages().QueueScoreboardTitle(duration, currentPlayers, maxPlayers);
+        List<String> boardLines = this.instance.getMessages().QueueScoreboardLines(duration, currentPlayers, maxPlayers);
 
         this.update(title, boardLines);
     }

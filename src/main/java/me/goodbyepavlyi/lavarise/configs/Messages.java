@@ -293,8 +293,11 @@ public class Messages extends YamlConfig {
         return this.getList("queue.items.leave.lore");
     }
 
-    public String QueueScoreboardTitle() {
-        return this.getString("queue.scoreboard.title");
+    public String QueueScoreboardTitle(String duration, int currentPlayers, int maximumPlayers) {
+        return this.getString("queue.scoreboard.title")
+            .replaceAll("%duration%", duration)
+            .replaceAll("%currentPlayers%", String.valueOf(currentPlayers))
+            .replaceAll("%maximumPlayers%", String.valueOf(maximumPlayers));
     }
 
     public String QueueScoreboardDurationWaiting() {
@@ -305,9 +308,9 @@ public class Messages extends YamlConfig {
         return this.getList("queue.scoreboard.lines")
                 .stream()
                 .map(line -> line
-                        .replaceAll("%duration%", duration)
-                        .replaceAll("%currentPlayers%", String.valueOf(currentPlayers))
-                        .replaceAll("%maximumPlayers%", String.valueOf(maximumPlayers))
+                    .replaceAll("%duration%", duration)
+                    .replaceAll("%currentPlayers%", String.valueOf(currentPlayers))
+                    .replaceAll("%maximumPlayers%", String.valueOf(maximumPlayers))
                 )
                 .collect(Collectors.toList());
     }
