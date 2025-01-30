@@ -14,6 +14,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -24,6 +25,20 @@ public class GameEventListener implements Listener {
         this.instance = instance;
     }
 
+    @EventHandler
+    public void cancelDisallowedCommands(PlayerCommandPreprocessEvent event) {
+        Player player = event.getPlayer();
+        Arena arena = this.instance.getArenaManager().getArenaByPlayer(player.getUniqueId());
+        if (arena == null) return;
+
+        String command = event.getMessage().toLowerCase();
+        if(this.instance.getConfiguration().GameAllowedCommands().contains(command)) return;
+
+        Logger.debug(String.format("Player %s tried to execute disallowed command %s", player.getName(), command));
+        player.sendMessage(this.instance.getMessages().CommandNoPermissions());
+        event.setCancelled(true);
+    }
+    
     @EventHandler
     public void makePlayerSpectatorOnDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();

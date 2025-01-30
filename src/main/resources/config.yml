@@ -126,6 +126,9 @@ game:
         fadeIn: 10
         stay: 40
         fadeOut: 10
+  
+  allowedCommands:
+    - /lobby
 
 # Configuration for the queue settings
 queue:
