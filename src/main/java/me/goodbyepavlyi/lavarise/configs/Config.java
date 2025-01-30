@@ -414,8 +414,12 @@ public class Config extends YamlConfig {
         return this.getConfig().getStringList("game.commands.players");
     }
 
+    public boolean GameAllowedCommandsEnabled() {
+        return this.getConfig().getBoolean("game.allowedCommands.enabled");
+    }
+
     public List<String> GameAllowedCommands() {
-        return this.getConfig().getStringList("game.allowedCommands");
+        return this.getConfig().getStringList("game.allowedCommands.commands");
     }
 
     public int QueueCountdown() {
