@@ -77,7 +77,9 @@ public class Arena {
         PLAYER_KILLED,
         GAME_LAVAPHASE_START,
         GAME_LAVAPHASE_END,
-        GAME_PVP_ENABLED
+        GAME_PVP_ENABLED,
+
+        QUEUE_COUNTDOWN_TITLE
     }
 
     public Arena(ArenaManager arenaManager, String name) {
@@ -239,6 +241,21 @@ public class Arena {
 
         if (message != null)
             this.sendMessage(message);
+    }
+    
+    public void announceTitle(AnnouncementType announcementType, String ...arguments) {
+        String message = null;
+        switch(announcementType){
+            case QUEUE_COUNTDOWN_TITLE:
+                if(arguments.length < 1 || !arenaManager.getInstance().getMessages().QueueTitleCountdownEnabled()) break;
+                message = arenaManager.getInstance().getMessages().QueueTitleCountdownTitle(arguments[0]);
+                break;
+        }
+
+        if(message != null) {
+            final String finalMessage = message;
+            this.doForAllPlayers(player -> player.sendTitle(finalMessage, "", 0, 20, 0));
+        }
     }
     
     public void stopAnnouncement() {

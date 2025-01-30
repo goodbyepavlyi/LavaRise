@@ -104,6 +104,7 @@ public class Queue {
             Logger.debug(String.format("Arena %s is half full, shortening countdown to %s", this.arena.getName(), HalfFullQueueCountdown));
             this.countdown = HalfFullQueueCountdown;
             arena.announceMessage(Arena.AnnouncementType.QUEUE_GAME_STARTING_IN, String.valueOf(this.countdown));
+            arena.announceTitle(Arena.AnnouncementType.QUEUE_COUNTDOWN_TITLE, String.valueOf(countdown));
         }
     }
 
@@ -140,8 +141,10 @@ public class Queue {
                     return;
                 }
 
-                if (countdown % 15 == 0 || (countdown <= 3 && countdown != HalfFullQueueCountdown))
+                if (countdown % 15 == 0 || (countdown <= 3 && countdown != HalfFullQueueCountdown)) {
                     arena.announceMessage(Arena.AnnouncementType.QUEUE_GAME_STARTING_IN, String.valueOf(countdown));
+                    arena.announceTitle(Arena.AnnouncementType.QUEUE_COUNTDOWN_TITLE, String.valueOf(countdown));
+                }
 
                 countdown--;
             }

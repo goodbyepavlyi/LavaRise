@@ -318,6 +318,14 @@ public class Messages extends YamlConfig {
     public List<String> QueueTips() {
         return this.getList("queue.tips");
     }
+    
+    public boolean QueueTitleCountdownEnabled() {
+        return this.getConfig().getBoolean("queue.titles.countdown.enabled");
+    }
+    public String QueueTitleCountdownTitle(String countdown) {
+        return this.getString("queue.titles.countdown.title")
+            .replaceAll("%countdown%", countdown);
+    }
 
     public String GameScoreboardTitle() {
         return this.getString("game.scoreboard.title");
