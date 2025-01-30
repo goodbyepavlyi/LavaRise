@@ -19,8 +19,7 @@ import java.lang.management.ManagementFactory;
 public class LavaRiseInstance extends JavaPlugin {
     private final String SPIGOT_RESOURCE_ID = "111135";
     private final int BSTATS_METRICS_ID = 23679;
-    private final boolean DEBUG;
-    private boolean IS_DEV_VERSION;
+    private boolean DEBUG;
 
     private Config config;
     private Messages messages;
@@ -32,9 +31,8 @@ public class LavaRiseInstance extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        this.DEBUG = this.DEBUG || this.getDescription().getVersion().contains("-dev");
         new Logger(this, this.DEBUG);
-
-        this.IS_DEV_VERSION = this.getDescription().getVersion().contains("-dev");
 
         this.config = new Config(this);
         this.messages = new Messages(this);
@@ -46,7 +44,7 @@ public class LavaRiseInstance extends JavaPlugin {
         this.getCommand("lavarise").setExecutor(new LavaRiseCommand(this));
         this.getCommand("lavarise").setTabCompleter(new LavaRiseCommand(this));
 
-        if (this.config.Metrics() && !this.DEBUG && !this.IS_DEV_VERSION) {
+        if (this.config.Metrics() && !this.DEBUG) {
             Logger.debug("Enabling bStats metrics");
             new Metrics(this, BSTATS_METRICS_ID);
         } else Logger.debug("bStats metrics are disabled, skipping");
