@@ -442,6 +442,14 @@ public class Config extends YamlConfig {
         return this.getConfig().getInt("queue.tips.interval");
     }
     
+    public boolean QueueJoinSoundEnabled() {
+        return this.getConfig().getBoolean("queue.joinSound.enabled");
+    }
+    
+    public Sound QueueJoinSound() {
+        return Sound.valueOf(this.getConfig().getString("queue.joinSound.sound"));
+    }
+    
     public boolean Metrics() {
         return this.getConfig().getBoolean("metrics");
     }

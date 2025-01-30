@@ -55,6 +55,11 @@ public class Queue {
         if (tipsIndex >= tips.size()) tipsIndex = 0;
         return tips.get(tipsIndex++);
     }
+    
+    private void playJoinSound(Player player){
+        if(!this.instance.getConfiguration().QueueJoinSoundEnabled()) return;
+        player.playSound(player.getLocation(), this.instance.getConfiguration().QueueJoinSound(), 1, 1);
+    }
 
     public boolean hasEnoughPlayersToStart() {
         return this.arena.getPlayers().size() >= this.arena.getConfig().getMinimumPlayers();
@@ -80,6 +85,7 @@ public class Queue {
         player.getInventory().setArmorContents(null);
         player.getInventory().clear();
         player.getInventory().setItem(this.instance.getConfiguration().QueueLeaveItemSlot(), this.getLeaveItem());
+        this.playJoinSound(player);
         this.arena.delayAction(player, p -> p.setFireTicks(0));
 
         this.startTipsAnnouncement();
@@ -164,6 +170,7 @@ public class Queue {
             @Override
             public void run() {
                 if (arena.getPlayers().isEmpty()) {
+                    cancel();
                     stopTipsAnnouncement();
                     Logger.debug(String.format("No players in arena %s, stopping tips announcement", arena.getName()));
                     return;
@@ -178,8 +185,7 @@ public class Queue {
     }
 
     public void stopTipsAnnouncement() {
-        if (this.tipsTask == null) return;
-        this.tipsTask.cancel();
+        if (this.tipsTask != null) this.tipsTask.cancel();
         this.arena.stopAnnouncement();
         this.arena.getTasks().remove(this.tipsTask);
         this.tipsTask = null;
