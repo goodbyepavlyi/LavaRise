@@ -202,10 +202,18 @@
             fadeOut: 10
         ```
 
+- **Allowed Commands**
+  - `game.allowedCommands` allows you to specify a list of commands that players can execute during the game.
+    - `enabled`: Toggle to enable or disable the execution of commands during the game.
+    - `commands`: List of commands that players can execute during the game.
+
 ---
 
 ## Queue Settings
 
+- `queue.tips`: Configuration for action bar tips
+    - `enabled`: Determines if action bar tips are displayed.
+    - `interval`: Countdown interval in seconds between each tip.
 - `queue.countdown`: Countdown time in seconds before the game starts.
 - `queue.halfFullQueueCountdown`: Configuration for countdown timing when the queue is half full.
     - `enabled`: Determines if the half-full queue countdown is active.
@@ -214,6 +222,10 @@
     - `material`: Material for the leave item (e.g., `"BARRIER"`).
         - Use the [Spigot API](https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html) for material names.
     - `slot`: Inventory slot in which the leave item will appear.
+- `queue.joinSound`: Sound effect played when players join the queue.
+    - `enabled`: Toggle to enable or disable the join sound.
+    - `sound`: Sound type.
+        - Use the [Spigot API](https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html) for sound names.
 
 ---
 
