@@ -168,6 +168,7 @@ public class Queue {
 
     public void startTipsAnnouncement() {
         if (!this.instance.getConfiguration().QueueTipsEnable()) return;
+        if(this.tipsTask != null) return;
         
         this.tipsTask = new BukkitRunnable() {
             @Override
