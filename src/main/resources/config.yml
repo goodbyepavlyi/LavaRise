@@ -6,6 +6,9 @@ game:
   spectatorSpawnYLavaOffset: 10  # Y offset from the lava where spectators will spawn
   endGameDelay: 5  # Delay in seconds before the game ends
   pvpGracePeriod: 30 # Duration of the grace period for PVP in seconds (set to 0 to disable grace period)
+  
+  spectator:
+    gameMode: ADVENTURE  # Enable or disable using game mode spectator for spectators
 
   deathmatch:
     damage: # Configuration for the damage dealt to players during the death match

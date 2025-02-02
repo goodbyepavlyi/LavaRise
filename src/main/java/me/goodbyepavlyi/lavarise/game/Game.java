@@ -248,7 +248,7 @@ public class Game {
 
         arenaPlayer.setSpectator(true);
         this.arena.doForAllPlayers(p -> p.hidePlayer(this.instance, player));
-        player.setGameMode(GameMode.ADVENTURE);
+        player.setGameMode(this.instance.getConfiguration().GameSpectatorGameMode());
         player.setAllowFlight(true);
         player.setFlying(true);
         player.teleport(this.gameMap.createSpectatorSpawnpoint(), PlayerTeleportEvent.TeleportCause.PLUGIN);

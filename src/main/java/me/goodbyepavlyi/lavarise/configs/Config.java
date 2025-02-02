@@ -5,6 +5,7 @@ import me.goodbyepavlyi.lavarise.utils.ChatUtils;
 import me.goodbyepavlyi.lavarise.utils.EnchantmentParser;
 import me.goodbyepavlyi.lavarise.utils.Logger;
 import me.goodbyepavlyi.lavarise.utils.YamlConfig;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -350,6 +351,10 @@ public class Config extends YamlConfig {
 
     public int GamePVPGracePeriod() {
         return this.getConfig().getInt("game.pvpGracePeriod");
+    }
+    
+    public GameMode GameSpectatorGameMode() {
+        return GameMode.valueOf(this.getConfig().getString("game.spectator.gameMode"));
     }
 
     public boolean GameDeathmatchDamageEnabled() {
