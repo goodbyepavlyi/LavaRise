@@ -217,6 +217,7 @@ public class Game {
             this.arena.doForAllArenaPlayersExcept(arenaPlayer ->
                 this.executeCommands(this.instance.getConfiguration().GameCommandsLosers(), arenaPlayer.getPlayer().getName()), winner);
 
+            winner.getStatistics().addWin();
             this.playVisualEffect(Config.VisualEffectType.WINNER);
         }
 

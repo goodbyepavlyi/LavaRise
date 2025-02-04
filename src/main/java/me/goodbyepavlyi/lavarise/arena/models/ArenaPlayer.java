@@ -9,12 +9,14 @@ public class ArenaPlayer {
     private final Player player;
     private final UUID playerUUID;
     private ArenaPlayerData arenaPlayerData;
+    private ArenaPlayerStatistics statistics;
     private boolean spectator;
 
-    public ArenaPlayer(Player player) {
+    public ArenaPlayer(Player player, ArenaPlayerStatistics arenaPlayerStatistics) {
         this.player = player;
         this.playerUUID = player.getUniqueId();
         this.arenaPlayerData = new ArenaPlayerData(this);
+        this.statistics = arenaPlayerStatistics;
     }
 
     public Player getPlayer() {
@@ -29,6 +31,10 @@ public class ArenaPlayer {
         this.arenaPlayerData = arenaPlayerData;
     }
 
+    public ArenaPlayerStatistics getStatistics() {
+        return statistics;
+    }
+    
     public boolean isSpectator() {
         return spectator;
     }

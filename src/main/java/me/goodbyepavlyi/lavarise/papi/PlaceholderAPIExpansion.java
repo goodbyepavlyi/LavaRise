@@ -54,6 +54,21 @@ public class PlaceholderAPIExpansion extends PlaceholderExpansion {
                 .map(arena -> String.valueOf(arena.getPlayersExceptSpectators().size()))
                 .orElse(null);
         }
+        
+        if(params.startsWith("stats_")){
+            String[] split = params.split("_", 2);
+            if (split.length < 2) return null;
+            switch (split[1]) {
+                case "wins":
+                    return String.valueOf(this.instance.getArenaManager().getPlayerStatistics(player.getUniqueId()).getWins());
+                case "losses":
+                    return String.valueOf(this.instance.getArenaManager().getPlayerStatistics(player.getUniqueId()).getLosses());
+                case "kills":
+                    return String.valueOf(this.instance.getArenaManager().getPlayerStatistics(player.getUniqueId()).getKills());
+                case "deaths":
+                    return String.valueOf(this.instance.getArenaManager().getPlayerStatistics(player.getUniqueId()).getDeaths());
+            }
+        }
 
         if ("total_players".equals(params)) {
             return String.valueOf(this.instance.getArenaManager().getArenaList()

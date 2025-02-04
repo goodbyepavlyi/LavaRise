@@ -1,6 +1,8 @@
 package me.goodbyepavlyi.lavarise.arena;
 
 import me.goodbyepavlyi.lavarise.LavaRiseInstance;
+import me.goodbyepavlyi.lavarise.arena.models.ArenaPlayerStatistics;
+import me.goodbyepavlyi.lavarise.configs.ArenaPlayerStatisticsConfig;
 import me.goodbyepavlyi.lavarise.configs.ArenaStorageConfig;
 import me.goodbyepavlyi.lavarise.utils.Logger;
 import org.bukkit.entity.Player;
@@ -14,6 +16,7 @@ public class ArenaManager {
     private final LavaRiseInstance instance;
     private final Set<Arena> arenas;
     private final ArenaStorageConfig storageConfig;
+    private final ArenaPlayerStatisticsConfig playerStatisticsConfig;
 
     public enum ArenaStateResult {
         SUCCESS, ARENA_IS_NOT_SETUP, ARENA_FULL, ARENA_IN_GAME, PLAYER_IN_ARENA, PLAYER_NOT_IN_ARENA
@@ -22,6 +25,7 @@ public class ArenaManager {
     public ArenaManager(LavaRiseInstance instance) {
         this.instance = instance;
         this.storageConfig = new ArenaStorageConfig(instance);
+        this.playerStatisticsConfig = new ArenaPlayerStatisticsConfig(instance);
         this.arenas = new HashSet<>();
 
         this.loadArenas();
@@ -35,6 +39,10 @@ public class ArenaManager {
         return this.storageConfig;
     }
 
+    public ArenaPlayerStatisticsConfig getPlayerStatisticsConfig() {
+        return this.playerStatisticsConfig;
+    }
+    
     public void loadArenas() {
         this.storageConfig.getArenas().forEach(arenaName -> {
             Arena arena = new Arena(this, arenaName);
@@ -104,5 +112,9 @@ public class ArenaManager {
 
         arena.removePlayer(player);
         return ArenaStateResult.SUCCESS;
+    }
+    
+    public ArenaPlayerStatistics getPlayerStatistics(UUID playerUUID) {
+        return new ArenaPlayerStatistics(this.playerStatisticsConfig.getSection(playerUUID));
     }
 }

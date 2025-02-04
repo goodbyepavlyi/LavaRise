@@ -70,7 +70,7 @@ public class Queue {
     }
 
     public void addPlayer(Player player) {
-        ArenaPlayer arenaPlayer = new ArenaPlayer(player);
+        ArenaPlayer arenaPlayer = new ArenaPlayer(player, this.arena.getArenaManager().getPlayerStatistics(player.getUniqueId()));
         arenaPlayer.saveData();
 
         Logger.debug(String.format("Player %s added to the queue in arena %s", player.getName(), arena.getName()));

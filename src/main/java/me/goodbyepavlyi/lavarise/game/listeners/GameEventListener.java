@@ -49,6 +49,8 @@ public class GameEventListener implements Listener {
         event.setDeathMessage(null);
         arena.announceMessage(Arena.AnnouncementType.PLAYER_DEATH, player.getName());
         arena.getGame().makeSpectator(player);
+        arena.getPlayer(player.getUniqueId()).getStatistics().addDeath();
+        arena.getPlayer(player.getUniqueId()).getStatistics().addLoss();
         Logger.debug(String.format("Player %s died in arena %s", player.getName(), arena.getName()));
     }
 
@@ -63,6 +65,9 @@ public class GameEventListener implements Listener {
         event.setCancelled(true);
         arena.announceMessage(Arena.AnnouncementType.PLAYER_KILLED, victim.getName(), killer.getName());
         arena.getGame().makeSpectator(victim);
+        arena.getPlayer(killer.getUniqueId()).getStatistics().addKill();
+        arena.getPlayer(victim.getUniqueId()).getStatistics().addDeath();
+        arena.getPlayer(victim.getUniqueId()).getStatistics().addLoss();
         Logger.debug(String.format("Player %s was killed by %s in arena %s", victim.getName(), killer.getName(), arena.getName()));
     }
 
@@ -78,6 +83,8 @@ public class GameEventListener implements Listener {
         event.setCancelled(true);
         arena.announceMessage(Arena.AnnouncementType.PLAYER_DEATH, player.getName());
         arena.getGame().makeSpectator(player);
+        arena.getPlayer(player.getUniqueId()).getStatistics().addDeath();
+        arena.getPlayer(player.getUniqueId()).getStatistics().addLoss();
         Logger.debug(String.format("Player %s died on final damage in arena %s", player.getName(), arena.getName()));
     }
 
@@ -110,6 +117,7 @@ public class GameEventListener implements Listener {
         Arena arena = this.instance.getArenaManager().getArenaByPlayer(player.getUniqueId());
         if (arena == null || arena.getState() != Arena.State.IN_GAME) return;
 
+        arena.getPlayer(player.getUniqueId()).getStatistics().addLoss();
         arena.removePlayer(player);
         Logger.debug(String.format("Player %s disconnected, removing them from arena %s", player.getName(), arena.getName()));
     }

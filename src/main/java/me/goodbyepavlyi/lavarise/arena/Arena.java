@@ -165,6 +165,7 @@ public class Arena {
         }
 
         arenaPlayer.restoreData();
+        this.arenaManager.getPlayerStatisticsConfig().saveStatistics(arenaPlayer.getPlayerUUID(), arenaPlayer.getStatistics());
         this.delayAction(player, p -> {
             p.setFireTicks(0);
             p.setFallDistance(0.0F);
