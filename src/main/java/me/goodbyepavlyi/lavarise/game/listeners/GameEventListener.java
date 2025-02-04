@@ -30,9 +30,10 @@ public class GameEventListener implements Listener {
         Player player = event.getPlayer();
         Arena arena = this.instance.getArenaManager().getArenaByPlayer(player.getUniqueId());
         if (arena == null) return;
+        if(!this.instance.getConfiguration().GameAllowedCommandsEnabled()) return;
 
         String command = event.getMessage().toLowerCase();
-        if(this.instance.getConfiguration().GameAllowedCommandsEnabled() && this.instance.getConfiguration().GameAllowedCommands().contains(command)) return;
+        if(this.instance.getConfiguration().GameAllowedCommands().contains(command)) return;
 
         Logger.debug(String.format("Player %s tried to execute disallowed command %s", player.getName(), command));
         player.sendMessage(this.instance.getMessages().CommandNoPermissions());
