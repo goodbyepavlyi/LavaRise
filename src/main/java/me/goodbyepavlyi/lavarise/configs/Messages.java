@@ -102,7 +102,9 @@ public class Messages extends YamlConfig {
     }
 
     public List<String> CommandUsage() {
-        return this.getList("command.usage");
+        List<String> usage = new ArrayList<>(this.getList("command.usage"));
+        usage.add(ChatUtils.color("&8Report bugs or suggest features at &6https://github.com/goodbyepavlyi/LavaRise"));
+        return usage;
     }
 
     public String CommandNoPermissions() {
