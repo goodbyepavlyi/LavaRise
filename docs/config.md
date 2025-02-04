@@ -13,6 +13,9 @@
 
 - `game.gracePhaseTime`: Duration of the grace period in seconds during which players are safe from lava rise.
 - `game.pvpGracePeriod`: Duration in seconds of the grace period for player-vs-player (PvP) combat at the start of the game. Set to `0` to disable the PvP grace period.
+- `game.spectator`:
+  - `gameMode`: Game mode for spectators.
+    - Use the [Spigot API](https://hub.spigotmc.org/javadocs/spigot/org/bukkit/GameMode.html#enum-constant-summary) for game mode names.
 - `game.lavaRisingTime`: Settings for lava rise intervals during the game.
     - `default`: Default time interval for lava to rise across all levels.
     - `levels`: Optional custom intervals for specific Y-levels. If left empty, the `default` rise time will be applied for all levels.
