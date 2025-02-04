@@ -31,7 +31,7 @@ public class GameMap {
     }
 
     public String getMapName() {
-        return String.format("LavaRise-%s_%d", this.arena.getName(), this.arena.getGame().getGameTime());
+        return String.format("LavaRiseGame-%s", this.arena.getName());
     }
 
     public void createGameWorld() {
