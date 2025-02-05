@@ -377,4 +377,17 @@ public class Messages extends YamlConfig {
     public String GameEventsPvpEnabled() {
         return this.getString("game.events.pvpEnabled");
     }
+    
+    public String PlaceholderApiNullValue() {
+        return this.getString("placeholderApi.nullValue");
+    }
+    
+    public String PlaceholderApiArenaState(Arena.State state){
+        return switch(state){
+            case WAITING -> this.getString("placeholderApi.arenaState.waiting");
+            case STARTING -> this.getString("placeholderApi.arenaState.starting");
+            case IN_GAME -> this.getString("placeholderApi.arenaState.inGame");
+            case ENDING -> this.getString("placeholderApi.arenaState.ending");
+        };
+    }
 }

@@ -49,7 +49,7 @@ public class PlaceholderAPIExpansion extends PlaceholderExpansion {
     @Override
     public @Nullable String onPlaceholderRequest(Player player, @NotNull String params) {
         if (params.startsWith("arena_status_")) {
-            return this.getArenaByParam(params).map(arena -> arena.getState().toString()).orElse(null);
+            return this.getArenaByParam(params).map(arena -> this.instance.getMessages().PlaceholderApiArenaState(arena.getState())).orElse(null);
         }
 
         if (params.startsWith("arena_players_")) {
@@ -96,7 +96,7 @@ public class PlaceholderAPIExpansion extends PlaceholderExpansion {
             if(type == null) return null;
 
             Map.Entry<UUID, Integer> stats = this.instance.getArenaManager().getPlayerStatisticsConfig().getTopPlayerByPosition(type, position);
-            if(stats == null) return null;
+            if(stats == null) return this.instance.getMessages().PlaceholderApiNullValue();
             
             if(valueType.equals("value")) return stats.getValue().toString();
             if(valueType.equals("player")) return this.instance.getServer().getOfflinePlayer(stats.getKey()).getName();

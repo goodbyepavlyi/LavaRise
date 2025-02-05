@@ -5,8 +5,8 @@
 ### Arena Status
 - `%lavarise_arena_status_<arena>%`
     - Returns the current state of a specific arena.
-    - Possible values: `Waiting`, `Starting`, `In game`, `Ended`.
     - Possible values: `Waiting`, `Starting`, `In game`, `Ending`.
+    - Custom values can be set messages.yml
 
 ### Arena Players
 - `%lavarise_arena_players_<arena>%`
