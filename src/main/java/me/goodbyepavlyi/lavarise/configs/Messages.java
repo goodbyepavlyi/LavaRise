@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Messages extends YamlConfig {
-    private final int CONFIG_VERSION = 6;
+    private final int CONFIG_VERSION = 7;
 
     public Messages(LavaRiseInstance instance) {
         super(instance, "messages.yml", true);
