@@ -9,7 +9,6 @@ import me.goodbyepavlyi.lavarise.game.models.GameMap;
 import me.goodbyepavlyi.lavarise.game.models.GameScoreboard;
 import me.goodbyepavlyi.lavarise.utils.Logger;
 import org.bukkit.GameMode;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
@@ -142,7 +141,7 @@ public class Game {
 
     public void stop() {
         Logger.debug(String.format("Stopping game in arena '%s'.", this.arena.getName()));
-        this.arena.setState(Arena.State.ENDED);
+        this.arena.setState(Arena.State.ENDING);
         this.arena.announceMessage(Arena.AnnouncementType.GAME_END);
 
         this.gameScoreboard.stopScoreboardUpdateTask();

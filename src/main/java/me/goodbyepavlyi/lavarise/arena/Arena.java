@@ -35,7 +35,7 @@ public class Arena {
         WAITING("Waiting"),
         STARTING("Starting"),
         IN_GAME("In game"),
-        ENDED("Ended");
+        ENDING("Ending");
 
         private final String name;
 
