@@ -3,11 +3,14 @@ package me.goodbyepavlyi.lavarise.papi;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.goodbyepavlyi.lavarise.LavaRiseInstance;
 import me.goodbyepavlyi.lavarise.arena.Arena;
+import me.goodbyepavlyi.lavarise.configs.ArenaPlayerStatisticsConfig;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 public class PlaceholderAPIExpansion extends PlaceholderExpansion {
     private final LavaRiseInstance instance;
@@ -68,6 +71,35 @@ public class PlaceholderAPIExpansion extends PlaceholderExpansion {
                 case "deaths":
                     return String.valueOf(this.instance.getArenaManager().getPlayerStatistics(player.getUniqueId()).getDeaths());
             }
+        }
+        
+        if(params.startsWith("top_")){
+            String[] split = params.split("_", 4);
+            if (split.length < 4) return null;
+            
+            String valueType = split[2]; // Options: "player", "value"
+            
+            int position;
+            try{
+                position = Integer.parseInt(split[3]);
+            }catch(NumberFormatException ex){
+                return null;
+            }
+
+            ArenaPlayerStatisticsConfig.StatisticsType type = switch (split[1]) {
+                case "wins" -> ArenaPlayerStatisticsConfig.StatisticsType.WINS;
+                case "losses" -> ArenaPlayerStatisticsConfig.StatisticsType.LOSSES;
+                case "kills" -> ArenaPlayerStatisticsConfig.StatisticsType.KILLS;
+                case "deaths" -> ArenaPlayerStatisticsConfig.StatisticsType.DEATHS;
+                default -> null;
+            };
+            if(type == null) return null;
+
+            Map.Entry<UUID, Integer> stats = this.instance.getArenaManager().getPlayerStatisticsConfig().getTopPlayerByPosition(type, position);
+            if(stats == null) return null;
+            
+            if(valueType.equals("value")) return stats.getValue().toString();
+            if(valueType.equals("player")) return this.instance.getServer().getOfflinePlayer(stats.getKey()).getName();
         }
 
         if ("total_players".equals(params)) {
