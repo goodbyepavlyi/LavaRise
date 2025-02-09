@@ -21,8 +21,8 @@ public class WorldUtils {
         }
 
         if (targetWorldFile.exists()) {
-            Logger.warning(String.format("Target world already exists: %s", targetWorldName));
-            return null;
+            Logger.warning(String.format("Target world already exists: %s, deleting...", targetWorldName));
+            deleteWorld(plugin, targetWorldName);
         }
 
         try {
