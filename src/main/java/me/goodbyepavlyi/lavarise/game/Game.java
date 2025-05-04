@@ -174,6 +174,7 @@ public class Game {
 
     public void spawnPlayers() {
         this.arena.doForAllPlayers(player -> {
+            player.setFallDistance(0F);
             player.teleport(this.gameMap.getSpawnpoint(), PlayerTeleportEvent.TeleportCause.PLUGIN);
             
             // Default initialization of player
