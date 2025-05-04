@@ -13,6 +13,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -187,5 +188,16 @@ public class GameEventListener implements Listener {
 
         event.setCancelled(true);
         Logger.debug(String.format("Cancelled item pickup event for spectator %s in arena %s", player.getName(), arena.getName()));
+    }
+    
+    @EventHandler
+    public void cancelSpectatorFoodHunger(FoodLevelChangeEvent event){
+        if (!(event.getEntity() instanceof Player player)) return;
+
+        Arena arena = this.instance.getArenaManager().getArenaByPlayer(player.getUniqueId());
+        if (arena == null || arena.getState() != Arena.State.IN_GAME || !arena.getGame().isSpectator(player)) return;
+
+        event.setCancelled(true);
+        Logger.debug(String.format("Cancelled food level change event for spectator %s in arena %s", player.getName(), arena.getName()));
     }
 }
