@@ -8,13 +8,10 @@ import java.util.Map;
 
 public class EnchantmentParser {
     private static final Map<String, Enchantment> enchantmentMap = new HashMap<>();
-    private static final boolean isLegacy;
 
     static {
-        String version = Bukkit.getBukkitVersion();
-        isLegacy = version.startsWith("1.12") || version.startsWith("1.13");
-
-        if (isLegacy) {
+        int version = Integer.parseInt(Bukkit.getBukkitVersion().split("-")[0].split("\\.")[1]);
+        if (version < 21) {
             enchantmentMap.put("EFFICIENCY", Enchantment.getByName("DIG_SPEED"));
             enchantmentMap.put("UNBREAKING", Enchantment.getByName("DURABILITY"));
             enchantmentMap.put("FORTUNE", Enchantment.getByName("LOOT_BONUS_BLOCKS"));
