@@ -322,6 +322,14 @@ public class Config extends YamlConfig {
         };
     }
 
+    public boolean GameJoinEnabled() {
+        return this.getConfig().getBoolean("game.join.enabled", true);
+    }
+
+    public void SetGameJoinEnabled(boolean val) {
+        this.getConfig().set("game.join.enabled", val);
+    }
+
     public int GameGracePhaseTime() {
         return this.getConfig().getInt("game.gracePhaseTime");
     }

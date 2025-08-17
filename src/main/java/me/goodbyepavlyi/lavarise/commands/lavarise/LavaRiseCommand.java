@@ -78,6 +78,10 @@ public class LavaRiseCommand implements CommandExecutor, TabCompleter {
                 case ARENA_IN_GAME:
                     CommandUtils.sendMessage(commandSender, this.instance.getMessages().CommandJoinArenaInGame());
                     break;
+
+                case JOIN_DISABLED:
+                    CommandUtils.sendMessage(commandSender, this.instance.getMessages().CommandJoinDisabled());
+                    break;
             }
 
             return true;
@@ -127,7 +131,7 @@ public class LavaRiseCommand implements CommandExecutor, TabCompleter {
 
             // Complete subcommands
             if (args.length == 2)
-                completions.addAll(filterOptions(Arrays.asList("list", "create", "delete", "set", "info"), args[1]));
+                completions.addAll(filterOptions(Arrays.asList("list", "create", "delete", "set", "info", "toggleJoin"), args[1]));
 
             // Complete arena names for "delete" and "set"
             if (args.length == 3 && (args[1].equalsIgnoreCase("delete") || args[1].equalsIgnoreCase("set") || args[1].equalsIgnoreCase("info"))) {

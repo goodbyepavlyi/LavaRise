@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Messages extends YamlConfig {
-    private final int CONFIG_VERSION = 7;
+    private final int CONFIG_VERSION = 8;
 
     public Messages(LavaRiseInstance instance) {
         super(instance, "messages.yml", true);
@@ -258,6 +258,10 @@ public class Messages extends YamlConfig {
 
     public String CommandJoinArenaInGame() {
         return this.getString("command.join.arenaInGame");
+    }
+
+    public String CommandJoinDisabled() {
+        return this.getString("command.join.disabled");
     }
 
     public String CommandLeaveNotInArena() {

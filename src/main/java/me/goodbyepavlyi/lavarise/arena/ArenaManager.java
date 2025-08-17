@@ -19,7 +19,7 @@ public class ArenaManager {
     private final ArenaPlayerStatisticsConfig playerStatisticsConfig;
 
     public enum ArenaStateResult {
-        SUCCESS, ARENA_IS_NOT_SETUP, ARENA_FULL, ARENA_IN_GAME, PLAYER_IN_ARENA, PLAYER_NOT_IN_ARENA
+        SUCCESS, ARENA_IS_NOT_SETUP, ARENA_FULL, ARENA_IN_GAME, PLAYER_IN_ARENA, PLAYER_NOT_IN_ARENA, JOIN_DISABLED
     }
 
     public ArenaManager(LavaRiseInstance instance) {
@@ -97,6 +97,7 @@ public class ArenaManager {
     }
 
     public ArenaStateResult joinArena(Arena arena, Player player) {
+        if(!instance.getConfiguration().GameJoinEnabled()) return ArenaStateResult.JOIN_DISABLED;
         if (!arena.checkSetup().isEmpty()) return ArenaStateResult.ARENA_IS_NOT_SETUP;
         if (this.getArenaByPlayer(player.getUniqueId()) != null) return ArenaStateResult.PLAYER_IN_ARENA;
         if (arena.getQueue().isFull()) return ArenaStateResult.ARENA_FULL;

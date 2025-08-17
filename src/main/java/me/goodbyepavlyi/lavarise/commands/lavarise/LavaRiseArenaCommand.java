@@ -17,6 +17,13 @@ public class LavaRiseArenaCommand {
             return true;
         }
 
+        if(args.length == 2 && args[1].equalsIgnoreCase("toggleJoin")){
+            boolean joinEnabled = !lavaRiseInstance.getConfiguration().GameJoinEnabled();
+            lavaRiseInstance.getConfiguration().SetGameJoinEnabled(joinEnabled);
+            CommandUtils.sendMessage(player, String.format("&8[&6&lLavaRise&8] Join toggled to &6%s", joinEnabled));
+            return true;
+        }
+
         if (args.length == 2 && args[1].equalsIgnoreCase("list")) {
             if (lavaRiseInstance.getArenaManager().getArenaList().isEmpty()) {
                 CommandUtils.sendMessage(player, lavaRiseInstance.getMessages().CommandArenaListEmpty());

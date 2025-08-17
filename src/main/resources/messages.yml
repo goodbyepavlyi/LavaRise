@@ -1,4 +1,4 @@
-version: 7
+version: 8
 
 command:
   usage:
@@ -79,6 +79,7 @@ command:
     arenaIsntSetup: "&8[&6&lLavaRise&8] Arena hasn't been set up yet!"
     arenaFull: "&8[&6&lLavaRise&8] Arena is full!"
     arenaInGame: "&8[&6&lLavaRise&8] Arena is in-game!"
+    disabled: "&8[&6&lLavaRise&8] Joining arenas is currently disabled!"
 
   leave:
     notInArena: "&8[&6&lLavaRise&8] You are not in arena!"
