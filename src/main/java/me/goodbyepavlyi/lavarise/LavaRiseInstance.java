@@ -70,6 +70,11 @@ public class LavaRiseInstance extends JavaPlugin {
         this.arenaManager.saveArenas();
     }
 
+    public void reload(){
+        this.config.load();
+        this.messages.load();
+    }
+
     public Config getConfiguration() {
         return this.config;
     }

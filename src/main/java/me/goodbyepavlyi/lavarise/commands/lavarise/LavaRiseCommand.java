@@ -55,6 +55,17 @@ public class LavaRiseCommand implements CommandExecutor, TabCompleter {
         if (args[0].equalsIgnoreCase("_plugin") && LavaRisePluginCommand.onCommand(this.instance, player, command, label, args))
             return true;
 
+        if(args[0].equalsIgnoreCase("reload") && args.length == 1){
+            if(!player.hasPermission(Permissions.ADMIN.toString())){
+                CommandUtils.sendMessage(commandSender, this.instance.getMessages().CommandNoPermissions());
+                return true;
+            }
+
+            this.instance.reload();
+            CommandUtils.sendMessage(commandSender, "&8[&6&lLavaRise&8] Configuration reloaded successfully.");
+            return true;
+        }
+
         if (args[0].equalsIgnoreCase("join") && args.length == 2) {
             Arena arena = this.instance.getArenaManager().getArena(args[1]);
             if (arena == null) {
@@ -106,7 +117,7 @@ public class LavaRiseCommand implements CommandExecutor, TabCompleter {
         if (args.length == 0) return null;
 
         if (args.length == 1) {
-            completions.addAll(filterOptions(Arrays.asList("arena", "join", "leave"), args[0]));
+            completions.addAll(filterOptions(Arrays.asList("arena", "join", "leave", "reload"), args[0]));
             return completions;
         }
 

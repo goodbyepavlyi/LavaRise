@@ -17,7 +17,7 @@ public class YamlConfig {
     private final LavaRiseInstance instance;
     private final String path;
     private final File file;
-    private final FileConfiguration config;
+    private FileConfiguration config;
 
     public YamlConfig(LavaRiseInstance instance, String path, boolean copyFromResources) {
         this.instance = instance;
@@ -36,6 +36,10 @@ public class YamlConfig {
         if (!this.file.exists() && copyFromResources)
             this.copyFromResources();
 
+        this.load();
+    }
+
+    public void load(){
         this.config = YamlConfiguration.loadConfiguration(this.file);
     }
 
