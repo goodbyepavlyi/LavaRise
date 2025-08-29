@@ -33,14 +33,14 @@ public class GameEventListener implements Listener {
         if (arena == null) return;
         if(!this.instance.getConfiguration().GameAllowedCommandsEnabled()) return;
 
-        String command = event.getMessage().split(" ")[0].toLowerCase();
-        if(this.instance.getConfiguration().GameAllowedCommands().contains(command)) return;
+		String command = event.getMessage().toLowerCase();
+        if (this.instance.getConfiguration().GameAllowedCommands().stream().anyMatch(cmd -> command.equals(cmd) || command.startsWith(cmd + " "))) return;
 
         Logger.debug(String.format("Player %s tried to execute disallowed command %s", player.getName(), command));
         player.sendMessage(this.instance.getMessages().CommandNoPermissions());
         event.setCancelled(true);
     }
-    
+
     @EventHandler
     public void makePlayerSpectatorOnDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
@@ -189,7 +189,7 @@ public class GameEventListener implements Listener {
         event.setCancelled(true);
         Logger.debug(String.format("Cancelled item pickup event for spectator %s in arena %s", player.getName(), arena.getName()));
     }
-    
+
     @EventHandler
     public void cancelSpectatorFoodHunger(FoodLevelChangeEvent event){
         if (!(event.getEntity() instanceof Player player)) return;
